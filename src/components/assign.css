@@ -1,0 +1,58 @@
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    width: 100%;
+}
+
+.table {
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 15px;
+    width: 100%;
+    border-collapse: collapse;
+    /* Ensures merged borders */
+}
+
+thead {
+    background-color: rgb(234, 233, 233);
+}
+
+thead .head {
+    border: 1px solid;
+}
+
+tbody .body {
+    border: 1px solid;
+}
+
+th,
+td {
+    border: 1px solid;
+    padding: 10px;
+    /* Space around cells */
+    text-align: center;
+}
+
+
+.dwnld,
+.upload,
+.delete {
+    background: rgb(204, 207, 204);
+    color: white;
+    border: none;
+
+}
+
+.dwnld:hover,
+.upload:hover {
+    background: green;
+
+}
+
+.delete:hover {
+    background: rgb(167, 43, 43);
+}
+

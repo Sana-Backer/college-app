@@ -1,0 +1,71 @@
+.courses {
+    text-align: center;
+    padding: 40px 0;
+    overflow: hidden;
+
+}
+.courses hr {
+    width: 6%;
+    margin: auto;
+    border: 2px solid rgb(245, 225, 6); 
+  }
+
+.course-card {
+    position: relative;
+    width: 230px;
+    height: 220px;
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.course-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Course Name inside image */
+.course-title {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    /* Semi-transparent dark background */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 80%;
+}
+
+/* Hover effect: Zooming the image */
+.course-card:hover .course-image {
+    transform: scale(1.1);
+}
+
+.arrows {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end; /* Moves arrows to the right */
+
+}
+
+.arrow {
+    border: 1px solid;
+    border-radius: 15%;
+    height: 19%;
+}

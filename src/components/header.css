@@ -1,0 +1,13 @@
+.navbar-custom {
+    background: linear-gradient( rgba(0, 0, 0, 0.1));
+    border: none;
+  }
+
+.links a{
+
+    text-decoration: none;
+    color: white;
+    
+}
+  
+  

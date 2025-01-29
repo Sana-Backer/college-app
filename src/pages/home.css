@@ -1,0 +1,14 @@
+.landingPage {
+    height: 100vh;
+    width: 100%;
+  
+    margin: 0 auto;
+  
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+      url("https://cdn.pixabay.com/photo/2021/10/11/04/08/university-6699377_1280.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-top: 20px;
+  }
