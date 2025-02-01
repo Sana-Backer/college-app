@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import './styles/stddash.css';
-import user from '../assets/user.jpg'
+import prof3 from '../assets/proff3.jpg'
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import AssignmentStd from '../components/AssignmentStd';
-import Profile from '../components/Profile';
 import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
-import { useNavigate } from 'react-router-dom';
-
-const StudentDash = () => {
+import FacultyProfile from '../components/faculty/facultyProfile'
+const FacultyDash = () => {
 
     const [activeFeature,setActiveFeature]= useState(null)
 
@@ -24,25 +22,18 @@ const StudentDash = () => {
                return <ResultStd/> ;
                case 'notes':
                 return <Notes/>
-              
-        
+     
             default:case "profile":
-            return<Profile/>
-            return
+            return<FacultyProfile/>
+           
         }
-    }
-    const navigate = useNavigate()
-    const backhome =()=>{
-        navigate('/home')
     }
 
     return (
         <section>
-         
+      
             <div>
-            <div className='container d-flex justify-content-end mt-1 me-auto'>
-                <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine/> Back to Home</a>
-                </div>
+            <div className='container d-flex justify-content-end mt-1 me-auto'><p className='tohome'><RiArrowGoForwardLine/> Back to Home </p></div>
                 <div className='dash'>
                     
                     <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
@@ -56,13 +47,13 @@ const StudentDash = () => {
                 <div className='d-flex row'>
                     <div className='sidebar col-lg-2 container mb-2 '>
                         <div className='photo img-fluid'>
-                            <img src={user} alt="" />
+                            <img src={prof3} alt="" />
                         </div>
                         <div className='text-center'>
-                            <h4>JOHN MATHEW</h4>
-                            <p>student Id:3809</p>
+                            <h4>Miazna Ameer</h4>
+                            <p>Department of civil Engineering</p>
                             <hr />
-                            <p>email@gmail.com</p>
+                            <p>miszna@gmail.com</p>
                             <p>908765432</p>
 
                         </div>
@@ -79,4 +70,4 @@ const StudentDash = () => {
     )
 }
 
-export default StudentDash;
+export default FacultyDash;

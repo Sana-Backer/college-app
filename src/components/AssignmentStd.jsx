@@ -1,40 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './assign.css';
 import { MdDelete } from "react-icons/md";
+import { IoIosCloudUpload } from "react-icons/io";
+import { FaDownload } from "react-icons/fa";
+import { Button, Modal } from 'react-bootstrap';
 
 const AssignmentStd = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => setShowModal(false);
+  const handleOpenModal = () => setShowModal(true);
+
+
+  const handleUpload = (file) => {
+    console.log('Uploading:', file);
+  };
+
+  const handleDelete = (id) => {
+    console.log('Deleting:', id);
+  };
+
   return (
-    <div className="table-container">
-      <div className="container" id='assign'>
-        <table className='table'>
-          <thead className='thead'>
-            <tr className='head '>
+    <div className="assignment-container">
+
+      {/* Assignment Table */}
+      <div className="table-container">
+        <table className="styled-table">
+          <thead>
+            <tr>
               <th>SI No</th>
               <th>Subject</th>
               <th>Topic</th>
-              <th>Download</th>
               <th>Submit</th>
               <th>Remove</th>
             </tr>
           </thead>
           <tbody>
-            <tr className='body'>
+            <tr>
               <td>1</td>
               <td>OOPs</td>
               <td>Data Structure Assignment</td>
-              <td><button className='dwnld px-3 py-2'>Download</button></td>
-              <td><button className='upload px-3 py-2'>Upload</button></td>
-              <td><button className='delete px-3 py-2'>Delete</button></td>
-            </tr>
-            <tr className='body'>
-              <td>1</td>
-              <td>OOPs</td>
-              <td>Data Structure Assignment</td>
-              <td><button className='dwnld  px-3 py-2'>Download</button></td>
-              <td><button className='upload p-2'>Upload</button></td>
+              <td>
+                <button className="action-btn upload-btn" onClick={() => document.getElementById('fileInput').click()}>
+                  <IoIosCloudUpload className="icon" /> Upload
+                </button>
+                <input
+                  type="file"
+                  id="fileInput"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleUpload(e.target.files[0])}
+                />
+              </td>
+              <td>
+                <button className="action-btn delete-btn" onClick={() => handleDelete('item-id')}>
+                  <MdDelete className="icon" /> Delete
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   );

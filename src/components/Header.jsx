@@ -2,28 +2,29 @@ import React from 'react';
 import './header.css';
 import logo from '../assets/logo.png';
 import { FaUser } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoIosLogOut } from "react-icons/io";
 
 const Header = () => {
-    const username = sessionStorage.getItem("username");
-    const role = sessionStorage.getItem("role");
+    const username = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.clear();
+        localStorage.clear();
+        navigate("/");
+    };
 
     return (
         <>
             <div className='navbar-custom d-flex pt-3'>
                 <div>
-                    {/* <img
-            alt=""
-            src={logo}
-            width="55"
-            height="55"
-            className="d-inline-block align-top ms-5"
-            style={{ borderRadius: '30px' }}
-          /> */}<h2 className='text-light ms-3'>BVCollege</h2>
+                    <h2 className='text-light ms-3'>BVCollege</h2>
                 </div>
                 <div className='links d-flex gap-5 ms-auto p-1 me-5'>
-                    <a href="">Home</a>
+                    <Link to="/home" style={{ textDecoration: "none" }}>Home</Link>
                     {role === "student" && (
                         <Link to="/studentDash" style={{ textDecoration: "none" }}>
                             Student Dashboard
@@ -35,23 +36,23 @@ const Header = () => {
                         </Link>
                     )}
                     {role === "faculty" && (
-                        <Link to="/teacherDash" style={{ textDecoration: "none" }}>
-                            <button className="sign-in-btn">Faculty Dashboard</button>
+                        <Link to="/facultydash" style={{ textDecoration: "none" }}>
+                         Faculty Dashboard
                         </Link>
                     )}
-                    <a href="">Courses</a>
-                    <a href="">Helpline</a>
-                    <a href="" className='d-flex mt-1'>
-                        <FaUser />
-                        <p className=''>{username}</p>
-                    </a>
-                    <a href="" className='logout'>
+                    <Link to="/courses" style={{ textDecoration: "none" }}>Courses</Link>
+                    <Link to="/helpline" style={{ textDecoration: "none" }}>Helpline</Link>
+                    <div className='d-flex mt-1'>
+                        <FaUser className='text-light' />
+                        <p className='ms-1 text-light'>{username}</p>
+                    </div>
+                    <div className='logout' onClick={handleLogout}>
                         <IoIosLogOut />
-                    </a>
+                    </div>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Header;

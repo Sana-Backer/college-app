@@ -27,7 +27,7 @@ function SignUp() {
         confirmButtonText: "Proceed",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/Add");
+          navigate("/admin-home");
         }
       });
     } else {

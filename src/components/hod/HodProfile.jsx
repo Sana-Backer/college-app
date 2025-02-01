@@ -1,8 +1,8 @@
 import React from 'react'
 import { RiEdit2Fill } from 'react-icons/ri'
-import './profile.css'
+// import './hodpofile.css'
 
-const Profile = () => {
+const HodProfile = () => {
   return (
     <div>
            <div className="profile mt-2 border py-3 px-3">
@@ -11,33 +11,22 @@ const Profile = () => {
 
                             <hr />
                             <div className='profile-details d-flex flex-row '>
-                                <div className='col-lg-3'>Student Id </div>
+                                <div className='col-lg-3'>HOD Id </div>
                                 :
-                                <div className='col-lg-5 ms-2'> 10</div>
+                                <div className='col-lg-5 ms-2'> 01</div>
                             </div>
                             <hr />
                             <div className='profile-details d-flex flex-row '>
-                                <div className='col-lg-3'>Student Name </div>
+                                <div className='col-lg-3'>HOD Name </div>
                                 :
-                                <div className='col-lg-5 ms-2'> John Mathew</div>
+                                <div className='col-lg-5 ms-2'> Aleena</div>
                             </div>
                             <hr />
-                            <div className='profile-details d-flex flex-row '>
-                                <div className='col-lg-3'> Batch </div>
-                                :
-                                <div className='col-lg-5 ms-2'>2020 -2024</div>
-                            </div>
-                            <hr />
+                           
                             <div className='profile-details d-flex flex-row '>
                                 <div className='col-lg-3'>Department </div>
                                 :
                                 <div className='col-lg-5 ms-2'> Btech</div>
-                            </div>
-                            <hr />
-                            <div className='profile-details d-flex flex-row '>
-                                <div className='col-lg-3'> Course </div>
-                                :
-                                <div className='col-lg-5 ms-2'> Civil Engineering</div>
                             </div>
                             <hr />
                             <div className='profile-details d-flex flex-row '>
@@ -49,7 +38,7 @@ const Profile = () => {
                             <div className='profile-details d-flex flex-row '>
                                 <div className='col-lg-3'> Gender </div>
                                 :
-                                <div className='col-lg-5 ms-2'> Male</div>
+                                <div className='col-lg-5 ms-2'> Female</div>
                             </div>
                             <hr />
                             <div className='profile-details d-flex flex-row '>
@@ -70,4 +59,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default HodProfile

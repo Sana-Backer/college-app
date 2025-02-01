@@ -6,7 +6,7 @@ import { FaRegEye } from "react-icons/fa";
 
 const Notes = () => {
   return (
-    <div>
+    <div className='notes-container'>
         <div className="row d-flex p-2 gap-1">
             <div className="col-lg-3 note-card">
                 <div className='pdf '>

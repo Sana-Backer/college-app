@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { verifyOtpApi, resendOtpApi } from '../Services/allAPI';
 import { toast } from 'react-toastify';
-
+import { resendOtpApi,verifyOtpApi } from '../services/allAPI';
 function Otp() {
   const location = useLocation();
   const email = location.state?.email || ''; 
