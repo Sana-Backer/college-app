@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri';
 import axios from 'axios';
-import { getFacultyApi } from '../../services/allAPI';
+import { getFacultyApi } from '../../Services/allAPI';
 
-// import { facultyApi } from '../../services/allAPI';  
+
+import { facultyApi } from '../../Services/allAPI';  
 
 const FacultyProfile = () => {
     const [faculty, setFaculty] = useState(null);
@@ -35,24 +36,23 @@ const FacultyProfile = () => {
     useEffect(() => {
         const fetchFacultyData = async () => {
           if (!token) {
-            setError('No token found in localStorage');
+            setError("No token found");
             setLoading(false);
             return;
           }
       
           try {
-            const data = await getFacultyApi(token);
-            setFaculty(data);
-            setLoading(false);
+            const facultyData = await getFacultyApi(token);
+            setFaculty(facultyData);
           } catch (error) {
-            console.error("Error fetching faculty data:", error);
-            setError('Failed to fetch faculty data.');
-            setLoading(false);
+            setError("Failed to fetch faculty data.");
           }
+          setLoading(false);
         };
       
         fetchFacultyData();
       }, [token]);
+      
       
     if (loading) {
         return <div>Loading...</div>;

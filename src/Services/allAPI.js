@@ -1,7 +1,6 @@
 import axios from "axios";
 import { commonAPI } from "./commonApi";
-import { serverUrl } from "./serverUrl";
-
+import {serverUrl} from './serverurl'
 // Function to refresh token
 const refreshToken = async () => {
   const refreshToken = localStorage.getItem('refresh'); // Assume the refresh token is also stored
@@ -109,21 +108,21 @@ export const editDeptApi = async (id, deptdetails, token) => {
   );
 };
 
-// export const facultyApi = async (token) => {
-//   try {
-//     const response = await axios.get(`${serverUrl}/Faculty/`, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//         Authorization: `Bearer ${token}`,
-//         // Pass token in Authorization header
-//       },
-//     });
-//     return response;
-//   } catch (error) {
-//     console.error("Error fetching faculty data", error);
-//     throw error; // Rethrow error for proper handling in the component
-//   }
-// };
+export const facultyApi = async (token) => {
+  try {
+    const response = await axios.get(`${serverUrl}/Faculty/`, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+        // Pass token in Authorization header
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching faculty data", error);
+    throw error; // Rethrow error for proper handling in the component
+  }
+};
 
 //delete faculty
 export const deleteFacultyApi = async (id, token) => {
@@ -174,21 +173,21 @@ export const addFacultyApi = async (formData, reqHeader) => {
 };
 
 
-// Fetch faculty data
 export const getFacultyApi = async (token) => {
   try {
     const response = await axios.get(`${serverUrl}/falist/`, {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
-    return response.data; // Assuming the data is in response.data
+    return response.data; // Return only data
   } catch (error) {
-    console.error("Error fetching faculty data:", error.response || error.message);
+    console.error("Error fetching faculty data:", error.response?.data || error.message);
     throw error; // Let the calling function handle errors
   }
 };
+
 
 
 

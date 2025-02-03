@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getDepartmentsApi } from '../../Services/allAPI';
 // import './viewdept.css'; 
-import { getDepartmentsApi } from '../../services/allAPI';
-
 
 const serverUrl = 'http://localhost:8000'; // Update with your server URL
 

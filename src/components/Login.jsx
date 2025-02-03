@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { loginApi } from "../services/allAPI";
-import { Form, Button, Container, Row, Col, Image } from "react-bootstrap";
-// import './login.css';
+import { toast, ToastContainer } from "react-toastify";
+import "./login.css"; // Import the CSS file
+import { loginApi } from "../Services/allAPI";
 
 function Login() {
   const [userData, setUserData] = useState({
@@ -28,6 +27,7 @@ function Login() {
     try {
       const result = await loginApi(userData);
       if (result.status === 200) {
+        // Storing the token and user data in localStorage
         localStorage.setItem("loggedUser", JSON.stringify(result.data));
         localStorage.setItem("access", result.data.access);
         localStorage.setItem("username", result.data.full_name);
@@ -52,73 +52,70 @@ function Login() {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
-      <Row className="w-100">
-        <Col md={6} className="d-none d-md-block">
-          <Image
-            src="https://img.freepik.com/premium-photo/student-black-man-books-study-home-desk-thinking-reading-studying-college-person-learning-focused-information-page-education-knowledge-working-law-research_590464-177778.jpg"
-            alt="Student studying"
-            fluid
-            className="rounded"
-          />
-        </Col>
-        <Col md={6}>
-          <div className="log-content">
-            <h2 className="text-center">WELCOME BACK</h2>
-            <p className="text-center">Welcome back! Please enter your details.</p>
+    <div className="lg-Box">
+      <div className="log-content">
+        <div className="lg-head">
+          <p>WELCOME BACK</p>
+          <p>Welcome back! Please enter your details.</p>
+        </div>
 
-            <Form onSubmit={handleLogin}>
-              <Form.Group controlId="formEmail" className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={userData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formPassword" className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  value={userData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  required
-                />
-              </Form.Group>
-
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <Form.Check type="checkbox" label="Remember me" />
-                <Link to="/forgot-password">Forgot Password?</Link>
-              </div>
-
-              <Button type="submit" variant="primary" className="w-100 mb-3">
-                Sign in
-              </Button>
-            </Form>
-
-            <Button variant="outline-primary" className="w-100 mb-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
-                alt="Google logo"
-                className="me-2"
-                style={{ width: '20px' }}
-              />
-              Sign in with Google
-            </Button>
-
-            <p className="text-center">
-              Don't have an account? <Link to="/signup">Click here to signup</Link>
-            </p>
+        <form onSubmit={handleLogin}>
+          <div className="i-box">
+            <label htmlFor="email" className="t">
+              Email
+            </label>
+            <input
+              name="email"
+              value={userData.email}
+              onChange={handleChange}
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
           </div>
-        </Col>
-      </Row>
-    </Container>
+
+          <div className="i-box">
+            <label htmlFor="password" className="t">
+              Password
+            </label>
+            <input
+              name="password"
+              value={userData.password}
+              onChange={handleChange}
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <div className="fp">
+            <div className="remme">
+              <input type="checkbox" />
+              <p>Remember me</p>
+            </div>
+            <p>Forgot Password</p>
+          </div>
+
+          <button type="submit" className="signBtn">
+            Sign in
+          </button>
+        </form>
+
+        <button className="google">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+            alt="Google logo"
+          />
+          Sign in with Google
+        </button>
+        <p className="spf">
+          Don't have an account? <Link to="/signup">Click here to signup</Link>
+        </p>
+      </div>
+      <ToastContainer />
+    </div>
   );
 }
 

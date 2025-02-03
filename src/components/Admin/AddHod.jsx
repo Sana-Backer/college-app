@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-// import "./add.css";
+import "./addhod.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { registerApi } from "../../services/allAPI";
-registerApi
+import { registerApi } from "../../Services/allAPI";
+
 function AddHod() {
   const [userData, setUserData] = useState({
     full_name: "",

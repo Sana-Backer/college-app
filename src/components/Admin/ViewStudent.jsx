@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './viewstd.css'
+import './viewstd.css';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form, Container, Row, Col, Spinner, Table } from 'react-bootstrap';
 import { toast, ToastContainer } from "react-toastify";
-import { deleteStudentApi, editStdApi, StudentApi } from '../../services/allAPI';
+import { deleteStudentApi, editStdApi, StudentApi } from '../../Services/allAPI';
 
 const ViewStudent = () => {
   const [students, setStudents] = useState([]);
@@ -12,7 +12,9 @@ const ViewStudent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   const fetchStudents = async () => {
     const token = localStorage.getItem('access');
@@ -33,10 +35,7 @@ const ViewStudent = () => {
       console.error('Error fetching students:', error);
     }
   };
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-  
+
   const handleEdit = (student) => {
     console.log(`Edit student with ID: ${student.id}`);
     setSelectedStudent(student);

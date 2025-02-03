@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import './viewHod.css';
+import './viewhod.css';
 import { useNavigate } from 'react-router-dom';
-import { deleteHodApi, HodApi } from '../../services/allAPI';
+import { deleteHodApi, HodApi } from '../../Services/allAPI';
 
 const ViewHod = () => {
   const [hods, setHods] = useState([]);

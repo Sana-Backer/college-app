@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { Form, Button, Container, Row, Col, Spinner } from "react-bootstrap";
-import { registerApi } from "../../services/allAPI";
-// import './addfaculty.css'
+import { registerApi } from "../../Services/allAPI";
+
 function AddFaculty() {
   const [userData, setUserData] = useState({
     full_name: "",
