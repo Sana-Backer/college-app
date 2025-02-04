@@ -33,25 +33,25 @@ const FacultyProfile = () => {
 
     //     fetchFacultyData();
     // }, [token]); 
-    useEffect(() => {
-        const fetchFacultyData = async () => {
-          if (!token) {
-            setError("No token found");
-            setLoading(false);
-            return;
-          }
+    // useEffect(() => {
+    //     const fetchFacultyData = async () => {
+    //       if (!token) {
+    //         setError("No token found");
+    //         setLoading(false);
+    //         return;
+    //       }
       
-          try {
-            const facultyData = await getFacultyApi(token);
-            setFaculty(facultyData);
-          } catch (error) {
-            setError("Failed to fetch faculty data.");
-          }
-          setLoading(false);
-        };
+    //       try {
+    //         const facultyData = await getFacultyApi(token);
+    //         setFaculty(facultyData);
+    //       } catch (error) {
+    //         setError("Failed to fetch faculty data.");
+    //       }
+    //       setLoading(false);
+    //     };
       
-        fetchFacultyData();
-      }, [token]);
+    //     fetchFacultyData();
+    //   }, [token]);
       
       
     if (loading) {

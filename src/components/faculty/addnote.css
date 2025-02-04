@@ -1,0 +1,16 @@
+.addnote{
+    background: rgb(33, 104, 33);
+    color: white;
+    border: 1px solid;
+    border: none;
+    font-size:  29px;
+}
+.custom-modal .modal-dialog {
+    max-width: 900px; /* Increase modal width */
+    width: 90%; /* Make it more responsive */
+}
+
+.custom-modal .modal-content {
+    height: auto; /* Allow content to define height */
+    padding: 20px; /* Add padding */
+}

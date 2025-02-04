@@ -6,6 +6,9 @@ import AssignmentStd from '../components/AssignmentStd';
 import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import FacultyProfile from '../components/faculty/facultyProfile'
+import ViewStudent from '../components/Admin/ViewStudent';
+import Studentlist from '../components/hod/Studentlist';
+import AddNote from '../components/faculty/AddNote';
 const FacultyDash = () => {
 
     const [activeFeature,setActiveFeature]= useState(null)
@@ -16,12 +19,12 @@ const FacultyDash = () => {
     const renderFeature =()=>{
         switch (activeFeature) {
 
-            case "assignment":
-               return <AssignmentStd/>;
+            case "studentlist":
+               return <ViewStudent/>;
                case "result":
                return <ResultStd/> ;
                case 'notes':
-                return <Notes/>
+                return <AddNote/>
      
             default:case "profile":
             return<FacultyProfile/>
@@ -38,7 +41,7 @@ const FacultyDash = () => {
                     
                     <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
                         <a href="#profile" onClick={()=>handleActiveFeature("profile")}>Profile</a>
-                        <a href="#assignment" onClick={()=>handleActiveFeature("assignment")}>Assignments</a>
+                        <a href="#assignment" onClick={()=>handleActiveFeature("studentlist")}>student list</a>
                         <a href="#notes" onClick={()=>handleActiveFeature("notes")}>Notes</a>
                         <a href="#attendence" onClick={()=>handleActiveFeature("attendence")}>Attendance</a>
                         <a href="#result" onClick={()=>handleActiveFeature("result")}>Result</a>

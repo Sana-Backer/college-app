@@ -23,7 +23,8 @@ const refreshToken = async () => {
 
 export const StudentApi = async (token) => {
   try {
-    const response = await axios.get(`${serverUrl}/stlist/`, {
+    const response = await axios.get(`${serverUrl}/
+      /`, {
       headers: {
         Authorization: `Bearer ${token}`, // Include your token here
       },
@@ -173,21 +174,21 @@ export const addFacultyApi = async (formData, reqHeader) => {
 };
 
 
+// Fetch faculty data
 export const getFacultyApi = async (token) => {
   try {
     const response = await axios.get(`${serverUrl}/falist/`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
       },
     });
-    return response.data; // Return only data
+    return response.data; // Assuming the data is in response.data
   } catch (error) {
-    console.error("Error fetching faculty data:", error.response?.data || error.message);
+    console.error("Error fetching faculty data:", error.response || error.message);
     throw error; // Let the calling function handle errors
   }
 };
-
 
 
 
@@ -286,4 +287,6 @@ export const addCourseApi = async (data, token) => {
     'Content-Type': 'application/json'
   })
 }
+
+// =============================
 

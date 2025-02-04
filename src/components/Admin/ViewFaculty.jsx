@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Container, Row, Col, Spinner, Modal, Form, Card } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-// import { FacultyApi, deleteFacultyApi, editFacultyApi } from "../services/allApi";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { deleteFacultyApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./addDepartment.css"; 
-import { addDepartmentApi } from "../../services/allAPI";
+import { addDepartmentApi } from "../../Services/allAPI";
 const AddDepartment = () => {
   const [departmentData, setDepartmentData] = useState({
     department_name: "",
