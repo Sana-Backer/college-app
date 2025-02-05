@@ -89,6 +89,10 @@ export const addDepartmentApi = async (data, token) => {
     'Content-Type': 'multipart/form-data',
   });
 };
+// dept view
+export const departmentApi = async () => {
+  return await commonAPI("GET", `${ serverUrl } / departments - list /`, "", "");
+};
 
 //delete department
 
