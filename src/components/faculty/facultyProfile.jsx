@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri';
 import axios from 'axios';
-import { getFacultyApi } from '../../Services/allAPI';
+// import { getFacultyApi } from '../../Services/allAPI';
 
 
 import { facultyApi } from '../../Services/allAPI';  
@@ -11,6 +11,8 @@ const FacultyProfile = () => {
     const [loading, setLoading] = useState(true); // To track loading state
     const [error, setError] = useState(null); // To track errors
     const token = localStorage.getItem('access');
+
+// byid,resto
 
     // useEffect(() => {
     //     const fetchFacultyData = async () => {

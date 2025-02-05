@@ -4,10 +4,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { deleteFacultyApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
+import './viewfaculty.css'
 
 function ViewFaculty() {
 
-  const serverUrl = 'http://localhost:8000'; 
+  const serverUrl = 'http://localhost:8000';
 
   const [facultyList, setFacultyList] = useState([]);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
@@ -20,7 +21,7 @@ function ViewFaculty() {
 
   // Fetch faculty data
   useEffect(() => {
-    const fetchFacultyData = async () => {
+    const AllFacultyData = async () => {
       try {
         const response = await FacultyApi();
         console.log("API Response:", response);
@@ -37,7 +38,7 @@ function ViewFaculty() {
       }
     };
 
-    fetchFacultyData();
+    AllFacultyData();
   }, []);
 
   // Handle edit faculty details
@@ -119,18 +120,17 @@ function ViewFaculty() {
   };
 
   return (
-    <Container className="py-5">
+    <div className=" container">
       <Row className="justify-content-center">
         <Col lg={10}>
-          <h1 className="text-center mb-4">Faculty List</h1>
 
           {isLoading ? (
             <div className="d-flex justify-content-center">
               <Spinner animation="border" size="lg" />
             </div>
           ) : (
-            <Card className="p-4 shadow-sm">
-              <Table striped bordered hover responsive className="bg-white">
+            <div className="p-4 ">
+              <Table striped bordered hover className="bg-white w-100">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -155,16 +155,29 @@ function ViewFaculty() {
                         <td>{faculty.gender}</td>
                         <td>
                           {faculty.photo ? (
-                            <img src={`${serverUrl}${faculty.photo}`} alt={faculty.full_name} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+                            <img
+                              src={`${serverUrl} ${faculty.photo}`}
+                          alt={faculty.full_name}
+                          style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                            />
                           ) : (
-                            "No Photo"
+                          "No Photo"
                           )}
                         </td>
                         <td>
-                          <Button variant="outline-primary" size="sm" onClick={() => handleEdit(faculty)} className="me-2">
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => handleEdit(faculty)}
+                            className="me-2"
+                          >
                             <FaEdit />
                           </Button>
-                          <Button variant="outline-danger" size="sm" onClick={() => handleDelete(faculty.id)}>
+                          <Button
+                            variant="outline-danger"
+                            size="sm"
+                            onClick={() => handleDelete(faculty.id)}
+                          >
                             <FaTrash />
                           </Button>
                         </td>
@@ -179,7 +192,8 @@ function ViewFaculty() {
                   )}
                 </tbody>
               </Table>
-            </Card>
+
+            </div>
           )}
         </Col>
       </Row>
@@ -233,7 +247,7 @@ function ViewFaculty() {
       </Modal>
 
       <ToastContainer />
-    </Container>
+    </div>
   );
 }
 

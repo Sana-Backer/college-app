@@ -12,6 +12,8 @@ import { StudentApi } from '../Services/allAPI';
 const StudentDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
+    const [profile, setProfile] = useState([])
+
 
     const handleActiveFeature = (feature) => {
         setActiveFeature(feature)
@@ -36,7 +38,6 @@ const StudentDash = () => {
     const backhome = () => {
         navigate('/home')
     }
-    const [profile, setProfile] = useState([])
 
     useEffect(() => {
         dashView()
@@ -50,11 +51,11 @@ const StudentDash = () => {
         try {
             const response = await StudentApi()
             setProfile(response.data)
-            
+
         } catch (err) {
             console.log("failed to fetch", err);
-            
-            
+
+
         }
 
     }
@@ -78,23 +79,23 @@ const StudentDash = () => {
                     </div>
                 </div>
                 <div className='d-flex row'>
-                    <div className='sidebar col-lg-2 container mb-2 '>
-                        <div className='photo img-fluid'>
-                            <img src={user} alt="" />
+                    <div className="sidebar  col-lg-2 col-md-4 col-sm-12 container mb-2">
+                        <div className="photo img-fluid">
+                            <img src={user} alt="User Profile" />
                         </div>
-                        <div className='text-center'>
+                        <div className="text-center">
                             <h4>JOHN MATHEW</h4>
-                            <p>student Id:3809</p>
+                            <p>Student Id: 3809</p>
                             <hr />
                             <p>email@gmail.com</p>
                             <p>908765432</p>
-
                         </div>
                     </div>
-                    <div className="col-lg-8 view " id=''>
+
+                    <div className="col-lg-9 view " id=''>
                         {renderFeature()}
                     </div>
-                    <div className="col-lg-1"></div>
+
 
                 </div>
 

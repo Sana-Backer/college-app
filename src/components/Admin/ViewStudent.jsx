@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './viewstd.css';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Button, Form, Container, Row, Col, Spinner, Table } from 'react-bootstrap';
+import { Modal, Button, Form,  Row, Col, Spinner, Table } from 'react-bootstrap';
 import { toast, ToastContainer } from "react-toastify";
 import { deleteStudentApi, editStdApi, StudentApi } from '../../Services/allAPI';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const ViewStudent = () => {
   const [students, setStudents] = useState([]);
@@ -13,10 +14,10 @@ const ViewStudent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchStudents();
+    AllStudents();
   }, []);
 
-  const fetchStudents = async () => {
+  const AllStudents = async () => {
     const token = localStorage.getItem('access');
     if (!token) {
       console.error('No token found in localStorage');
@@ -109,62 +110,57 @@ const ViewStudent = () => {
   };
 
   return (
-    <Container className="py-5">
+    <div className="container">
       <Row className="justify-content-center">
         <Col lg={10}>
-          <h1 className="text-center mb-4">Students List</h1>
-          <Table striped bordered hover responsive className="bg-white shadow-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Date of Birth</th>
-                <th>Gender</th>
-                <th>Department</th>
-                <th>Course</th>
-                <th>Batch</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.length > 0 ? (
-                students.map((student) => (
-                  <tr key={student.id}>
-                    <td>{student.id}</td>
-                    <td>{student.full_name}</td>
-                    <td>{student.email}</td>
-                    <td>{student.phone}</td>
-                    <td>{student.dob}</td>
-                    <td>{student.gender}</td>
-                    <td>{student.department}</td>
-                    <td>{student.course}</td>
-                    <td>{student.batch}</td>
-                    <td>{student.role}</td>
-                    <td className="student-actions">
-                      <i
-                        className="fa fa-edit edit-icon"
-                        onClick={() => handleEdit(student)}
-                      ></i>
-                      <i
-                        className="fa fa-trash delete-icon"
-                        onClick={() => handleDelete(student.id)}
-                      ></i>
-                    </td>
+
+          <div className="p-2 ">
+            {students.length > 0 ? (
+              <Table striped bordered hover className="bg-white">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Course</th>
+                    <th>Batch</th>
+                    <th>Gender</th>
+                    <th>Actions</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="11">No students found.</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
+                </thead>
+                <tbody>
+                  {students.map((student, index) => (
+                    <tr key={student.id}>
+                      <td>{index + 1}</td>
+                      <td>{student.full_name}</td>
+                      <td>{student.email}</td>
+                      <td>{student.phone}</td>
+                      <td>{student.department}</td>
+                      <td>{student.course}</td>
+                      <td>{student.batch}</td>
+                      <td>{student.gender}</td>
+                      <td>
+                        <Button variant="outline-primary" size="sm" onClick={() => handleEdit(student)} className="me-2">
+                          <FaEdit />
+                        </Button>
+                        <Button variant="outline-danger" size="sm" onClick={() => handleDelete(student.id)}>
+                          <FaTrash />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              <p className="text-center">No students found.</p>
+            )}
+          </div>
         </Col>
       </Row>
 
+      {/* Edit Student Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Student Details</Modal.Title>
@@ -272,8 +268,9 @@ const ViewStudent = () => {
           </Form>
         </Modal.Body>
       </Modal>
+
       <ToastContainer />
-    </Container>
+    </div>
   );
 };
 

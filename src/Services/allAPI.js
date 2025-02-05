@@ -1,6 +1,8 @@
 import axios from "axios";
 import { commonAPI } from "./commonApi";
-import {serverUrl} from './serverurl'
+import { serverUrl } from "./serverUrl";
+
+
 // Function to refresh token
 const refreshToken = async () => {
   const refreshToken = localStorage.getItem('refresh'); // Assume the refresh token is also stored
@@ -23,8 +25,7 @@ const refreshToken = async () => {
 
 export const StudentApi = async (token) => {
   try {
-    const response = await axios.get(`${serverUrl}/
-      /`, {
+    const response = await axios.get(`${serverUrl}/stlist/`, {
       headers: {
         Authorization: `Bearer ${token}`, // Include your token here
       },
@@ -111,7 +112,7 @@ export const editDeptApi = async (id, deptdetails, token) => {
 
 export const facultyApi = async (token) => {
   try {
-    const response = await axios.get(`${serverUrl}/Faculty/`, {
+    const response = await axios.get(`${serverUrl}/falist/`, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
@@ -173,28 +174,13 @@ export const addFacultyApi = async (formData, reqHeader) => {
   }
 };
 
-
-// Fetch faculty data
-export const getFacultyApi = async (token) => {
-  try {
-    const response = await axios.get(`${serverUrl}/falist/`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-      },
-    });
-    return response.data; // Assuming the data is in response.data
-  } catch (error) {
-    console.error("Error fetching faculty data:", error.response || error.message);
-    throw error; // Let the calling function handle errors
-  }
-};
-
-
-
+// // studentlist -api
+// export const StudentApi = async () => {
+//   return await commonAPI("GET", `${serverUrl}/stlist/`, "", "");
+// };
 
 //addStudentApi
-export const addStudentApi = async (formData, reqHeader) => {
+export const addStudentApi = async (FormData, reqHeader) => {
   try {
     const response = await axios.post(`${serverUrl}/stlist/`, formData, {
       headers: {
@@ -261,7 +247,7 @@ export const delete_Studentnote = async (id, token) => {
   });
 };
 
-
+// =============================
 // HOD API functions
 export const HodApi = async (token) => {
   return await commonAPI("GET", `${serverUrl}/hodlist/`, null, {
@@ -280,7 +266,7 @@ export const editHodApi = async (id, hodDetails, token) => {
     Authorization: `Bearer ${token}`,
   });
 };
-
+// -----------------------------------------------------------------
 export const addCourseApi = async (data, token) => {
   return await commonAPI("POST", `${serverUrl}/courses-list/`, data, {
     Authorization: `Bearer ${token}`,
@@ -288,5 +274,5 @@ export const addCourseApi = async (data, token) => {
   })
 }
 
-// =============================
+
 

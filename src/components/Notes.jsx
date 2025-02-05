@@ -7,8 +7,9 @@ import { FaRegEye } from "react-icons/fa";
 const Notes = () => {
   return (
     <div className='notes-container'>
-        <div className="row d-flex p-2 gap-1">
-            <div className="col-lg-3 note-card">
+        <div className="card-wrap p-2 gap-1">
+          {/* col-12 col-sm-6 col-md-4 col-lg-3 p-2 */}
+            <div className="note-card">
                 <div className='pdf '>
                   <div><img src={pdf} style={{width:'100px', height:'110px'}} alt="" /></div>
                 </div>
@@ -23,7 +24,7 @@ const Notes = () => {
                 </div>
                 
             </div>
-            <div className="col-lg-3 note-card">
+            <div className="note-card">
                 <div className='pdf '>
                   <div><img src={pdf} style={{width:'100px', height:'110px'}} alt="" /></div>
                 </div>
@@ -38,7 +39,7 @@ const Notes = () => {
                 </div>
                 
             </div>
-            <div className="col-lg-3 note-card">
+            <div className="note-card">
                 <div className='pdf '>
                   <div><img src={pdf} style={{width:'100px', height:'110px'}} alt="" /></div>
                 </div>
@@ -53,7 +54,7 @@ const Notes = () => {
                 </div>
                 
             </div>
-            <div className="col-lg-3 note-card">
+            <div className="note-card">
                 <div className='pdf '>
                   <div><img src={pdf} style={{width:'100px', height:'110px'}} alt="" /></div>
                 </div>
@@ -68,6 +69,10 @@ const Notes = () => {
                 </div>
                 
             </div>
+          
+           
+
+          
          
         </div>
     </div>

@@ -8,43 +8,52 @@ import Notes from '../components/Notes';
 import FacultyProfile from '../components/faculty/facultyProfile'
 import ViewStudent from '../components/Admin/ViewStudent';
 import Studentlist from '../components/hod/Studentlist';
-import AddNote from '../components/faculty/AddNote';
+import { useNavigate } from 'react-router-dom';
+// import AddNote from '../components/faculty/AddNote';
 const FacultyDash = () => {
 
-    const [activeFeature,setActiveFeature]= useState(null)
+    const [activeFeature, setActiveFeature] = useState(null)
+    const navigate = useNavigate()
 
-    const handleActiveFeature =(feature)=>{
+
+    const backhome = () => {
+        navigate('/home')
+    }
+
+    const handleActiveFeature = (feature) => {
         setActiveFeature(feature)
     }
-    const renderFeature =()=>{
+    const renderFeature = () => {
         switch (activeFeature) {
 
             case "studentlist":
-               return <ViewStudent/>;
-               case "result":
-               return <ResultStd/> ;
-               case 'notes':
-                return <AddNote/>
-     
-            default:case "profile":
-            return<FacultyProfile/>
-           
+                return <ViewStudent />;
+            case "result":
+                return <ResultStd />;
+            case 'notes':
+                return <AddNote />
+
+            default: case "profile":
+                return <FacultyProfile />
+
         }
     }
 
     return (
         <section>
-      
+
             <div>
-            <div className='container d-flex justify-content-end mt-1 me-auto'><p className='tohome'><RiArrowGoForwardLine/> Back to Home </p></div>
+                <div className='container d-flex justify-content-end mt-1 me-auto'>
+                    <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
+                </div>
                 <div className='dash'>
-                    
+
                     <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
-                        <a href="#profile" onClick={()=>handleActiveFeature("profile")}>Profile</a>
-                        <a href="#assignment" onClick={()=>handleActiveFeature("studentlist")}>student list</a>
-                        <a href="#notes" onClick={()=>handleActiveFeature("notes")}>Notes</a>
-                        <a href="#attendence" onClick={()=>handleActiveFeature("attendence")}>Attendance</a>
-                        <a href="#result" onClick={()=>handleActiveFeature("result")}>Result</a>
+                        <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
+                        <a href="#assignment" onClick={() => handleActiveFeature("studentlist")}>student list</a>
+                        <a href="#notes" onClick={() => handleActiveFeature("notes")}>Notes</a>
+                        <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
+                        <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
                     </div>
                 </div>
                 <div className='d-flex row'>
@@ -62,12 +71,12 @@ const FacultyDash = () => {
                         </div>
                     </div>
                     <div className="col-lg-8 view " id=''>
-                    {renderFeature()}
+                        {renderFeature()}
                     </div>
                     <div className="col-lg-1"></div>
 
                 </div>
-                
+
             </div>
         </section>
     )
