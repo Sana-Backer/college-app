@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import './styles/stddash.css';
-import bg from '../assets/bgg.jpg';
 import prof3 from '../assets/proff3.jpg'
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import AssignmentStd from '../components/AssignmentStd';
