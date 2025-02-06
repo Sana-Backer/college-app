@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./department.css";
+import "./departments.css";
 import { Link } from "react-router-dom";
 
 const serverUrl = 'http://localhost:8000';
