@@ -32,7 +32,7 @@ const Header = () => {
                     )}
                     {role === "hod" && (
                         <Link to="/hodDash" style={{ textDecoration: "none" }}>
-                            <button className="sign-in-btn">HOD Dashboard</button>
+                            HOD Dashboard
                         </Link>
                     )}
                     {role === "faculty" && (

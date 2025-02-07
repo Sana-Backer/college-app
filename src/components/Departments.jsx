@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./departments.css";
 import { Link } from "react-router-dom";
+import { departmentApi } from "../Services/allAPI";
 
 const serverUrl = 'http://localhost:8000';
 
@@ -55,14 +56,13 @@ function Departments() {
               <div className="image-container">
                 <img
                   className="dept-img"
-                  src={`${serverUrl} ${imageUrl}`}
-                alt={department.department_name}
+                  src={`${serverUrl}${imageUrl}`}
+                  alt={department.department_name}
                 />
                 <div className="dept-title">
                   <p className="cp1">{department.department_name}</p>
                   <Link to={{
-                    pathname: "/coursedescription"
-                  }} state={{ department }} style={{ textDecoration: 'none' }}>
+                    pathname: "/coursedescription" }} state={{ department }} style={{ textDecoration: 'none' }}> 
                     <p className="text-warning">
                       See Course Guide <i className="fa-solid fa-arrow-right"></i>
                     </p>

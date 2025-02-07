@@ -12,6 +12,7 @@ import Otp from "./components/Otp";
 import AdminHome from "./components/Admin/AdminHome";
 import HodDash from "./pages/HodDash";
 import FacultyDash from "./pages/FacultyDash";
+import HodProfile from "./components/hod/HodProfile";
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/studentDash" element={<StudentDash />}></Route>
         <Route path="/hoddash" element={<HodDash />}></Route>
+        <Route path="/hod/:hodId" element={<HodProfile  />} />
+
         <Route path="/facultydash" element={<FacultyDash />}></Route>
         
         <Route path="/admin-home" element={<AdminHome />}></Route>

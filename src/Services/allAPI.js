@@ -91,9 +91,8 @@ export const addDepartmentApi = async (data, token) => {
 };
 // dept view
 export const departmentApi = async () => {
-  return await commonAPI("GET", `${ serverUrl } / departments - list /`, "", "");
+  return await commonAPI("GET", `${serverUrl}/departments-list/`, "", "");
 };
-
 //delete department
 
 export const deleteDeptApi = async (id, token) => {
@@ -228,6 +227,7 @@ export const student_attendanceapi = async (token) => {
 };
 
 //uploading notes {faculty dash}
+//uploading notes {faculty dash}
 
 export const upload_Studentnote = async (formData, reqHeader) => {
   try {
@@ -250,6 +250,8 @@ export const delete_Studentnote = async (id, token) => {
     Authorization: `Bearer ${token}`,
   });
 };
+;
+
 
 // =============================
 // HOD API functions
@@ -259,6 +261,22 @@ export const HodApi = async (token) => {
   });
 };
 
+// Function to fetch a specific HOD by ID
+// export const getHodById = async (userId, token) => {
+
+//   return await commonAPI("GET", `${serverUrl}/hodlist/${userId}/`, null, {
+//     Authorization: `Bearer ${token}`,
+//   });
+// };
+
+// profile
+export const getUserProfileApi = async (userId, token) => {
+  return axios.get(`${serverUrl}/profile/${userId}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 export const deleteHodApi = async (id, token) => {
   return await commonAPI("DELETE", `${serverUrl}/hodlist/${id}/`, null, {
     Authorization: `Bearer ${token}`,
@@ -270,6 +288,7 @@ export const editHodApi = async (id, hodDetails, token) => {
     Authorization: `Bearer ${token}`,
   });
 };
+
 // -----------------------------------------------------------------
 export const addCourseApi = async (data, token) => {
   return await commonAPI("POST", `${serverUrl}/courses-list/`, data, {

@@ -5,13 +5,13 @@ import prof3 from '../assets/proff3.jpg'
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import AssignmentStd from '../components/AssignmentStd';
 import ResultStd from '../components/ResultStd';
-import Notes from '../components/Notes';
 import HodProfile from '../components/hod/HodProfile';
 import { useNavigate } from 'react-router-dom';
 import ViewStudent from '../components/Admin/ViewStudent';
 import ViewFaculty from '../components/Admin/ViewFaculty';
 import { Button, Modal } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
+import AddNote from '../components/hod/AddNote';
 
 const HodDash = () => {
 
@@ -20,8 +20,6 @@ const HodDash = () => {
     const [showForm, setShowForm] = useState(null);
 
     const navigate = useNavigate()
-
-
     const backhome = () => {
         navigate('/home')
     }
@@ -35,8 +33,8 @@ const HodDash = () => {
                 return < ViewFaculty />;
             case "students":
                 return <ViewStudent />;
-            case 'notes':
-                return <Notes />
+            case 'addnote':
+                return <AddNote />
 
 
 
@@ -56,6 +54,8 @@ const HodDash = () => {
 
 
 
+
+
     return (
         <section>
 
@@ -69,7 +69,7 @@ const HodDash = () => {
                         <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
                         <a href="#assignment" onClick={() => handleActiveFeature("faculties")}>Faculty List</a>
                         <a href="#notes" onClick={() => handleActiveFeature("students")}>Student List</a>
-                        <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
+                        <a href="#attendence" onClick={() => handleActiveFeature("addnote")}>Notes</a>
                         <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
                     </div>
                 </div>

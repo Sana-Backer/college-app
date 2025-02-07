@@ -7,12 +7,17 @@ import Profile from '../components/Profile';
 import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import { useNavigate } from 'react-router-dom';
-import { StudentApi } from '../Services/allAPI';
+import { getUserProfileApi, StudentApi } from '../Services/allAPI';
 
 const StudentDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
-    const [profile, setProfile] = useState([])
+    const [profile, setProfile] = useState({
+        id:"",
+        name:"",
+        email:'',
+        phone:''
+    })
 
 
     const handleActiveFeature = (feature) => {
@@ -31,7 +36,7 @@ const StudentDash = () => {
 
             default: case "profile":
                 return <Profile />
-                return
+                
         }
     }
     const navigate = useNavigate()
@@ -40,25 +45,35 @@ const StudentDash = () => {
     }
 
     useEffect(() => {
-        dashView()
-    }, [])
+        const studentSideBar = async()=>{
+            const token = localStorage.getItem('access')
+            const userId = localStorage.getItem('userId')
+            if(! token || ! userId){
+                console.log('token / userid not found in local storage');
+                return        
+            }
+            try {
+                const response = await getUserProfileApi(userId, token)
+                const userData = response.data
+                console.log(userData);
+                
+                setProfile({
+                    id: userData.id,
+                    full_name: userData.full_name,
+                    department: userData.department,
+                    email: userData.email,
+                    phone: userData.phone
 
-    const dashView = async () => {
-        const token = localStorage.getItem('access')
-        if (!token) {
-            console.log("no token found");
+                })
+
+            } catch (error) {
+                console.log('error fetching student profile',error);
+                
+            }
         }
-        try {
-            const response = await StudentApi()
-            setProfile(response.data)
+        studentSideBar()
+    },[])
 
-        } catch (err) {
-            console.log("failed to fetch", err);
-
-
-        }
-
-    }
 
 
     return (
@@ -84,11 +99,11 @@ const StudentDash = () => {
                             <img src={user} alt="User Profile" />
                         </div>
                         <div className="text-center">
-                            <h4>JOHN MATHEW</h4>
+                            <h4>name{profile.name}</h4>
                             <p>Student Id: 3809</p>
                             <hr />
-                            <p>email@gmail.com</p>
-                            <p>908765432</p>
+                            <p>email{profile.email}</p>
+                            <p>9898989898{profile.phone}</p>
                         </div>
                     </div>
 

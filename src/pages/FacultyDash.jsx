@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/stddash.css';
 import prof3 from '../assets/proff3.jpg'
 import { RiArrowGoForwardLine } from "react-icons/ri";
@@ -9,10 +9,19 @@ import FacultyProfile from '../components/faculty/facultyProfile'
 import ViewStudent from '../components/Admin/ViewStudent';
 import Studentlist from '../components/hod/Studentlist';
 import { useNavigate } from 'react-router-dom';
+import { getUserProfileApi } from '../Services/allAPI';
 // import AddNote from '../components/faculty/AddNote';
 const FacultyDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
+    const [faculty, setFaculty] = useState({
+        full_name:"",
+        department:"",
+        email:"",
+        phone:"",
+        photo:""
+    });
+
     const navigate = useNavigate()
 
 
@@ -38,6 +47,36 @@ const FacultyDash = () => {
 
         }
     }
+     
+    useEffect(() => {
+        const facultySideBar = async()=>{
+            const token = localStorage.getItem('access')
+            const userId = localStorage.getItem('userId')
+            if(! token || ! userId){
+                console.log('token / userid not found in local storage');
+                return        
+            }
+            try {
+                const response = await getUserProfileApi(userId, token)
+                const userData = response.data
+                console.log(userData);
+                
+                setFaculty({
+                    id: userData.id,
+                    full_name: userData.full_name,
+                    department: userData.department,
+                    email: userData.email,
+                    phone: userData.phone
+
+                })
+
+            } catch (error) {
+                console.log('error fetching faculty profile',error);
+                
+            }
+        }
+        facultySideBar()
+    },[])
 
     return (
         <section>
@@ -62,11 +101,11 @@ const FacultyDash = () => {
                             <img src={prof3} alt="" />
                         </div>
                         <div className='text-center'>
-                            <h4>Miazna Ameer</h4>
-                            <p>Department of civil Engineering</p>
+                            <h4>{faculty.full_name}</h4>
+                            <p >Department {faculty.department}</p>
                             <hr />
-                            <p>miszna@gmail.com</p>
-                            <p>908765432</p>
+                            <p>{faculty.email}</p>
+                            <p>{faculty.phone}</p>
 
                         </div>
                     </div>

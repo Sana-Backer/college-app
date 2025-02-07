@@ -1,0 +1,18 @@
+.addnote{
+    background: rgb(35, 119, 35);
+    color: white;
+    border: 1px solid;
+    border: none;
+    border-radius: 20px;
+    font-size:  29px;
+    font-family:'Courier New', Courier, monospace
+}
+.custom-modal .modal-dialog {
+    max-width: 900px; /* Increase modal width */
+    width: 90%; /* Make it more responsive */
+}
+
+.custom-modal .modal-content {
+    height: auto; /* Allow content to define height */
+    padding: 20px; /* Add padding */
+}
