@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 import "./addDepartment.css";
 import { addDepartmentApi } from "../../Services/allAPI";
 
@@ -9,10 +9,10 @@ const AddDepartment = () => {
   const [departmentData, setDepartmentData] = useState({
     department_name: "",
     description: "",
-    course_type: "",
+    courses: "",
     photo: null,
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,9 +26,11 @@ const AddDepartment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("access");
+    setIsLoading(true);
+    const token = localStorage.getItem('access');
     if (!token) {
       toast.error("You must be logged in to add a department.");
+      setIsLoading(false);
       return;
     }
 
@@ -44,16 +46,16 @@ const AddDepartment = () => {
         setDepartmentData({
           department_name: "",
           description: "",
-          course_type: "",
+          courses: "",
           photo: null,
         });
       } else {
-        console.error("Error response:", response.data);
         toast.error("There was a problem adding the department. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding department:", error.response || error.message);
       toast.error("An unexpected error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,11 +65,11 @@ const AddDepartment = () => {
         <div className="registration-card">
           <header className="registration-header">
             <h1>Add Department</h1>
-            <p>Enter department details to create a new department</p>
+            <p>Enter department details to create a new entry</p>
           </header>
 
           <form onSubmit={handleSubmit} className="registration-form">
-            <div className="form-grid">
+            <div className="form-grid ">
               <div className="input-group">
                 <label htmlFor="department_name">Department Name</label>
                 <input
@@ -80,24 +82,22 @@ const AddDepartment = () => {
                   className="input-field"
                 />
               </div>
-              
+
               <div className="input-group">
-                <label htmlFor="course_type">Course Type</label>
+                <label htmlFor="courses">Course Type</label>
                 <select
-                  id="course_type"
-                  name="course_type"
-                  value={departmentData.course_type}
+                  id="courses"
+                  name="courses"
+                  value={departmentData.courses}
                   onChange={handleChange}
                   className="select-field"
                 >
                   <option value="">Select Course Type</option>
-                  <option value="M.Tech">M.Tech</option>
-                  <option value="B.Tech">B.Tech</option>
+                  <option value="2">B.Tech</option>
+                  <option value="3">M.Tech</option>
                 </select>
               </div>
-            </div>
 
-            <div className="form-grid">
               <div className="input-group full-width">
                 <label htmlFor="description">Description</label>
                 <textarea
@@ -109,11 +109,9 @@ const AddDepartment = () => {
                   className="input-field"
                 ></textarea>
               </div>
-            </div>
 
-            <div className="form-grid">
-              <div className="input-group full-width">
-                <label htmlFor="photo">Department Photo</label>
+              <div className="input-group">
+                <label htmlFor="photo">Photo</label>
                 <input
                   type="file"
                   id="photo"
@@ -127,16 +125,17 @@ const AddDepartment = () => {
             <div className="form-actions">
               <button 
                 type="button" 
-                className="btn-secondary" 
-                onClick={() => navigate("/")}
+                className="btn-secondary"
+                onClick={() => navigate('/')}
               >
                 Cancel
               </button>
               <button 
                 type="submit" 
                 className="btn-primary"
+                disabled={isLoading}
               >
-                Add Department
+                {isLoading ? 'Processing...' : 'Add Department'}
               </button>
             </div>
           </form>

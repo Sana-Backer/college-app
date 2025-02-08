@@ -32,13 +32,13 @@ const Courses = () => {
       setCurrentIndex(currentIndex - 1);
     }
   };
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 3000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     handleNext();
+  //   }, 3000);
   
-    return () => clearInterval(interval); 
-  }, [currentIndex]);
+  //   return () => clearInterval(interval); 
+  // }, [currentIndex]);
   
   
 

@@ -51,7 +51,7 @@ const ViewDepartment = () => {
     }
 
     const confirmDelete = window.confirm("Are you sure you want to delete this department");
-    if(!confirmDelete){
+    if (!confirmDelete) {
       return;
     }
 
@@ -127,12 +127,12 @@ const ViewDepartment = () => {
         </thead>
         <tbody>
           {filteredDepartments.length > 0 ? (
-            filteredDepartments.map((department,index) => (
+            filteredDepartments.map((department, index) => (
               <tr key={department.id}>
-                <td>{index+1}</td>
+                <td>{index + 1}</td>
                 <td>
                   {department.photo && (
-                    <img src={`${serverUrl}${department.photo}`} alt={`${department.department_name} photo`} className="department-photo" />
+                    <img src={`${serverUrl}/${department.photo}`} alt={`${department.department_name} photo`} className="department-photo" />
                   )}
                 </td>
                 <td>{department.department_name}</td>

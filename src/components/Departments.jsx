@@ -35,17 +35,18 @@ function Departments() {
   }
 
   if (error) {
-    return <div>{error}</div>; // Display error message
+    return <div>{error}</div>;
   }
 
   if (!departments || departments.length === 0) {
-    return <div>No departments available.</div>; // Fallback if no departments
+    return <div>No departments available.</div>; 
   }
 
   return (
     <>
       <div className="head-course-text my-2">
-        <p className="text-center fs-4">Most Popular Courses</p>
+        <h2 className="text-center ">Our Departments</h2>
+        <hr />
       </div>
 
       <div className="course-box">

@@ -239,10 +239,11 @@ export const upload_Studentnote = async (formData, reqHeader) => {
     });
     return response;
   } catch (err) {
-    console.error("Error in upload_Studentnote:", err.response || err.message);
+    console.error("Error in upload_Studentnote:", err.response?.data || err.message);
     throw err; // Re-throw to let the caller handle it
   }
 };
+
 
 //delete_Studentnote
 export const delete_Studentnote = async (id, token) => {

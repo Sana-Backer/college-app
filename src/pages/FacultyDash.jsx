@@ -10,10 +10,16 @@ import ViewStudent from '../components/Admin/ViewStudent';
 import Studentlist from '../components/hod/Studentlist';
 import { useNavigate } from 'react-router-dom';
 import { getUserProfileApi } from '../Services/allAPI';
-// import AddNote from '../components/faculty/AddNote';
+import AddNote from '../components/hod/AddNote';
+import { Button, Modal } from 'react-bootstrap';
+import { FaPlus } from 'react-icons/fa';
 const FacultyDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
+    const [showModal, setShowModal] = useState(false);
+    const [showForm, setShowForm] = useState(null);
+    const [showActionMenu, setShowActionMenu] = useState(false);
+
     const [faculty, setFaculty] = useState({
         full_name:"",
         department:"",
@@ -39,8 +45,8 @@ const FacultyDash = () => {
                 return <ViewStudent />;
             case "result":
                 return <ResultStd />;
-            case 'notes':
-                return <AddNote />
+            case 'addnote':
+                return <Notes/>
 
             default: case "profile":
                 return <FacultyProfile />
@@ -77,6 +83,28 @@ const FacultyDash = () => {
         }
         facultySideBar()
     },[])
+    const handleAddStudent = () => {
+        setShowForm("Student");
+        setShowModal(true);
+        setShowActionMenu(false);
+    };
+
+    const handleAddNote = () => {
+        setShowForm("Note");
+        setShowModal(true);
+        setShowActionMenu(false);
+    };
+
+    const handleModalClose = () => {
+        setShowModal(false);
+        setShowForm(null);
+    };
+
+    const toggleActionMenu = () => {
+        setShowActionMenu(!showActionMenu);
+    };
+
+
 
     return (
         <section>
@@ -90,7 +118,7 @@ const FacultyDash = () => {
                     <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
                         <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
                         <a href="#assignment" onClick={() => handleActiveFeature("studentlist")}>student list</a>
-                        <a href="#notes" onClick={() => handleActiveFeature("notes")}>Notes</a>
+                        <a href="#notes" onClick={() => handleActiveFeature("addnote")}>Notes</a>
                         <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
                         <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
                     </div>
@@ -115,8 +143,38 @@ const FacultyDash = () => {
                     <div className="col-lg-1"></div>
 
                 </div>
+         {/* Floating action button to add student or note */}
+         <div className='fab' onClick={toggleActionMenu}>
+                    <FaPlus />
+                </div>
 
+                {/* Action Menu for selecting Add Student or Add Note */}
+                {showActionMenu && (
+                    <div className="action-menu">
+                        <Button variant="primary" onClick={handleAddStudent}>Add Student</Button>
+                        <Button variant="secondary" onClick={handleAddNote}>Add Note</Button>
+                    </div>
+                )}
             </div>
+     
+              {/* Modal for Adding Student or Note */}
+              <Modal show={showModal} onHide={handleModalClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{showForm ? `Add ${showForm}` : "Select Action"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {!showForm ? (
+                        <div className="d-flex justify-content-around">
+                            <Button variant="primary" onClick={handleAddStudent}>Add Student</Button>
+                            <Button variant="success" onClick={handleAddNote}>Add Note</Button>
+                        </div>
+                    ) : showForm === "Student" ? (
+                        <AddStudent onClose={handleModalClose} />
+                    ) : showForm === "Note" && (
+                        <AddNote onClose={handleModalClose} />
+                    )}
+                </Modal.Body>
+            </Modal>
         </section>
     )
 }

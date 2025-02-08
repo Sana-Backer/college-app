@@ -1,14 +1,22 @@
-.course-box{
-    display: flex;
-    flex-direction: row;
+.course-box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 10px; /* Space between columns */
+    padding: 20px 0;
 }
+.head-course-text hr {
+    width: 6%;
+    margin: auto;
+    border: 2px solid rgb(245, 225, 6); 
+  }
+
 /* chngeeee */
 .dept-card {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    width: 350px;
-    height: 200px;
+    width: 100%; /* Full width of the grid cell */
+    height: 250px;
     overflow: hidden;
     margin: 10px;
 }
@@ -48,8 +56,9 @@
 }
 
 .course-box {
-    display: flex;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     padding: 20px 0;
     scrollbar-width: thin; 
 }
@@ -66,6 +75,7 @@
 .course-box::-webkit-scrollbar-track {
     background-color: #f1f1f1;
 }
+
 .see-more-container {
     text-align: center;
 }
@@ -78,4 +88,31 @@
 
 .see-more-link:hover {
     text-decoration: underline;
+}
+@media screen and (max-width: 1024px) {
+    .course-box {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .course-box {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for mobile */
+        padding: 10px;
+    }
+
+    .dept-card {
+        height: auto; /* Adjust height for better mobile display */
+    }
+
+    .dept-title {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .dept-title {
+        font-size: 0.9rem; /* Reduce font size for smaller screens */
+        padding: 10px 0;
+    }
 }
