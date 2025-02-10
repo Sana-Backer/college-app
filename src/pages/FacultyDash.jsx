@@ -7,10 +7,10 @@ import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import FacultyProfile from '../components/faculty/facultyProfile'
 import ViewStudent from '../components/Admin/ViewStudent';
-import Studentlist from '../components/hod/Studentlist';
 import { useNavigate } from 'react-router-dom';
 import { getUserProfileApi } from '../Services/allAPI';
 import AddNote from '../components/hod/AddNote';
+import AddStudent from '../components/Admin/AddStudent'
 import { Button, Modal } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 const FacultyDash = () => {

@@ -35,7 +35,8 @@ const HodDash = () => {
                 return <ViewStudent />;
             case 'addnote':
                 return <AddNote />
-
+                case 'result':
+                    return <ResultStd />
 
 
             default: case "profile":
