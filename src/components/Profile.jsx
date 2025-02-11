@@ -29,7 +29,7 @@ const Profile = () => {
                      gender: userData.gender,
                      batch: userData.batch,
                      department: userData.department,
-                     couser: userData.course,
+                     course: userData.course,
                      email: userData.email,
                      phone: userData.phone
  
@@ -37,9 +37,9 @@ const Profile = () => {
                  setLoading(false)
  
              } catch (error) {
-                 console.log('failed to fetch faculty details', error);
+                 console.log('failed to fetch student details', error);
  
-                 setError('failed to fetch faculty details');
+                 setError('failed to fetch student details');
                  setLoading(false)
  
              }

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './addStudent.css';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import { registerApi } from '../../Services/allAPI';
+import { departmentApi, registerApi } from '../../Services/allAPI';
 
 function StudentRegistration() {
   const [userData, setUserData] = useState({
@@ -18,8 +18,26 @@ function StudentRegistration() {
     role: 'student',
   });
 
+  const [department, setDepartment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const AllDept = async () => {
+      try {
+        const response = await departmentApi();
+        if (response.status === 200) {
+          setDepartment(response.data);
+        } else {
+          toast.error('Failed to get departments');
+        }
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+        toast.error('An unexpected error occurred. Please try again.');
+      }
+    };
+    AllDept();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,13 +46,14 @@ function StudentRegistration() {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoading(true); // Set loading state to true
 
     const { full_name, dob, gender, email, phone, password, course, department, batch, role } = userData;
 
+    // Check if any field is empty
     if (!full_name || !dob || !gender || !email || !phone || !password || !course || !department || !batch) {
       toast.warning('Please fill out all fields');
-      setIsLoading(false);
+      setIsLoading(false); // Reset loading state
       return;
     }
 
@@ -52,6 +71,8 @@ function StudentRegistration() {
         role,
       });
 
+      console.log('User Data:', userData); // Debug log to check data being sent
+
       if (response.status === 200) {
         toast.success('OTP sent successfully');
         setUserData({
@@ -61,9 +82,9 @@ function StudentRegistration() {
           email: '',
           phone: '',
           password: '',
-          course: '',
-          department: '',
-          batch: '',
+          course: '', 
+          department: '', 
+          batch: '', 
           role: 'student',
         });
         navigate('/Otp', { state: { email } });
@@ -74,9 +95,10 @@ function StudentRegistration() {
       console.error('Error during registration:', error);
       toast.error('An unexpected error occurred. Please try again.');
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Reset loading state after the request
     }
   };
+  
 
   return (
     <div className="registration-page">
@@ -196,11 +218,9 @@ function StudentRegistration() {
                   className="select-field"
                 >
                   <option value="">Select Department</option>
-                  <option value="1">Chemical Engineering</option>
-                  <option value="2">Computer Engineering</option>
-                  <option value="3">Civil Engineering</option>
-                  <option value="4">Electronic Engineering</option>
-                  <option value="5">EC Engineering</option>
+                  {department.map((dept) => (
+                    <option key={dept.id} value={dept.id}>{dept.department_name}</option>
+                  ))}
                 </select>
               </div>
 
@@ -221,15 +241,14 @@ function StudentRegistration() {
             </div>
 
             <div className="form-actions">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn-secondary"
-                onClick={() => navigate('/')}
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn-primary"
                 disabled={isLoading}
               >
@@ -239,7 +258,7 @@ function StudentRegistration() {
           </form>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

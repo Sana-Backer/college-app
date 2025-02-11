@@ -5,6 +5,7 @@ import './viewHod.css';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { deleteHodApi, editHodApi, HodApi } from '../../Services/allAPI';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ViewHod = () => {
   const [hods, setHods] = useState([]);
@@ -43,6 +44,7 @@ const ViewHod = () => {
 
   const handleEdit = (hod) => {
     console.log(`Edit HOD with ID: ${hod.id}`);
+    localStorage.setItem("selectedFacultyId", hod.id);
     setSelectedHod(hod);
     setShowModal(true);
   };
@@ -73,10 +75,17 @@ const ViewHod = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedHod((prevHod) => ({
-      ...prevHod,
-      [name]: value,
-    }));
+    if (name === 'photo') {
+      setSelectedHod((prevHod) => ({
+        ...prevHod,
+        [name]: e.target.files[0],
+      }));
+    } else {
+      setSelectedHod((prevHod) => ({
+        ...prevHod,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -84,23 +93,27 @@ const ViewHod = () => {
     setIsSubmitting(true);
 
     const formData = new FormData();
+    formData.append("id", selectedHod.id);
     formData.append("full_name", selectedHod.full_name);
     formData.append("email", selectedHod.email);
     formData.append("phone", selectedHod.phone);
     formData.append("department", selectedHod.department);
+    formData.append("dob", selectedHod.dob);
+    formData.append("gender", selectedHod.gender);
+    if (selectedHod.photo) {
+      formData.append("photo", selectedHod.photo);
+    }
 
     try {
       const response = await editHodApi(selectedHod.id, formData, token, true);
       console.log('API Response:', response);
 
       if (response.status === 200) {
-        console.log(`HOD with ID: ${selectedHod.id} updated successfully`);
         setHods(hods.map(hod => (hod.id === selectedHod.id ? response.data : hod)));
         setShowModal(false);
         setSelectedHod(null);
         toast.success("HOD details updated!");
       } else {
-        console.error('Failed to update HOD');
         toast.error("Failed to update HOD details.");
       }
     } catch (error) {
@@ -115,7 +128,6 @@ const ViewHod = () => {
     <div className="container">
       <Row className="justify-content-center">
         <Col lg={10}>
-
           {isLoading ? (
             <div className="d-flex justify-content-center">
               <Spinner animation="border" size="lg" />
@@ -126,10 +138,14 @@ const ViewHod = () => {
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>id</th>
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Department</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Photos</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -138,10 +154,14 @@ const ViewHod = () => {
                     hods.map((hod, index) => (
                       <tr key={hod.id}>
                         <td>{index + 1}</td>
+                        <td>{hod.hodId || hod.id}</td>
                         <td>{hod.full_name}</td>
                         <td>{hod.email}</td>
                         <td>{hod.phone}</td>
                         <td>{hod.department}</td>
+                        <td>{hod.dob}</td>
+                        <td>{hod.gender}</td>
+                        <td>{hod.photo}</td>
                         <td>
                           <Button
                             variant="outline-primary"
@@ -163,7 +183,7 @@ const ViewHod = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="text-center">
+                      <td colSpan="9" className="text-center">
                         No HODs found.
                       </td>
                     </tr>
@@ -185,7 +205,6 @@ const ViewHod = () => {
               <Form.Label>Full Name</Form.Label>
               <Form.Control type="text" name="full_name" value={selectedHod?.full_name || ""} onChange={handleChange} />
             </Form.Group>
-
             <Form.Group className="mt-3">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" name="email" value={selectedHod?.email || ""} onChange={handleChange} />
@@ -198,7 +217,18 @@ const ViewHod = () => {
               <Form.Label>Department</Form.Label>
               <Form.Control type="text" name="department" value={selectedHod?.department || ""} onChange={handleChange} />
             </Form.Group>
-
+            <Form.Group className="mt-3">
+              <Form.Label>Date of Birth</Form.Label>
+              <Form.Control type="date" name="dob" value={selectedHod?.dob || ""} onChange={handleChange} />
+            </Form.Group>
+            <Form.Group className="mt-3">
+              <Form.Label>Gender</Form.Label>
+              <Form.Control type="text" name="gender" value={selectedHod?.gender || ""} onChange={handleChange} />
+            </Form.Group>
+            <Form.Group className="mt-3">
+              <Form.Label>Photo</Form.Label>
+              <Form.Control type="file" name="photo" onChange={handleChange} />
+            </Form.Group>
             <Button variant="primary" type="submit" className="mt-4 w-100" disabled={isSubmitting}>
               {isSubmitting ? <Spinner animation="border" size="sm" /> : "Update"}
             </Button>
