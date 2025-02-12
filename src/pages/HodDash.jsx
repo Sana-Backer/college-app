@@ -1,49 +1,98 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import './styles/stddash.css';
-import prof3 from '../assets/proff3.jpg'
+import React, { useEffect, useState } from 'react';
+import prof3 from '../assets/proff3.jpg';
 import { RiArrowGoForwardLine } from "react-icons/ri";
-import AssignmentStd from '../components/AssignmentStd';
-import ResultStd from '../components/ResultStd';
-import HodProfile from '../components/hod/HodProfile';
-import { useNavigate } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
+import { MdNotifications } from 'react-icons/md';
+import { Modal, Button } from 'react-bootstrap';
 import ViewStudent from '../components/Admin/ViewStudent';
 import ViewFaculty from '../components/Admin/ViewFaculty';
-import { Button, Modal } from 'react-bootstrap';
-import { FaPlus } from 'react-icons/fa';
+import Notes from '../components/Notes';
+import HodProfile from '../components/hod/HodProfile';
+import AddStudent from '../components/Admin/AddStudent';
+import AddFaculty from '../components/Admin/AddFaculty';
+import AddDepartment from '../components/Admin/AddDepartment';
 import AddNote from '../components/hod/AddNote';
-
+import Notification from '../components/Admin/Notification';
+import AttendenceView from '../components/AttendenceView';
+import { getUserProfileApi, departmentApi } from '.././Services/allAPI';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import AssignmentStd from '../components/AssignmentStd';
+import './hoddash.css'
+import AddAssignment from '../components/AddAssignment';
 const HodDash = () => {
-
-    const [activeFeature, setActiveFeature] = useState(null)
+    const [activeFeature, setActiveFeature] = useState("profile");
     const [showModal, setShowModal] = useState(false);
     const [showForm, setShowForm] = useState(null);
+    const [profile, setProfile] = useState({
+        full_name: '',
+        department_name: '',
+        email: '',
+        phone: '',
+        photo: ''
+    });
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
-    const navigate = useNavigate()
-    const backhome = () => {
-        navigate('/home')
-    }
+    useEffect(() => {
+        const fetchProfileDetails = async () => {
+            const token = localStorage.getItem('access');
+            const userId = localStorage.getItem('userId');
+
+            if (!token || !userId) {
+                toast.error('Authentication error: Missing token or user ID.');
+                return;
+            }
+
+            try {
+                const response = await getUserProfileApi(userId, token);
+                const profileData = response.data;
+                const departmentNameResponse = await departmentApi(profileData.department);
+                const departmentName = departmentNameResponse.data ? departmentNameResponse.data.name : "N/A";
+
+                setProfile({
+                    full_name: profileData.full_name || "N/A",
+                    department_name: departmentName,
+                    email: profileData.email || "N/A",
+                    phone: profileData.phone || "N/A",
+                    photo: profileData.photo || prof3
+                });
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+                toast.error('Failed to fetch profile data.');
+            }
+        };
+
+        fetchProfileDetails();
+    }, []);
+
     const handleActiveFeature = (feature) => {
-        setActiveFeature(feature)
-    }
-    const renderFeature = () => {
-        switch (activeFeature) {
+        setShowNotifications(false);
+        setActiveFeature(feature || "profile");
+    };
 
-            case "faculties":
-                return < ViewFaculty />;
+    const renderFeature = () => {
+        if (showNotifications) {
+            return <Notification notifications={notifications} onClose={handleCloseNotifications} />;
+        }
+
+        switch (activeFeature) {
             case "students":
                 return <ViewStudent />;
-            case 'addnote':
-                return <AddNote />
-                case 'result':
-                    return <ResultStd />
+            case "faculties":
+                return <ViewFaculty />;
+            case "attendence":
+                return <AttendenceView />;
+            case "notes":
+                return <Notes />;
+            case "assignments":
+                return <AssignmentStd />;
 
-
-            default: case "profile":
-                return <HodProfile />
-
+            default:
+                return <HodProfile />;
         }
-    }
+    };
+
     const handleAddUser = () => {
         setShowModal(true);
     };
@@ -53,77 +102,136 @@ const HodDash = () => {
         setShowForm(null);
     };
 
+    const handleShowNotifications = () => {
+        setShowNotifications(true);
+    };
 
-
-
+    const handleCloseNotifications = () => {
+        setShowNotifications(false);
+    };
 
     return (
-        <section>
-
-            <div>
-                <div className='container d-flex justify-content-end mt-1 me-auto'>
-                    <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
-                </div>
-                <div className='dash'>
-
-                    <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
-                        <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
-                        <a href="#assignment" onClick={() => handleActiveFeature("faculties")}>Faculty List</a>
-                        <a href="#notes" onClick={() => handleActiveFeature("students")}>Student List</a>
-                        <a href="#attendence" onClick={() => handleActiveFeature("addnote")}>Notes</a>
-                        <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
-                    </div>
-                </div>
-                <div className='d-flex row'>
-                    <div className='sidebar col-lg-2 container mb-2 '>
-                        <div className='photo img-fluid'>
-                            <img src={prof3} alt="" />
-                        </div>
-                        <div className='text-center'>
-                            <h4>Aleena</h4>
-                            <p>Department of civil Engineering</p>
-                            <hr />
-                            <p>email@gmail.com</p>
-                            <p>908765432</p>
-
-                        </div>
-                    </div>
-                    <div className="col-lg-8 view " id=''>
-                        {renderFeature()}
-                    </div>
-                    <div className="col-lg-1"></div>
-
-                </div>
-                {/*  add student or faculty */}
-                <div className="fab" onClick={handleAddUser}>
-                    <FaPlus />
-                </div>
-
-
+        <div className="hod-dashboard">
+            <div className="hod-header">
+                <Link to="/home" className="back-link">
+                    <RiArrowGoForwardLine /> Back to Home
+                </Link>
             </div>
-            <Modal show={showModal} onHide={handleModalClose} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>{showForm ? Add `${showForm} `: "Select User Type"}</Modal.Title>
+
+            <div className="navigation-menu">
+                <nav className="nav-links">
+                    <a
+                        href="#profile"
+                        onClick={() => handleActiveFeature("profile")}
+                        className={activeFeature === "profile" ? "active" : ""}
+                    >
+                        Profile
+                    </a>
+                    <a
+                        href="#faculties"
+                        onClick={() => handleActiveFeature("faculties")}
+                        className={activeFeature === "faculties" ? "active" : ""}
+                    >
+                        All Faculty
+                    </a>
+                    <a
+                        href="#students"
+                        onClick={() => handleActiveFeature("students")}
+                        className={activeFeature === "students" ? "active" : ""}
+                    >
+                        All Students
+                    </a>
+                    <a
+                        href="#notes"
+                        onClick={() => handleActiveFeature("notes")}
+                        className={activeFeature === "notes" ? "active" : ""}
+                    >
+                        Notes
+                    </a>
+                    <a
+                        href="#assignments"
+                        onClick={() => handleActiveFeature("assignments")}
+                        className={activeFeature === "assignments" ? "active" : ""}
+                    >
+                        Assignments
+                    </a>
+                    <a
+                        href="#attendence"
+                        onClick={() => handleActiveFeature("attendence")}
+                        className={activeFeature === "attendence" ? "active" : ""}
+                    >
+                        Attendance
+                    </a>
+
+                    <MdNotifications
+                        className="notification-btn"
+                        onClick={handleShowNotifications}
+                    />
+                </nav>
+            </div>
+
+            <div className="dashboard-content">
+                <aside className="profile-sidebar">
+                    <div className="profile-image">
+                        <img src={profile.photo} alt="Profile" />
+                    </div>
+                    <div className="profile-info">
+                        <h4>{profile.full_name}</h4>
+                        <p>{profile.department_name}</p>
+                        <hr />
+                        <p>{profile.email}</p>
+                        <p>{profile.phone}</p>
+                    </div>
+                </aside>
+
+                <main className="main-content">
+                    {renderFeature()}
+                </main>
+            </div>
+
+            <button className="floating-action-btn" onClick={handleAddUser}>
+                <FaPlus />
+            </button>
+
+            <Modal show={showModal} onHide={handleModalClose} centered className="custom-modal">
+                <Modal.Header closeButton className="custom-modal-header">
+                    <Modal.Title>{showForm ? `Add ${showForm}` : "Select User Type"}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="custom-modal-body">
                     {!showForm ? (
                         <div className="d-flex justify-content-around">
-                            <Button variant="primary" onClick={() => setShowForm("Student")}>Add Student</Button>
-                            <Button variant="success" onClick={() => setShowForm("Faculty")}>Add Faculty</Button>
-                            <Button variant='warning' onClick={() => setShowForm("Department")}>Add Department</Button>
+                            <Button variant="primary" onClick={() => setShowForm("Student")} className="custom-button m-2">
+                                Add Student
+                            </Button>
+                            <Button variant="success" onClick={() => setShowForm("Faculty")} className="custom-button m-2">
+                                Add Faculty
+                            </Button>
+                            <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
+                                Add Department
+                            </Button>
+                            <Button variant="info" onClick={() => setShowForm("Notes")} className="custom-button m-2">
+                                Add Notes
+                            </Button>
+                            <Button variant="info" onClick={() => setShowForm("Assignment")} className="custom-button m-2">
+                                Add Assignment
+                            </Button>
                         </div>
                     ) : showForm === "Student" ? (
                         <AddStudent onClose={handleModalClose} />
                     ) : showForm === "Faculty" ? (
                         <AddFaculty onClose={handleModalClose} />
-                    ) : (
+                    ) : showForm === "Department" ? (
                         <AddDepartment onClose={handleModalClose} />
-                    )}
+                    ) : showForm === "Notes" ? (
+                        <AddNote onClose={handleModalClose} />
+                    ) : showForm === "Assignment" ? (
+                        <AddAssignment onClose={handleModalClose} />
+                    ): null}
                 </Modal.Body>
             </Modal>
 
-        </section>
-    )
-}
+        </div>
+    );
+};
 
 export default HodDash;

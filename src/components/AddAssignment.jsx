@@ -2,28 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { addAssignmentApi, getBatchApi, facultyApi } from '../Services/allAPI';
 
-const AddAssignment = ({ role, username }) => {
+const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [batch, setBatch] = useState('');
   const [deadline, setDeadline] = useState('');
   const [batches, setBatches] = useState([]);
+  const [faculty, setFaculty] = useState('');
+  const [faculties, setFaculties] = useState([]);
+  const [role, setRole] = useState('');
+  const [token, setToken] = useState(localStorage.getItem('access'));
+  const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch available batches from API
-    const fetchBatches = async () => {
+    console.log("Role:", localStorage.getItem("role"));
+    console.log("Username:", localStorage.getItem('username'));
+
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/batches/'); // Adjust API endpoint as needed
-        const data = await response.json();
-        setBatches(data);
+        const [batchResponse, facultyResponse] = await Promise.all([
+          getBatchApi(token),
+          facultyApi(token) // Add API call to fetch faculty data
+        ]);
+
+        if (batchResponse?.data && Array.isArray(batchResponse.data)) {
+          setBatches(batchResponse.data);
+        } else {
+          setError('Unexpected response format for batches');
+          console.error('Unexpected response format:', batchResponse);
+        }
+
+        if (facultyResponse?.data && Array.isArray(facultyResponse.data)) {
+          setFaculties(facultyResponse.data);
+        } else {
+          setError('Unexpected response format for faculties');
+          console.error('Unexpected response format:', facultyResponse);
+        }
       } catch (error) {
-        console.error('Error fetching batches:', error);
+        console.log("Error fetching batches and faculties", error);
+        setError('Failed to fetch batches or faculties. Please check your authorization token.');
       }
     };
-    fetchBatches();
-  }, []);
+
+    fetchData();
+    setRole(localStorage.getItem("role") || "");
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,23 +58,17 @@ const AddAssignment = ({ role, username }) => {
     const assignmentData = {
       title,
       description,
-      faculty: username, // Assuming username is mapped to faculty
+      faculty,  // Use faculty ID
       batch,
       deadline,
     };
 
     try {
-      const response = await fetch('/api/assignments/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(assignmentData),
-      });
+      const response = await addAssignmentApi(token, assignmentData);
+      console.log(response.data);
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success('Assignment uploaded successfully!');
-        navigate('/assignments'); // Redirect to assignments page after success
       } else {
         toast.error('Failed to upload assignment');
       }
@@ -81,22 +102,43 @@ const AddAssignment = ({ role, username }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="batch">
-          <Form.Label>Batch</Form.Label>
-          <Form.Control
-            as="select"
-            value={batch}
-            onChange={(e) => setBatch(e.target.value)}
-            required
-          >
-            <option value="">Select a Batch</option>
-            {batches.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
+        {role?.toLowerCase() === "hod" && (
+          <Form.Group controlId="batch">
+            <Form.Label>Batch</Form.Label>
+            <Form.Control
+              as="select"
+              value={batch}
+              onChange={(e) => setBatch(e.target.value)}
+              required
+            >
+              <option value="">Select a Batch</option>
+              {batches.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.batch_name}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        )}
+
+        {role?.toLowerCase() === "hod" && (
+          <Form.Group controlId="faculty">
+            <Form.Label>Select Faculty</Form.Label>
+            <Form.Control
+              as="select"
+              value={faculty}
+              onChange={(e) => setFaculty(e.target.value)}
+              required
+            >
+              <option value="">Select Faculty</option>
+              {faculties.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.full_name}  {/* Display faculty usernames */}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        )}
 
         <Form.Group controlId="deadline">
           <Form.Label>Deadline</Form.Label>
@@ -105,11 +147,6 @@ const AddAssignment = ({ role, username }) => {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
           />
-        </Form.Group>
-
-        <Form.Group controlId="username">
-          <Form.Label>{role === 'HOD' ? 'HOD Username' : 'Faculty Username'}</Form.Label>
-          <Form.Control type="text" value={username} readOnly />
         </Form.Group>
 
         <Button className="my-2" variant="primary" type="submit">

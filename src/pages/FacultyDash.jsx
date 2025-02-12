@@ -74,7 +74,7 @@ const FacultyDash = () => {
         switch (activeFeature) {
             case "students":
                 return <ViewStudent />;
-                case "assignments":
+            case "assignments":
                 return <AssignmentStd />;
             case "result":
                 return <ResultStd />;
@@ -102,7 +102,7 @@ const FacultyDash = () => {
         setShowModal(true);
         setShowActionMenu(false);
     };
-    
+
 
     const handleModalClose = () => {
         setShowModal(false);
@@ -135,57 +135,57 @@ const FacultyDash = () => {
 
     return (
         <div className="faculty-dashboard">
-            
+
 
             <div className="faculty-header">
                 <p className="back-link" onClick={backhome}>
                     <RiArrowGoForwardLine /> Back to Home
                 </p>
-                <MdNotifications 
-                    className="notification-btn" 
+                <MdNotifications
+                    className="notification-btn"
                     onClick={handleShowNotifications}
                 />
             </div>
 
             <div className="navigation-menu">
                 <nav className="nav-links">
-                    <a 
-                        href="#profile" 
+                    <a
+                        href="#profile"
                         onClick={() => handleActiveFeature("profile")}
                         className={activeFeature === "profile" ? "active" : ""}
                     >
                         Profile
                     </a>
-                    <a 
-                        href="#students" 
+                    <a
+                        href="#students"
                         onClick={() => handleActiveFeature("students")}
                         className={activeFeature === "students" ? "active" : ""}
                     >
                         All Students
                     </a>
-                    <a 
-                        href="#notes" 
+                    <a
+                        href="#notes"
                         onClick={() => handleActiveFeature("notes")}
                         className={activeFeature === "notes" ? "active" : ""}
                     >
                         Notes
                     </a>
-                    <a 
-                        href="#assignments" 
+                    <a
+                        href="#assignments"
                         onClick={() => handleActiveFeature("assignments")}
                         className={activeFeature === "assignments" ? "active" : ""}
                     >
                         Assignments
                     </a>
-                    <a 
-                        href="#attendence" 
+                    <a
+                        href="#attendence"
                         onClick={() => handleActiveFeature("attendence")}
                         className={activeFeature === "attendence" ? "active" : ""}
                     >
                         Attendance
                     </a>
-                    <a 
-                        href="#result" 
+                    <a
+                        href="#result"
                         onClick={() => handleActiveFeature("result")}
                         className={activeFeature === "result" ? "active" : ""}
                     >
@@ -212,7 +212,6 @@ const FacultyDash = () => {
                     {renderFeature()}
                 </main>
             </div>
-
             <button className="floating-action-btn" onClick={toggleActionMenu}>
                 <FaPlus />
             </button>
@@ -222,15 +221,20 @@ const FacultyDash = () => {
                     <Button variant="primary" onClick={handleAddStudent}>
                         Add Student
                     </Button>
-                    <Button variant="secondary" onClick={handleAddNote}>
+                    <Button variant="secondary" onClick={handleAddFaculty}>
+                        Add Faculty
+                    </Button>
+                    <Button variant="warning" onClick={handleAddDepartment}>
+                        Add Department
+                    </Button>
+                    <Button variant="info" onClick={handleAddNote}>
                         Add Note
                     </Button>
-                    <Button variant="secondary" onClick={handleAddAssignment}>
-                        Add Assignmnent
+                    <Button variant="success" onClick={handleAddAssignment}>
+                        Add Assignment
                     </Button>
                 </div>
             )}
-
             {/* Modal for Adding Student or Note */}
             <Modal show={showModal} onHide={handleModalClose} centered>
                 <Modal.Header closeButton>
@@ -239,26 +243,26 @@ const FacultyDash = () => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-    {!showForm ? (
-        <div className="d-flex justify-content-around">
-            <Button variant="primary" onClick={handleAddStudent}>
-                Add Student
-            </Button>
-            <Button variant="success" onClick={handleAddNote}>
-                Add Note
-            </Button>
-            <Button variant="success" onClick={handleAddAssignment}>
-                Add Assignment
-            </Button>
-        </div>
-    ) : showForm === "Student" ? (
-        <AddStudent onClose={handleModalClose} />
-    ) : showForm === "Note" ? (
-        <AddNote onClose={handleModalClose} />
-    ) : showForm === "Assignment" ? (
-        <AddAssignment role="Faculty" username={profile.full_name} />
-    ) : null}
-</Modal.Body>
+                    {!showForm ? (
+                        <div className="d-flex justify-content-around">
+                            <Button variant="primary" onClick={handleAddStudent}>
+                                Add Student
+                            </Button>
+                            <Button variant="success" onClick={handleAddNote}>
+                                Add Note
+                            </Button>
+                            <Button variant="success" onClick={handleAddAssignment}>
+                                Add Assignment
+                            </Button>
+                        </div>
+                    ) : showForm === "Student" ? (
+                        <AddStudent onClose={handleModalClose} />
+                    ) : showForm === "Note" ? (
+                        <AddNote onClose={handleModalClose} />
+                    ) : showForm === "Assignment" ? (
+                        <AddAssignment role="Faculty" username={profile.full_name} />
+                    ) : null}
+                </Modal.Body>
 
             </Modal>
 

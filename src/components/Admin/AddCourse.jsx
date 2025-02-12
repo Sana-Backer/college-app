@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addCourseApi } from "../../Services/allAPI";
-// import "./addCourse.css"; // Ensure the CSS file exists in the specified path
+// import "./addCourse.css";
 
 const AddCourse = () => {
   const [courseData, setCourseData] = useState({

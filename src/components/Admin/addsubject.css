@@ -1,4 +1,4 @@
-.add-batch-container {
+.subject-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
     padding: 20px;
 }
 
-.add-batch-form {
+.subject-form {
     background-color: #fff;
     padding: 30px;
     border-radius: 10px;
@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-.add-batch-form h2 {
+.subject-form h2 {
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 1rem;
@@ -74,7 +74,7 @@
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    .add-batch-form {
+    .subject-form {
         padding: 20px;
     }
 }

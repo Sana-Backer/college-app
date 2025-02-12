@@ -120,7 +120,7 @@ const Notification = () => {
                         />
                     </div>
                 )}
-                <button type="submit" className="btn btn-primary">Send</button>
+                <button type="submit" className="send-button btn btn-primary">Send</button>
             </form>
             <ToastContainer />
         </div>

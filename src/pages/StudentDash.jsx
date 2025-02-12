@@ -7,7 +7,9 @@ import Profile from '../components/Profile';
 import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import { useNavigate } from 'react-router-dom';
-import { getUserProfileApi, StudentApi } from '../Services/allAPI';
+import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/allAPI';
+import { MdNotifications } from 'react-icons/md';
+import { Modal } from 'react-bootstrap';
 
 const StudentDash = () => {
 
@@ -18,6 +20,8 @@ const StudentDash = () => {
         email:'',
         phone:''
     })
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
 
     const handleActiveFeature = (feature) => {
@@ -73,6 +77,24 @@ const StudentDash = () => {
         }
         studentSideBar()
     },[])
+    const fetchNotifications = async () => {
+        const token = localStorage.getItem('access');
+        try {
+            const response = await getNotificationsApi(token);
+            setNotifications(response.data);
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
+
+    const handleShowNotifications = () => {
+        fetchNotifications();
+        setShowNotifications(true);
+    };
+
+    const handleCloseNotifications = () => {
+        setShowNotifications(false);
+    };
 
 
 
@@ -82,6 +104,10 @@ const StudentDash = () => {
             <div>
                 <div className='container d-flex justify-content-end mt-1 me-auto'>
                     <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
+                    <MdNotifications 
+                    className="notification-btn" 
+                    onClick={handleShowNotifications}
+                />
                 </div>
                 <div className='dash'>
 
@@ -115,6 +141,25 @@ const StudentDash = () => {
                 </div>
 
             </div>
+            <Modal show={showNotifications} onHide={handleCloseNotifications} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Notifications</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {notifications.length > 0 ? (
+                        <ul className="notification-list">
+                            {notifications.map((notification, index) => (
+                                <li key={index} className="notification-item">
+                                    <h5>{notification.title}</h5>
+                                    <p>{notification.message}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No notifications available.</p>
+                    )}
+                </Modal.Body>
+            </Modal>
         </section>
     )
 }
