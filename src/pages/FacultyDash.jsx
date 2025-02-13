@@ -5,7 +5,7 @@ import prof3 from '../assets/proff3.jpg';
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
 import { MdNotifications } from 'react-icons/md';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
 import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import FacultyProfile from '../components/faculty/FacultyProfile';
@@ -32,6 +32,7 @@ const FacultyDash = () => {
         photo: ''
     });
     const navigate = useNavigate()
+    const [sidebarVisible, setSidebarVisible] = useState(false); 
 
 
     const backhome = () => {
@@ -133,6 +134,9 @@ const FacultyDash = () => {
         setShowNotifications(false);
     };
 
+    const handlePhotoClick = () => {
+        setSidebarVisible(!sidebarVisible); 
+    };
     return (
         <div className="faculty-dashboard">
 
@@ -141,14 +145,18 @@ const FacultyDash = () => {
                 <p className="back-link" onClick={backhome}>
                     <RiArrowGoForwardLine /> Back to Home
                 </p>
-                <MdNotifications
-                    className="notification-btn"
-                    onClick={handleShowNotifications}
-                />
+              
             </div>
 
-            <div className="navigation-menu">
-                <nav className="nav-links">
+            <Navbar expand='lg' className="navigation-menu">
+                                <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
+                                    <img src={profile.photo} className='img-fluid' alt="profile" />
+                                </div>
+                                
+                                <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
+                               <Navbar.Collapse id="basic-navbar-nav">
+                
+                <Nav className="nav-links ms-auto me-auto">
                     <a
                         href="#profile"
                         onClick={() => handleActiveFeature("profile")}
@@ -191,13 +199,34 @@ const FacultyDash = () => {
                     >
                         Result
                     </a>
-                </nav>
-            </div>
-
-            <div className="dashboard-content">
+                    <MdNotifications
+                    className="notification-btn"
+                    onClick={handleShowNotifications}
+                />
+                </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+                       {/* Profile Sidebar - positioned below the navbar */}
+                       {sidebarVisible && (
                 <aside className="profile-sidebar">
                     <div className="profile-image">
-                        <img src={profile.photo || prof3} alt="Profile" />
+                        <img src={profile.photo} alt="Profile" />
+                    </div>
+                    <div className="profile-info">
+                        <h4>{profile.full_name}</h4>
+                        <p>{profile.department}</p>
+                        <hr />
+                        <p>{profile.email}</p>
+                        <p>{profile.phone}</p>
+                    </div>
+                </aside>
+            )}
+
+
+            <div className="dashboard-content">
+                <aside className="profile-sidebar" id='hidesidebar'>
+                <div className="profile-image">
+                        <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">
                         <h4>{profile.full_name}</h4>

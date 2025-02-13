@@ -96,6 +96,12 @@ export const addStudentApi = async (formData, reqHeader) => {
   }
 };
 
+export const getStudentApi = async (token,userId) => {
+  return await commonAPI("GET", `${serverUrl}/stlist/${userId}`, null, {
+    Authorization: `Bearer ${token}`,
+  });
+};
+
 //delete student api
 export const deleteStudentApi = async (id, token) => {
   return await commonAPI("DELETE", `${serverUrl}/stlist/${id}/`, "", {

@@ -219,6 +219,48 @@ const AssignmentStd = () => {
                 />
               </Form.Group>
 
+              {role === "hod" && (
+                <>
+                  <Form.Group controlId="batch" className="mt-3">
+                    <Form.Label>Batch</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="batch"
+                      value={selectedAssignment?.batch || ""}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select a Batch</option>
+                      {batches.map((batch) => (
+                        <option key={batch.id} value={batch.id}>
+                          {batch.batch_name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+
+                  <Form.Group controlId="faculty" className="mt-3">
+                    <Form.Label>Faculty</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="faculty"
+                      value={selectedAssignment?.faculty || ""}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select a Faculty</option>
+                      {faculties.map((fac) => (
+                        <option key={fac.id} value={fac.id}>
+                          {fac.full_name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                </>
+              )}
+
+
+
               <Form.Group controlId="deadline" className="mt-3">
                 <Form.Label>Deadline</Form.Label>
                 <Form.Control

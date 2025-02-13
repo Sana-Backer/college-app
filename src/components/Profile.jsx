@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri';
 import './profile.css';
-import { getUserProfileApi } from '../Services/allAPI';
+import { getStudentApi, getUserProfileApi } from '../services/allApi';
 
 const Profile = () => {
   const [stdDetails, setStdDetails] = useState(null);
+  const [token, setToken]= useState(localStorage.getItem('access'))
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
     useEffect(() => {
          const studentProfile = async () => {
-             const token = localStorage.getItem('access');
              const userId = localStorage.getItem('userId')
              if (!token || !userId) {
                  setError("token or user ID not found in localStorage. ")
@@ -18,7 +18,7 @@ const Profile = () => {
                  return
              }
              try {
-                 const response = await getUserProfileApi(userId, token)
+                 const response = await getStudentApi(userId, token)
                  const userData = response.data
                  console.log(userData);
                  
@@ -45,7 +45,7 @@ const Profile = () => {
              }
          }
          studentProfile()
-     }, [])
+     }, [token])
  
  
      if (loading) {

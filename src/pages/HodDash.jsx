@@ -3,7 +3,7 @@ import prof3 from '../assets/proff3.jpg';
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
 import { MdNotifications } from 'react-icons/md';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Navbar, Nav } from 'react-bootstrap';
 import ViewStudent from '../components/Admin/ViewStudent';
 import ViewFaculty from '../components/Admin/ViewFaculty';
 import Notes from '../components/Notes';
@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import AssignmentStd from '../components/AssignmentStd';
 import './hoddash.css'
 import AddAssignment from '../components/AddAssignment';
+
 const HodDash = () => {
     const [activeFeature, setActiveFeature] = useState("profile");
     const [showModal, setShowModal] = useState(false);
@@ -33,6 +34,8 @@ const HodDash = () => {
     });
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [showDetails, setShowDetails] = useState(false);
+    const [sidebarVisible, setSidebarVisible] = useState(false); 
 
     useEffect(() => {
         const fetchProfileDetails = async () => {
@@ -110,6 +113,10 @@ const HodDash = () => {
         setShowNotifications(false);
     };
 
+    const handlePhotoClick = () => {
+        setSidebarVisible(!sidebarVisible); // Toggle sidebar visibility
+    };
+
     return (
         <div className="hod-dashboard">
             <div className="hod-header">
@@ -117,60 +124,64 @@ const HodDash = () => {
                     <RiArrowGoForwardLine /> Back to Home
                 </Link>
             </div>
+            <Navbar expand="lg" className="navigation-menu">
+                <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
+                    <img src={profile.photo} className='img-fluid' alt="profile" />
+                </div>
+                
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
+                
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="nav-links ms-auto me-auto">
+                        <a
+                            href="#profile"
+                            onClick={() => handleActiveFeature("profile")}
+                            className={activeFeature === "profile" ? "active" : ""}
+                        >
+                            Profile
+                        </a>
+                        <a
+                            href="#faculties"
+                            onClick={() => handleActiveFeature("faculties")}
+                            className={activeFeature === "faculties" ? "active" : ""}
+                        >
+                            All Faculty
+                        </a>
+                        <a
+                            href="#students"
+                            onClick={() => handleActiveFeature("students")}
+                            className={activeFeature === "students" ? "active" : ""}
+                        >
+                            All Students
+                        </a>
+                        <a
+                            href="#notes"
+                            onClick={() => handleActiveFeature("notes")}
+                            className={activeFeature === "notes" ? "active" : ""}
+                        >
+                            Notes
+                        </a>
+                        <a
+                            href="#assignments"
+                            onClick={() => handleActiveFeature("assignments")}
+                            className={activeFeature === "assignments" ? "active" : ""}
+                        >
+                            Assignments
+                        </a>
+                        <a
+                            href="#attendence"
+                            onClick={() => handleActiveFeature("attendence")}
+                            className={activeFeature === "attendence" ? "active" : ""}
+                        >
+                            Attendance
+                        </a>
+                        <MdNotifications className="notification-btn" />
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
 
-            <div className="navigation-menu">
-                <nav className="nav-links">
-                    <a
-                        href="#profile"
-                        onClick={() => handleActiveFeature("profile")}
-                        className={activeFeature === "profile" ? "active" : ""}
-                    >
-                        Profile
-                    </a>
-                    <a
-                        href="#faculties"
-                        onClick={() => handleActiveFeature("faculties")}
-                        className={activeFeature === "faculties" ? "active" : ""}
-                    >
-                        All Faculty
-                    </a>
-                    <a
-                        href="#students"
-                        onClick={() => handleActiveFeature("students")}
-                        className={activeFeature === "students" ? "active" : ""}
-                    >
-                        All Students
-                    </a>
-                    <a
-                        href="#notes"
-                        onClick={() => handleActiveFeature("notes")}
-                        className={activeFeature === "notes" ? "active" : ""}
-                    >
-                        Notes
-                    </a>
-                    <a
-                        href="#assignments"
-                        onClick={() => handleActiveFeature("assignments")}
-                        className={activeFeature === "assignments" ? "active" : ""}
-                    >
-                        Assignments
-                    </a>
-                    <a
-                        href="#attendence"
-                        onClick={() => handleActiveFeature("attendence")}
-                        className={activeFeature === "attendence" ? "active" : ""}
-                    >
-                        Attendance
-                    </a>
-
-                    <MdNotifications
-                        className="notification-btn"
-                        onClick={handleShowNotifications}
-                    />
-                </nav>
-            </div>
-
-            <div className="dashboard-content">
+            {/* Profile Sidebar - positioned below the navbar */}
+            {sidebarVisible && (
                 <aside className="profile-sidebar">
                     <div className="profile-image">
                         <img src={profile.photo} alt="Profile" />
@@ -183,7 +194,23 @@ const HodDash = () => {
                         <p>{profile.phone}</p>
                     </div>
                 </aside>
+            )}
 
+            <div className="dashboard-content">
+                <aside className="profile-sidebar" id='hidesidebar'>
+                    <div className="profile-image">
+                        <img src={profile.photo} alt="Profile" />
+                    </div>
+                    <div className="profile-info">
+                        <h4>{profile.full_name}</h4>
+                        <p>{profile.department_name}</p>
+                        <hr />
+                        <p>{profile.email}</p>
+                        <p>{profile.phone}</p>
+                    </div>
+                </aside>
+
+                {/* Main content */}
                 <main className="main-content">
                     {renderFeature()}
                 </main>
@@ -226,10 +253,9 @@ const HodDash = () => {
                         <AddNote onClose={handleModalClose} />
                     ) : showForm === "Assignment" ? (
                         <AddAssignment onClose={handleModalClose} />
-                    ): null}
+                    ) : null}
                 </Modal.Body>
             </Modal>
-
         </div>
     );
 };

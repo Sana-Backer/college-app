@@ -9,19 +9,20 @@ import Notes from '../components/Notes';
 import { useNavigate } from 'react-router-dom';
 import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/allAPI';
 import { MdNotifications } from 'react-icons/md';
-import { Modal } from 'react-bootstrap';
+import { Modal, Nav, Navbar } from 'react-bootstrap';
 
 const StudentDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
     const [profile, setProfile] = useState({
-        id:"",
-        name:"",
-        email:'',
-        phone:''
+        id: "",
+        name: "",
+        email: '',
+        phone: ''
     })
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
 
 
     const handleActiveFeature = (feature) => {
@@ -40,7 +41,7 @@ const StudentDash = () => {
 
             default: case "profile":
                 return <Profile />
-                
+
         }
     }
     const navigate = useNavigate()
@@ -49,18 +50,18 @@ const StudentDash = () => {
     }
 
     useEffect(() => {
-        const studentSideBar = async()=>{
+        const studentSideBar = async () => {
             const token = localStorage.getItem('access')
             const userId = localStorage.getItem('userId')
-            if(! token || ! userId){
+            if (!token || !userId) {
                 console.log('token / userid not found in local storage');
-                return        
+                return
             }
             try {
                 const response = await getUserProfileApi(userId, token)
                 const userData = response.data
                 console.log(userData);
-                
+
                 setProfile({
                     id: userData.id,
                     full_name: userData.full_name,
@@ -71,12 +72,13 @@ const StudentDash = () => {
                 })
 
             } catch (error) {
-                console.log('error fetching student profile',error);
-                
+                console.log('error fetching student profile', error);
+
             }
         }
         studentSideBar()
-    },[])
+    }, [])
+
     const fetchNotifications = async () => {
         const token = localStorage.getItem('access');
         try {
@@ -95,7 +97,9 @@ const StudentDash = () => {
     const handleCloseNotifications = () => {
         setShowNotifications(false);
     };
-
+    const handlePhotoClick = () => {
+        setSidebarVisible(!sidebarVisible);
+    };
 
 
     return (
@@ -104,32 +108,53 @@ const StudentDash = () => {
             <div>
                 <div className='container d-flex justify-content-end mt-1 me-auto'>
                     <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
-                    <MdNotifications 
-                    className="notification-btn" 
-                    onClick={handleShowNotifications}
-                />
+                   
                 </div>
-                <div className='dash'>
-
-                    <div className='stdOptions d-flex justify-content-center p-2 gap-4 mt-2 '>
-                        <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
-                        <a href="#assignment" onClick={() => handleActiveFeature("assignment")}>Assignments</a>
-                        <a href="#notes" onClick={() => handleActiveFeature("notes")}>Notes</a>
-                        <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
-                        <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
+                <Navbar expand='lg' className='dash'>
+                    <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
+                        <img src={profile.photo} className='img-fluid' alt="profile" />
                     </div>
-                </div>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
+                    <Navbar.Collapse id="basic-navbar-nav">
+
+                        <Nav className='stdOptions ms-auto me-auto  mt-2 '>
+                            <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
+                            <a href="#assignment" onClick={() => handleActiveFeature("assignment")}>Assignments</a>
+                            <a href="#notes" onClick={() => handleActiveFeature("notes")}>Notes</a>
+                            <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
+                            <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
+                            <MdNotifications
+                        className="notification"
+                        onClick={handleShowNotifications}
+                    />
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                {sidebarVisible && (
+                <aside className="profile-sidebar">
+                    <div className="profile-image">
+                        <img src={profile.photo} alt="Profile" />
+                    </div>
+                    <div className="profile-info">
+                        <h4>{profile.full_name}</h4>
+                        <hr />
+                        <p>{profile.email}</p>
+                        <p>{profile.phone}</p>
+                    </div>
+                </aside>
+            )}
+
                 <div className='d-flex row'>
-                    <div className="sidebar  col-lg-2 col-md-4 col-sm-12 container mb-2">
+                    <div className="sidebar  col-lg-2 col-md-4 col-sm-12 container mb-2" id='hidesidebar'>
                         <div className="photo img-fluid">
                             <img src={user} alt="User Profile" />
                         </div>
                         <div className="text-center">
-                            <h4>name{profile.name}</h4>
+                            <h3>name{profile.name}</h3>
                             <p>Student Id: 3809</p>
                             <hr />
-                            <p>email{profile.email}</p>
-                            <p>9898989898{profile.phone}</p>
+                            <p>{profile.email}</p>
+                            <p>{profile.phone}</p>
                         </div>
                     </div>
 

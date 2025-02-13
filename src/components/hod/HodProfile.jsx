@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri'; // Edit icon
-import { getUserProfileApi } from '../../Services/allAPI';
+import { getUserProfileApi } from '../../services/allApi';
 
 const HodProfile = () => {
     const [userDetails, setUserDetails] = useState(null);

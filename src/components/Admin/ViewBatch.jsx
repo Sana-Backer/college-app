@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Table, Alert } from 'react-bootstrap';
-import { getBatchApi } from '../../Services/allAPI';
+import { getBatchApi } from '../../services/allApi';
 
 const ViewBatch = () => {
     const [batches, setBatches] = useState([]);
