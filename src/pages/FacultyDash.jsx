@@ -221,12 +221,7 @@ const FacultyDash = () => {
                     <Button variant="primary" onClick={handleAddStudent}>
                         Add Student
                     </Button>
-                    <Button variant="secondary" onClick={handleAddFaculty}>
-                        Add Faculty
-                    </Button>
-                    <Button variant="warning" onClick={handleAddDepartment}>
-                        Add Department
-                    </Button>
+
                     <Button variant="info" onClick={handleAddNote}>
                         Add Note
                     </Button>

@@ -401,6 +401,19 @@ export const addAssignmentApi = async (token, assignmentData) => {
   });
 };
 
+// get subject
+export const getAssignmentApi = async (token, assignmentData) => {
+  return await commonAPI("GET", `${serverUrl}/assignments/`, assignmentData, {
+    Authorization: `Bearer ${token}`
+  });
+};
+// edit assignments
+export const editAssignmentApi = async (id, assignD, token) => {
+  return await commonAPI("PUT", `${serverUrl}/assignments/${id}/`, assignD, {
+    Authorization: `Bearer ${token}`,
+  });
+};
+
 
 
 

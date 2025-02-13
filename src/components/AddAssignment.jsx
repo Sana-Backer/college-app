@@ -26,7 +26,7 @@ const AddAssignment = () => {
       try {
         const [batchResponse, facultyResponse] = await Promise.all([
           getBatchApi(token),
-          facultyApi(token) // Add API call to fetch faculty data
+          facultyApi(token) 
         ]);
 
         if (batchResponse?.data && Array.isArray(batchResponse.data)) {
@@ -69,6 +69,11 @@ const AddAssignment = () => {
 
       if (response.status === 201) {
         toast.success('Assignment uploaded successfully!');
+        setTitle('')
+        setDescription('')
+        setBatch('')
+        setDeadline('')
+        setFaculty('')
       } else {
         toast.error('Failed to upload assignment');
       }
@@ -102,7 +107,6 @@ const AddAssignment = () => {
           />
         </Form.Group>
 
-        {role?.toLowerCase() === "hod" && (
           <Form.Group controlId="batch">
             <Form.Label>Batch</Form.Label>
             <Form.Control
@@ -119,7 +123,7 @@ const AddAssignment = () => {
               ))}
             </Form.Control>
           </Form.Group>
-        )}
+        
 
         {role?.toLowerCase() === "hod" && (
           <Form.Group controlId="faculty">
@@ -133,7 +137,7 @@ const AddAssignment = () => {
               <option value="">Select Faculty</option>
               {faculties.map((f) => (
                 <option key={f.id} value={f.id}>
-                  {f.full_name}  {/* Display faculty usernames */}
+                  {f.full_name}  
                 </option>
               ))}
             </Form.Control>
