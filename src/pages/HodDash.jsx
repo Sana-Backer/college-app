@@ -202,7 +202,7 @@ const HodDash = () => {
                         <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">
-                        <h4>{profile.full_name}</h4>
+                        <h3>{profile.full_name}</h3>
                         <p>{profile.department_name}</p>
                         <hr />
                         <p>{profile.email}</p>

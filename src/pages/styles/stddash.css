@@ -96,7 +96,6 @@ body {
     /* Adjusted image width */
     height: 230px;
     border-radius: 50%;
-    /* Ensures the image remains a square */
     border: 5px solid white;
     object-fit: cover;
 }
