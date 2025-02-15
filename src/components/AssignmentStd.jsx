@@ -3,7 +3,7 @@ import './assign.css';
 import { MdDelete } from "react-icons/md";
 import { IoIosCloudUpload } from "react-icons/io";
 import { FaEye, FaPen } from "react-icons/fa";
-import { editAssignmentApi, FacultyApi, getAssignmentApi, getBatchApi } from '../services/allApi';
+import { editAssignmentApi, FacultyApi, getAssignmentApi, getBatchApi, deleteAssignmentApi } from '../Services/allAPI';
 import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -18,6 +18,20 @@ const AssignmentStd = () => {
   const [batches, setBatches] = useState([]);
   const [faculties, setFaculties] = useState([]);
   const [error, setError] = useState(null);
+  //   const [expandedIndex, setExpandedIndex] = useState(null);
+
+  // const showDescription = (index) => {
+  //   setExpandedIndex(expandedIndex === index ? null : index);
+  // };
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [selectedDescription, setSelectedDescription] = useState('');
+  const [selectedTitle, setSelectedTitle] = useState('')
+
+  const handleShowModal = (title, description) => {
+    setSelectedTitle(title)
+    setSelectedDescription(description);
+    setShowDescriptionModal(true);
+  };
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
@@ -93,6 +107,23 @@ const AssignmentStd = () => {
     }));
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this assignment?")) return;
+
+    try {
+      const response = await deleteAssignmentApi(id, token);
+      if (response.status === 204) {
+        toast.success("Assignment deleted successfully!");
+        setAssignments(assignments.filter(A => A.id !== id));
+      } else {
+        toast.error("Failed to delete assignment. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+      toast.error("An error occurred while deleting. Please try again.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -121,14 +152,6 @@ const AssignmentStd = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    console.log('Deleting:', id);
-  };
-
-  const handleViewSubmissions = () => {
-    console.log('Viewing submissions');
-  };
-
   return (
     <>
       <div className="assignment-container">
@@ -139,18 +162,29 @@ const AssignmentStd = () => {
                 <th>SI No</th>
                 <th>Subject</th>
                 <th>Topic</th>
+                <th>Description</th>
                 <th>Deadline</th>
                 <th>Action</th>
-                <th>Remove</th>
-                <th>Edit</th>
+
+                <th>
+                  {(role === 'hod' || role === 'faculty') && (  Remove )}
+
+                </th>
+                {(role === 'hod' || role === 'faculty') && (  Edit )}
+
               </tr>
             </thead>
             <tbody>
-              {assignments.map((A) => (
+              {assignments.map((A, index) => (
                 <tr key={A.id}>
-                  <td>{A.id}</td>
+                  <td>{index + 1}</td>
                   <td>OOPs</td>
                   <td>{A.title}</td>
+                  <td>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handleShowModal(A.title, A.description); }}>
+                      Check details
+                    </a>
+                  </td>
                   <td>{A.deadline}</td>
                   <td>
                     {role === 'student' ? (
@@ -169,21 +203,27 @@ const AssignmentStd = () => {
                         />
                       </>
                     ) : (
-                      <button className="action-btn view-btn" onClick={handleViewSubmissions}>
+                      <button className="action-btn view-btn">
                         <FaEye className="icon" /> View Submissions
                       </button>
                     )}
                   </td>
                   <td>
-                    <button className="action-btn delete-btn" onClick={() => handleDelete(A.id)}>
-                      <MdDelete className="icon" /> Delete
-                    </button>
+                    {(role === 'hod' || role === 'faculty') && (
+                      <button className="action-btn delete-btn" onClick={() => handleDelete(A.id)}>
+                        <MdDelete className="icon" /> Delete
+                      </button>
+                    )}
                   </td>
+
                   <td>
-                    <button className="action-btn edit-btn" onClick={() => handleEdit(A)}>
-                      <FaPen className="icon" />
-                    </button>
+                    {(role === 'hod' || role === 'faculty') && (
+                      <button className="action-btn edit-btn" onClick={() => handleEdit(A)}>
+                        <FaPen className="icon" />
+                      </button>
+                    )}
                   </td>
+
                 </tr>
               ))}
             </tbody>
@@ -207,79 +247,32 @@ const AssignmentStd = () => {
                 />
               </Form.Group>
 
-              <Form.Group controlId="description" className="mt-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="description"
-                  value={selectedAssignment?.description || ""}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </Form.Group>
-
-              {role === "hod" && (
-                <>
-                  <Form.Group controlId="batch" className="mt-3">
-                    <Form.Label>Batch</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="batch"
-                      value={selectedAssignment?.batch || ""}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                    >
-                      <option value="">Select a Batch</option>
-                      {batches.map((batch) => (
-                        <option key={batch.id} value={batch.id}>
-                          {batch.batch_name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
-
-                  <Form.Group controlId="faculty" className="mt-3">
-                    <Form.Label>Faculty</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="faculty"
-                      value={selectedAssignment?.faculty || ""}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                    >
-                      <option value="">Select a Faculty</option>
-                      {faculties.map((fac) => (
-                        <option key={fac.id} value={fac.id}>
-                          {fac.full_name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
-                </>
-              )}
-
-
-
-              <Form.Group controlId="deadline" className="mt-3">
-                <Form.Label>Deadline</Form.Label>
-                <Form.Control
-                  type="datetime-local"
-                  name="deadline"
-                  value={selectedAssignment?.deadline || ""}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </Form.Group>
-
               <Button variant="primary" type="submit" className="mt-4" disabled={isSubmitting}>
                 {isSubmitting ? <Spinner animation="border" size="sm" /> : "Update"}
               </Button>
             </Form>
           </Modal.Body>
         </Modal>
+        {/* Description Modal */}
+        <Modal show={showDescriptionModal} onHide={() => setShowDescriptionModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Assignment Details</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body className='description '>
+            <h2 className='text-center'>{selectedTitle}</h2>
+
+            <p>{selectedDescription}</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowDescriptionModal(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <ToastContainer />
-      </div>
+      </div >
     </>
   );
 };

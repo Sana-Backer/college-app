@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { addAssignmentApi, getBatchApi, facultyApi } from '../Services/allAPI';
+import { addAssignmentApi, getBatchApi, FacultyApi, facultyApi, HodApi, getSubjectApi } from '../Services/allAPI';
 
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
@@ -11,22 +11,28 @@ const AddAssignment = () => {
   const [deadline, setDeadline] = useState('');
   const [batches, setBatches] = useState([]);
   const [faculty, setFaculty] = useState('');
+  const [hod, setHod] = useState('');
   const [faculties, setFaculties] = useState([]);
-  const [role, setRole] = useState('');
+  const [hods, setHods] = useState([]);
+  const [sub, setSub] = useState('')
+  const [subjects, setSubjects] = useState([])
+  const [role, setRole] = useState(localStorage.getItem('role'));
   const [token, setToken] = useState(localStorage.getItem('access'));
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Role:", localStorage.getItem("role"));
+    console.log("Role:", role);
     console.log("Username:", localStorage.getItem('username'));
 
     const fetchData = async () => {
       try {
-        const [batchResponse, facultyResponse] = await Promise.all([
+        const [batchResponse, facultyResponse, hodResponse ,subjectResponse] = await Promise.all([
           getBatchApi(token),
-          facultyApi(token) 
+          FacultyApi(token),
+          HodApi(token),
+          getSubjectApi(token)
         ]);
 
         if (batchResponse?.data && Array.isArray(batchResponse.data)) {
@@ -36,21 +42,41 @@ const AddAssignment = () => {
           console.error('Unexpected response format:', batchResponse);
         }
 
+        if (subjectResponse?.data && Array.isArray(subjectResponse.data)) {
+          setSubjects(subjectResponse.data);
+        } else {
+          setError('Unexpected response format for subjects');
+          console.error('Unexpected response format:', subjectResponse);
+        }
+
         if (facultyResponse?.data && Array.isArray(facultyResponse.data)) {
           setFaculties(facultyResponse.data);
+          // Set the faculty to the logged-in user if they are a faculty member
+          if (role?.toLowerCase() === 'faculty') {
+            const loggedInFaculty = facultyResponse.data.find(faculty => faculty.user === localStorage.getItem('username'));
+            if (loggedInFaculty) {
+              setFaculty(loggedInFaculty.id);
+            }
+          }
         } else {
           setError('Unexpected response format for faculties');
           console.error('Unexpected response format:', facultyResponse);
         }
+
+        if (hodResponse?.data && Array.isArray(hodResponse.data)) {
+          setHods(hodResponse.data);
+        } else {
+          setError('Unexpected response format for HODs');
+          console.error('Unexpected response format:', hodResponse);
+        }
       } catch (error) {
-        console.log("Error fetching batches and faculties", error);
-        setError('Failed to fetch batches or faculties. Please check your authorization token.');
+        console.log("Error fetching data", error);
+        setError('Failed to fetch data. Please check your authorization token.');
       }
     };
 
     fetchData();
-    setRole(localStorage.getItem("role") || "");
-  }, [token]);
+  }, [token, role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +84,9 @@ const AddAssignment = () => {
     const assignmentData = {
       title,
       description,
-      faculty,  // Use faculty ID
+      sub,
+      faculty,
+      hod,
       batch,
       deadline,
     };
@@ -69,11 +97,7 @@ const AddAssignment = () => {
 
       if (response.status === 201) {
         toast.success('Assignment uploaded successfully!');
-        setTitle('')
-        setDescription('')
-        setBatch('')
-        setDeadline('')
-        setFaculty('')
+        navigate('/assignments'); // Redirect to assignments page after successful upload
       } else {
         toast.error('Failed to upload assignment');
       }
@@ -107,42 +131,80 @@ const AddAssignment = () => {
           />
         </Form.Group>
 
-          <Form.Group controlId="batch">
-            <Form.Label>Batch</Form.Label>
-            <Form.Control
-              as="select"
-              value={batch}
-              onChange={(e) => setBatch(e.target.value)}
-              required
-            >
-              <option value="">Select a Batch</option>
-              {batches.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.batch_name}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        
-
+        <Form.Group controlId="subject">
+              <Form.Label>Subject</Form.Label>
+              <Form.Control
+                as="select"
+                value={sub}
+                onChange={(e) => setSub(e.target.value)}
+                required
+              >
+                <option value="">Select a subject</option>
+                {subjects.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
         {role?.toLowerCase() === "hod" && (
-          <Form.Group controlId="faculty">
-            <Form.Label>Select Faculty</Form.Label>
-            <Form.Control
-              as="select"
-              value={faculty}
-              onChange={(e) => setFaculty(e.target.value)}
-              required
-            >
-              <option value="">Select Faculty</option>
-              {faculties.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.full_name}  
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
+          <>
+            <Form.Group controlId="batch">
+              <Form.Label>Batch</Form.Label>
+              <Form.Control
+                as="select"
+                value={batch}
+                onChange={(e) => setBatch(e.target.value)}
+                required
+              >
+                <option value="">Select a Batch</option>
+                {batches.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.batch_name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="hod">
+              <Form.Label>Select HOD</Form.Label>
+              <Form.Control
+                as="select"
+                value={hod}
+                onChange={(e) => setHod(e.target.value)}
+                required
+              >
+                <option value="">Select HOD</option>
+                {hods.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.full_name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </>
         )}
+
+       { role ==='faculty ' && (
+        <>
+           <Form.Group controlId="faculty">
+           <Form.Label>Select Faculty</Form.Label>
+           <Form.Control
+             as="select"
+             value={faculty}
+             onChange={(e) => setFaculty(e.target.value)}
+             required
+           >
+             <option value="">Select Faculty</option>
+             {faculties.map((f) => (
+               <option key={f.id} value={f.id}>
+                 {f.full_name}
+               </option>
+             ))}
+           </Form.Control>
+         </Form.Group>
+        </>
+       )}
 
         <Form.Group controlId="deadline">
           <Form.Label>Deadline</Form.Label>
@@ -150,6 +212,7 @@ const AddAssignment = () => {
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
+            required
           />
         </Form.Group>
 

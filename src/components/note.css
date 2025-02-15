@@ -1,19 +1,22 @@
-
-.notes-container{
+.notes-container {
     max-width: 900px;
     margin: auto;
-    background:#f8f9fa;
+    background: #f8f9fa;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
 
 }
+
 .card-wrap {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* This will create 3 equal columns */
-    gap: 20px; /* Space between the cards */
-  }
+    grid-template-columns: repeat(3, 1fr);
+    /* This will create 3 equal columns */
+    gap: 20px;
+    /* Space between the cards */
+}
+
 .note-card {
     border: 1px solid;
     justify-content: center;
@@ -42,13 +45,31 @@
 }
 
 .save-note {
-    border: none;
-    /* background: rgb(213, 216, 219); */
-    background: rgb(236, 243, 245);
+    /* border: 1px solid; */
+    /* background: rgb(236, 243, 245); */
+    /* background: rgb(174, 209, 219); */
+    color: rgb(107, 105, 105);
+    text-decoration: none;
+
 
 }
 
+
 .save-note:hover {
+    border: none;
+    color: white;
+    background-color: rgb(46, 88, 161);
+}
+.delete-note{
+    border: none;
+    color: rgb(114, 113, 113);
+    /* background-color: rgb(213, 216, 219); */
+    background: rgb(236, 243, 245);
+    font-size: 20px;
+
+ 
+}
+.delete-note:hover {
     border: none;
     color: white;
     background-color: rgb(46, 88, 161);
@@ -56,11 +77,10 @@
 
 .view-note {
     border: none;
-    color: white;
+    color: rgb(114, 113, 113);
     /* background-color: rgb(213, 216, 219); */
     background: rgb(236, 243, 245);
-
-
+    font-size: 20px;
 }
 
 .view-note:hover {
@@ -70,12 +90,14 @@
 
 @media (max-width: 768px) {
     .card-wrap {
-      grid-template-columns: repeat(2, 1fr); /* 2 cards per row on smaller screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 cards per row on smaller screens */
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .card-wrap {
-      grid-template-columns: 1fr; /* 1 card per row on mobile screens */
+        grid-template-columns: 1fr;
+        /* 1 card per row on mobile screens */
     }
-  }
+}
