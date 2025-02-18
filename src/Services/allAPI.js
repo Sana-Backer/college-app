@@ -439,7 +439,19 @@ export const deleteAssignmentApi = async (id, token) => {
   });
 };
 
+// Get submissions for a specific assignment
+export const getSubmissionsApi = async (token, assignmentId) => {
+  return await commonAPI("GET", `${serverUrl}/assignments/${assignmentId}/submissions/`, null, {
+    Authorization: ` Bearer ${token}`
+  });
+};
 
+// Create a new submission for a specific assignment
+export const createSubmissionApi = async (token, assignmentId, submissionData) => {
+  return await commonAPI("POST", `${serverUrl}/assignments/${assignmentId}/submissions/`, submissionData, {
+    Authorization: `Bearer ${token}`
+  });
+};
 
 
 
