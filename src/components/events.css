@@ -9,3 +9,31 @@
     color: rgb(206, 162, 16);
 
 }
+/* .date-box {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  background-color: lightgray;
+  width: 100px;
+  height: 100px;
+  transition: 0.3s;
+}
+
+.btnHover {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.date-box:hover h2 {
+  opacity: 0; 
+}
+
+.date-box:hover .btnHover {
+  opacity: 1;} */

@@ -14,6 +14,8 @@ import AssignmentStd from '../components/AssignmentStd'
 import AddStudent from '../components/Admin/AddStudent';
 import AddAssignment from '../components/AddAssignment';
 import AddNote from '../components/hod/AddNote';
+import StudentAttendence from '../components/faculty/StudentAttendence'
+import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
 import { getNotificationsApi, getUserProfileApi } from '../Services/allAPI';
 
@@ -81,6 +83,10 @@ const FacultyDash = () => {
                 return <ResultStd />;
             case "notes":
                 return <Notes />;
+                case "attendence":
+                    return <StudentAttendence />;
+                    case "attendenceView":
+                    return <AttendenceViewStd />;
             default:
             case "profile":
                 return <FacultyProfile />;
@@ -190,7 +196,14 @@ const FacultyDash = () => {
                         onClick={() => handleActiveFeature("attendence")}
                         className={activeFeature === "attendence" ? "active" : ""}
                     >
-                        Attendance
+                       Student Attendance
+                    </a>
+                    <a
+                        href="#attendenceView"
+                        onClick={() => handleActiveFeature("attendenceView")}
+                        className={activeFeature === "attendenceView" ? "active" : ""}
+                    >
+                       Student Attendance view
                     </a>
                     <a
                         href="#result"

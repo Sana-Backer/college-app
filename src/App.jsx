@@ -18,6 +18,7 @@ import HodProfile from "./components/hod/HodProfile";
 function App() {
   return (
     <>
+    
       {/* <NavBar /> */}
       <Routes>
         <Route path="/" element={<Login />}></Route>

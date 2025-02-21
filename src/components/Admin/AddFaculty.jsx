@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import "./addStudent.css";
+import React, { useEffect, useState } from "react";
+// import "./.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { registerApi } from "../../Services/allAPI";
+import { departmentApi, registerApi } from "../../Services/allAPI";
 
 function AddFaculty() {
   const [userData, setUserData] = useState({
@@ -16,10 +16,22 @@ function AddFaculty() {
     photo: null,
     role: "faculty",
   });
-
+  const [departments, setDepartments] = useState([])
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null)
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const departments = async () => {
+      try {
+        const response = await departmentApi()
+        setDepartments(response.data)
+      } catch (error) {
+        setError("Failed to fetch departments", error)
+      }
+    }
+    departments()
+  },[])
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -153,8 +165,11 @@ function AddFaculty() {
                 <label htmlFor="department">Department</label>
                 <select id="department" name="department" value={userData.department} onChange={handleChange} className="select-field">
                   <option value="">Select Department</option>
-                  <option value="1">B.Tech</option>
-                  <option value="2">M.Tech</option>
+                  {departments.map((D)=>(
+                    <option key={D.id} value={D.id}>{D.department_name}</option>
+                  ))
+                    
+                 }
                 </select>
               </div>
 

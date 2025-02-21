@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import {
-  Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar,
-  Toolbar, Typography, CssBaseline, Container, Collapse
+  Drawer, List, ListItem, ListItemIcon, ListItemText, Container,
+  Collapse, IconButton, CssBaseline, Toolbar,
+  useMediaQuery
 } from '@mui/material';
 import {
-  Add, Visibility, ExitToApp, ExpandLess, ExpandMore,
+  Menu, Add, Visibility, ExitToApp, ExpandLess, ExpandMore,
   Notifications, Assessment
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import AddHod from './AddHod';  
+import AddHod from './AddHod';
 import AddFaculty from './AddFaculty';
 import AddStudent from './AddStudent';
 import AddBatch from './AddBatch';
@@ -25,12 +26,27 @@ import ViewCourses from './ViewCourses';
 import ViewBatch from './ViewBatch';
 import AddSubject from './AddSubject';
 import ViewSubject from './ViewSubject';
-
+import logo from '../../assets/logo.png'
 function AdminHome() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(true); // Toggle state for drawer
   const [openAdd, setOpenAdd] = useState(false);
   const [openView, setOpenView] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
+
+  const isMediumScreen = useMediaQuery('(max-width:1290px)');
+
+
+  const isLargeScreen = useMediaQuery('(min-width:900px)'); // Sidebar always open on large screens
+
+  const toggleDrawer = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const handleCloseOptions = () => {
+    setOpen(!open);
+  };
+
 
   const handleAddClick = () => {
     setOpenAdd(!openAdd);
@@ -47,16 +63,38 @@ function AdminHome() {
   return (
     <div className="admin-home">
       <CssBaseline />
-      {/* <AppBar position="fixed" className="admin-appbar">
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Admin Portal
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
-      <Drawer className="admin-drawer" variant="permanent">
-        <div className="toolbar-spacer" />
-        <div className="sidebar-header">Admin Controls</div>
+
+      {/* Toggle Button */}
+      {/* <IconButton onClick={toggleDrawer} sx={{ position: "absolute", top: 10, left: 10 }}>
+        <Menu />
+      </IconButton> */}
+      <Drawer
+        className="admin-drawer"
+        variant={isLargeScreen ? "permanent" : "temporary"} // Permanent on large screens
+        anchor="left"
+        open={isLargeScreen || open} // Always open if large screen
+        onClose={isLargeScreen ? undefined : toggleDrawer} // Close only on small screens
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          width: isLargeScreen ? 240 : 0,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: 240,
+            transition: 'width 0.3s',
+            overflowX: 'hidden',
+          },
+        }}
+      >
+
+
+        <Toolbar />
+        <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center' }}>
+
+          <span>Admin Controls</span>
+        </div>
+        {/*  */}
+
+
         <List>
           {/* Add Section */}
           <ListItem button className="list-item" onClick={handleAddClick}>
@@ -67,13 +105,16 @@ function AdminHome() {
           <Collapse in={openAdd} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddHod />)}>
-                <ListItemText primary="Add HOD" />
+                <ListItemText primary="Add HOD"
+                  onClick={handleCloseOptions} />
               </ListItem>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddFaculty />)}>
                 <ListItemText primary="Add Faculty" />
               </ListItem>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddStudent />)}>
-                <ListItemText primary="Add Student" />
+                <ListItemText primary="Add Student"
+                // onClick={toggleDrawerClose}
+                />
               </ListItem>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddCourse />)}>
                 <ListItemText primary="Add Course" />
@@ -140,9 +181,26 @@ function AdminHome() {
           </ListItem>
         </List>
       </Drawer>
-      <main className="admin-content">
+
+      {/* Main Content */}
+      <main className="admin-content" style={{
+        maxWidth: isMediumScreen ? '1100px' : '100%',
+        marginLeft: isLargeScreen ? '240px' : '0'
+      }}>
         <div className="toolbar-spacer" />
         <Container>
+          <IconButton
+            onClick={toggleDrawer}
+            sx={{ marginRight: 1, display: { xs: 'block', md: 'none' } }}
+          >
+            <Menu />
+          </IconButton>
+          <div className='m-auto d-flex flex-column align-items-center mb-2 '>
+            <img src={logo} className='' style={{ width: '150px', borderRadius: '90px' }} alt="" />
+
+            <h1 className='my-2'>Welcome  <span className='text-primary'>Admin</span></h1>
+          </div>
+
           {selectedComponent}
         </Container>
       </main>

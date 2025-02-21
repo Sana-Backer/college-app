@@ -387,7 +387,11 @@ export const getBatchApi = async (token) => {
 // ---------------------COURSE
 // all courses
 export const getCoursesApi = async (token) => {
-  return await commonAPI("GET", `${serverUrl}/courses-list/`, "")
+  return await commonAPI("GET", `${serverUrl}/courses-list/`, "",
+    {
+      Authorization: `Bearer ${token}`
+    }
+  )
 }
 // ---------------------subject
 
@@ -456,3 +460,22 @@ export const createSubmissionApi = async (token, assignmentId, submissionData) =
 
 
 
+// Create student attendance
+export const createStudentAttendanceApi = async (data, token) => {
+  return await commonAPI("POST", `${serverUrl}/student_attendance/`, data, {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  });
+};
+export const getStudentAttendenceApi = async (token, data) => {
+  return await commonAPI("GET", `${serverUrl}/student_attendance/`, data, {
+    Authorization: ` Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+};
+export const getAttendenceRecord = async (token, report) => {
+  return await commonAPI("GET", `${serverUrl}/student-attendance-reports/`, report, {
+    Authorization: ` Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+};

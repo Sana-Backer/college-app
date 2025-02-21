@@ -1,31 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import pdf from '../assets/pdf2.webp'
-import './note.css'
-import 'react-toastify/dist/ReactToastify.css';
 import { getNotes } from '../Services/allAPI';
-import { MdDelete } from 'react-icons/md';
-import { FaRegEye } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './note.css';
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
-  const [role, setRole] = useState('')
+  const [course, setCourse] = useState('');
+  const [userRole, setUserRole] = useState('');
+
   useEffect(() => {
+    const storedRole = localStorage.getItem('role');
+    setUserRole(storedRole || '');
+
+    const storedCourse = localStorage.getItem('course');
+    setCourse(storedCourse || '');
+
     const fetchNotes = async () => {
-      const storedRole = localStorage.getItem('role');
-      setRole(storedRole);
       const token = localStorage.getItem('access');
       if (!token) {
         toast.error('Authentication error: Missing token.');
         return;
       }
 
-
       try {
         const notesData = await getNotes(token);
-        console.log('notesData:', notesData);
+        console.log('Notes:', notesData);
 
-        setNotes(notesData);
+        let filteredNotes = notesData;
+
+        // If the user is a Student, filter notes by the stored course
+        if (storedRole === 'Student') {
+          filteredNotes = notesData.filter(note => note.course === storedCourse);
+        }
+
+        const notesWithDetails = filteredNotes.map(note => ({
+          ...note,
+          facultyName: note.faculty_name || 'Unknown',
+          courseName: note.course_name || 'Unknown',
+          fileUrl: note.file ? `http://localhost:8000${note.file}` : null
+        }));
+
+        setNotes(notesWithDetails);
       } catch (error) {
         console.error('Error fetching notes:', error);
         toast.error('Failed to fetch notes.');
@@ -36,60 +52,26 @@ const Notes = () => {
   }, []);
 
   return (
-    // <div className="notes-container">
-    //   <h2>Notes</h2>
-    //   <ul>
-    //     {notes.map(note => (
-    //       <li key={note.id}>
-    //         <h3>{note.title}</h3>
-    //         <p>
-    //               File:{" "}
-    //               <a href={note.file} target="_blank" rel="noopener noreferrer">
-    //                 View File
-    //               </a>
-    //             </p>
-    //         <p>Course: {note.course}</p>
-    //         <p>Faculty: {note.faculty}</p>
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
-    <div className='notes-container'>
-      <div className="card-wrap p-2 gap-1">
+    <div className="notes-page">
+      <h1 className="notes-title">Notes Management</h1>
+      <div className="notes-grid-container">
         {notes.map(note => (
           <div className="note-card" key={note.id}>
-            <div className='pdf'>
-              <div><img src={pdf} style={{ width: '100px', height: '110px' }} alt="" /></div>
-            </div>
-            <div className='d-flex flex-column'>
-              <h5>{note.title}</h5>
-              <p>{note.subject}</p>
-              <div className='buttons d-flex'>
-                <a
-                  href={note.file}
-                  download={note.title} 
-                  className="save-note px-3 py-2">Save</a> 
-
-                 {role === 'hod' || role === 'faculty' ? (
-                  <button
-                    className='delete-note px-3 '
-                    onClick={() => handleDelete(note.id)} 
-                  >
-                    <MdDelete className='w-100' />
-                  </button>
-                ) : (
-                  <a href={note.file} target="_blank" rel="noopener noreferrer">
-                    <button className='view-note px-3 py-2 '>
-                      <FaRegEye className='w-100' />
-                    </button>
-                  </a>)}
-              </div>
-            </div>
+            <h3 className="note-title">{note.title}</h3>
+            <p className="note-info">Course: {note.courseName}</p>
+            <p className="note-info">Faculty: {note.facultyName}</p>
+            {note.fileUrl ? (
+              <a className="note-link" href={note.fileUrl} target="_blank" rel="noopener noreferrer">
+                Open PDF
+              </a>
+            ) : (
+              <p className="note-info">No PDF available</p>
+            )}
           </div>
         ))}
       </div>
+      <ToastContainer />
     </div>
-
   );
 };
 

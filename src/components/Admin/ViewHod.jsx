@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Spinner, Row, Col } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
-import './viewHod.css';
+import { HodApi, deleteHodApi, departmentApi, editHodApi } from '../../Services/allAPI';
+import './viewhod.css';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { deleteHodApi, editHodApi, HodApi } from '../../Services/allAPI';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ViewHod = () => {
+
+  const serverUrl = 'http://localhost:8000';
+
+
   const [hods, setHods] = useState([]);
   const [selectedHod, setSelectedHod] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [departments, setDepartments] = useState([]);
+  const [filteredHods, setFilteredHods] = useState([]); // Store filtered HODs
+  const [filterDepartment, setFilterDepartment] = useState('');
+
+
 
   const token = localStorage.getItem("access"); // Fetch the token from localStorage
 
@@ -41,6 +49,42 @@ const ViewHod = () => {
       setIsLoading(false);
     }
   };
+
+
+  useEffect(() => {
+    if (!hods || hods.length === 0) return; // Ensure data exists
+
+    let filteredList = hods; // Default: all HODs
+
+    if (filterDepartment) {
+      filteredList = hods.filter(hod => String(hod.department) === String(filterDepartment));
+    }
+
+    console.log('Filtered HODs:', filteredList);
+    setFilteredHods(filteredList);
+  }, [hods, filterDepartment]);
+
+
+
+  useEffect(() => {
+    AllHods();
+    allDepartments();
+    // allCourses();
+    // allBatches();
+  }, []);
+
+  const allDepartments = async () => {
+    try {
+      const response = await departmentApi();
+      if (Array.isArray(response.data)) {
+        setDepartments(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
+
+
 
   const handleEdit = (hod) => {
     console.log(`Edit HOD with ID: ${hod.id}`);
@@ -126,6 +170,19 @@ const ViewHod = () => {
 
   return (
     <div className="container">
+
+      <Row className="justify-content-center">
+        <Col lg={10}>
+          <Form.Select value={filterDepartment} onChange={(e) => setFilterDepartment(e.target.value)}>
+            <option value="">Select Department</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>{dept.department_name}</option>
+            ))}
+
+          </Form.Select>
+        </Col>
+      </Row>
+
       <Row className="justify-content-center">
         <Col lg={10}>
           {isLoading ? (
@@ -134,10 +191,10 @@ const ViewHod = () => {
             </div>
           ) : (
             <div className="p-4">
-              <Table striped bordered hover className="bg-white w-100">
+              <Table striped bordered hover responsive className="bg-white w-100">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th >#</th>
                     <th>id</th>
                     <th>Full Name</th>
                     <th>Email</th>
@@ -150,32 +207,33 @@ const ViewHod = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {hods.length > 0 ? (
-                    hods.map((hod, index) => (
+                  {filteredHods.length > 0 ? (
+                    filteredHods.map((hod, index) => (
                       <tr key={hod.id}>
                         <td>{index + 1}</td>
                         <td>{hod.hodId || hod.id}</td>
                         <td>{hod.full_name}</td>
                         <td>{hod.email}</td>
                         <td>{hod.phone}</td>
-                        <td>{hod.department}</td>
+                        <td>{departments.find(dept => dept.id === hod.department)?.department_name || 'Unknown'}</td>
                         <td>{hod.dob}</td>
                         <td>{hod.gender}</td>
-                        <td>{hod.photo}</td>
                         <td>
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => handleEdit(hod)}
-                            className="me-2"
-                          >
+                          {hod.photo ? (
+                            <img
+                              src={`${serverUrl}${hod.photo}`}
+                              alt={hod.full_name}
+                              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                            />
+                          ) : (
+                            "No Photo"
+                          )}
+                        </td>
+                        <td>
+                          <Button variant="outline-primary" size="sm" onClick={() => handleEdit(hod)} className="me-2">
                             <FaEdit />
                           </Button>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            onClick={() => handleDelete(hod.id)}
-                          >
+                          <Button variant="outline-danger" size="sm" onClick={() => handleDelete(hod.id)}>
                             <FaTrash />
                           </Button>
                         </td>
@@ -183,12 +241,11 @@ const ViewHod = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" className="text-center">
-                        No HODs found.
-                      </td>
+                      <td colSpan="9" className="text-center">No HODs found.</td>
                     </tr>
                   )}
                 </tbody>
+
               </Table>
             </div>
           )}
@@ -213,9 +270,18 @@ const ViewHod = () => {
               <Form.Label>Phone</Form.Label>
               <Form.Control type="number" name="phone" value={selectedHod?.phone || ""} onChange={handleChange} />
             </Form.Group>
-            <Form.Group className="mt-3">
+            <Form.Group controlId="department" className="mt-3">
               <Form.Label>Department</Form.Label>
-              <Form.Control type="text" name="department" value={selectedHod?.department || ""} onChange={handleChange} />
+              <Form.Select
+                value={selectedHod?.department || ""}
+                onChange={(e) => setSelectedHod({ ...selectedHod, department: e.target.value })}
+              >
+
+                <option value="">Select Department</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>{dept.department_name}</option>
+                ))}
+              </Form.Select>
             </Form.Group>
             <Form.Group className="mt-3">
               <Form.Label>Date of Birth</Form.Label>
@@ -226,9 +292,19 @@ const ViewHod = () => {
               <Form.Control type="text" name="gender" value={selectedHod?.gender || ""} onChange={handleChange} />
             </Form.Group>
             <Form.Group className="mt-3">
-              <Form.Label>Photo</Form.Label>
+              <Form.Label>Current Photo</Form.Label>
+              <div>
+                {selectedHod?.photo && (
+                  <img
+                    src={selectedHod.photo instanceof File ? URL.createObjectURL(selectedHod.photo) : `${serverUrl}${selectedHod.photo}`}
+                    alt="HOD"
+                    style={{ width: "80px", height: "80px", borderRadius: "50%", marginBottom: "10px" }}
+                  />
+                )}
+              </div>
               <Form.Control type="file" name="photo" onChange={handleChange} />
             </Form.Group>
+
             <Button variant="primary" type="submit" className="mt-4 w-100" disabled={isSubmitting}>
               {isSubmitting ? <Spinner animation="border" size="sm" /> : "Update"}
             </Button>
