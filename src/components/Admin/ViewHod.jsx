@@ -190,8 +190,8 @@ const ViewHod = () => {
               <Spinner animation="border" size="lg" />
             </div>
           ) : (
-            <div className="p-4">
-              <Table striped bordered hover responsive className="bg-white w-100">
+            <div className="table-container p-4">
+              <Table striped bordered hover  className="table bg-white w-100">
                 <thead>
                   <tr>
                     <th >#</th>

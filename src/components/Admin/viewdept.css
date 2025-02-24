@@ -68,7 +68,9 @@
 .department-table button:hover .fa {
   opacity: 0.8;
 }
-
+.full-description{
+  width: 300px;
+}
 .modal-title {
   text-align: center;
 }
@@ -80,4 +82,21 @@
 
 .modal-body .form-group {
   margin-bottom: 15px;
+}
+@media (max-width: 1000px) {
+  .full-description {
+    display: none; /* Hide full description */
+  }
+  .view-details {
+    display: block; /* Show link */
+  }
+}
+
+@media (min-width: 1001px) {
+  .full-description {
+    display: block; /* Show full description */
+  }
+  .view-details {
+    display: none; /* Hide link */
+  }
 }
