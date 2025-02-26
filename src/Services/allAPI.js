@@ -479,3 +479,26 @@ export const getAttendenceRecord = async (token, report) => {
     'Content-Type': 'application/json'
   });
 };
+// 
+export const createFacultyAttendanceApi = async (token, data) => {
+  return commonAPI("POST", `${serverUrl}/faculty-attendance/`, data, token, {
+      headers: { "Content-Type": "application/json" },
+  });
+};
+
+// ------------result
+// Post exam result data
+export const ExamResultApi = async (examResult, token) => {
+  try {
+    const response = await axios.post('http://localhost:8000/exam_result/', examResult, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('There was an error posting the exam result!', error);
+    throw error;
+  }
+};

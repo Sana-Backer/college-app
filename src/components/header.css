@@ -9,6 +9,45 @@
   color: white;
 
 }
-.logout{
-font-size: 20px;
-  color: white;}
+
+.logout {
+  font-size: 20px;
+  color: white;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 300px;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    border-radius: 20px;
+    background-color: rgb(52, 72, 90,0.4);
+    transform: translateX(200%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .links.active {
+    transform: translateX(0);
+  }
+
+  .links a {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+}

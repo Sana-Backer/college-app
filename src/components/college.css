@@ -1,0 +1,58 @@
+.college-section {
+  text-align: center;
+  padding: 40px 10px;
+}
+
+.main-photo {
+  width: 100%;
+  height: 100%;
+  max-width: 630px;
+}
+
+.college-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.college-card {
+  position: relative;
+  /* border-radius: 8px; */
+  overflow: hidden;
+  height: 300px;
+}
+
+.college-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .photos {
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .main-photo {
+    max-width: 30%;
+    height: auto;
+
+  }
+
+  .college-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .college-card {
+    height: auto;
+  }
+
+  .photos img {
+    max-width: 100%;
+  }
+}

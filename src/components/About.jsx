@@ -11,36 +11,42 @@ import prof1 from '../assets/proff1.jpg'
 import prof3 from '../assets/proff3.jpg'
 import prof4 from '../assets/proff4.jpg'
 import Departments from './Departments';
+import College from './College';
+import { useNavigate } from 'react-router-dom';
 
 const About = () => {
+  const navigate = useNavigate()
   return (
     <>
-      <div className="container d-flex gap-5 justify-content-center my-3">
-        <div className='card p-2 text-light text-center'>
-          <div className='d-flex align-items-center justify-content-center'><TfiAnnouncement /></div>
+      <div className="container d-flex gap-3 justify-content-center my-3">
+        <div className='About-card p-2  text-light text-center'>
+          <div className='icons d-flex align-items-center justify-content-center '><TfiAnnouncement /></div>
           <h5>Announcements</h5>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div >
-        <div className='card p-2 text-light text-center'>
-          <div className='d-flex align-items-center justify-content-center'><MdOutlineEventNote /></div>
+        <div className='About-card p-2 text-light text-center'>
+          <div className='icons d-flex align-items-center justify-content-center '><MdOutlineEventNote /></div>
           <h5>Events</h5>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
-        <div className='card p-2 text-light text-center'>
-          <div className='d-flex align-items-center justify-content-center'><GiBlackBook /></div>
+        <div className='About-card p-2 text-light text-center' onClick={()=> navigate('/courses')}>
+          <div className='icons d-flex align-items-center justify-content-center'><GiBlackBook /></div>
           <h5>Courses</h5>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
-        <div className='card p-2 text-light text-center'>
-          <div className='d-flex align-items-center justify-content-center'><BsTrophy /></div>
+        <div className='About-card p-2 text-light text-center' onClick={()=> navigate('/ResultStd')}>
+          <div className='icons d-flex align-items-center justify-content-center'><BsTrophy /></div>
           <h5>Results</h5>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
       </div>
       {/* Events */}
+
       <Events />
       <Departments/>
       <Courses />
+      <College/>
+
       <div className=''>
         <div className='d-flex flex-row gap-2 m-2'>
           <div className="people py-2 ms-auto">

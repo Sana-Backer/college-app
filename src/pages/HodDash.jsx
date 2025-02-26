@@ -13,11 +13,12 @@ import AddFaculty from '../components/Admin/AddFaculty';
 import AddDepartment from '../components/Admin/AddDepartment';
 import AddNote from '../components/hod/AddNote';
 import Notification from '../components/Admin/Notification';
-import AttendenceView from '../components/AttendenceView';
+import FacultyAttendenceMark from '../components/hod/FacultyAttendenceMark';
 import { getUserProfileApi, departmentApi } from '.././Services/allAPI';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import AssignmentStd from '../components/AssignmentStd';
+
 import './hoddash.css'
 import AddAssignment from '../components/AddAssignment';
 
@@ -84,8 +85,8 @@ const HodDash = () => {
                 return <ViewStudent />;
             case "faculties":
                 return <ViewFaculty />;
-            case "attendence":
-                return <AttendenceView />;
+            case "attendenceMark":
+                return <FacultyAttendenceMark />;
             case "notes":
                 return <Notes />;
             case "assignments":
@@ -169,11 +170,11 @@ const HodDash = () => {
                             Assignments
                         </a>
                         <a
-                            href="#attendence"
-                            onClick={() => handleActiveFeature("attendence")}
-                            className={activeFeature === "attendence" ? "active" : ""}
+                            href="#attendenceMark"
+                            onClick={() => handleActiveFeature("attendenceMark")}
+                            className={activeFeature === "attendenceMark" ? "active" : ""}
                         >
-                            Attendance
+                           Faculty Attendance
                         </a>
                         <MdNotifications className="notification-btn" />
                     </Nav>

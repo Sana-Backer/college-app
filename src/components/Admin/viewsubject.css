@@ -1,0 +1,62 @@
+/* Responsive Table Container */
+.table-res {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+    padding: 0 10px; /* Reduce extra spacing */
+}
+
+/* Table Styling */
+.table {
+    width: 90%; /* Increased width */
+    max-width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    margin: auto; /* Center table */
+    border-radius: 10px; /* Adds small curve */
+    overflow: hidden; /* Keeps the border-radius applied */
+}
+
+/* Table Header */
+th {
+    background-color: blue;
+    color: white;
+    padding: 12px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+/* Table Cells */
+td {
+    padding: 10px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+/* Fixing Borders to Extend to End */
+tr {
+    border-bottom: 1px solid black;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .table {
+        width: 100%; /* Full width on small screens */
+        font-size: 14px;
+    }
+    th, td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .table {
+        font-size: 12px;
+    }
+    th, td {
+        width: 180px;
+        padding: 6px;
+    }
+}

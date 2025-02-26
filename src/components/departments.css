@@ -1,7 +1,7 @@
 .course-box {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    gap: 10px; /* Space between columns */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
     padding: 20px 0;
 }
 .head-course-text hr {
@@ -15,7 +15,7 @@
     position: relative;
     display: inline-block;
     cursor: pointer;
-    width: 100%; /* Full width of the grid cell */
+    width: 100%; 
     height: 250px;
     overflow: hidden;
     margin: 10px;

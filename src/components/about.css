@@ -1,16 +1,27 @@
-/* .card{
+
+.About-card{
     background-color: rgb(142, 168, 185);
 
 }
-.card:hover{
+.About-card:hover{
     transition: 1s;
     background-color: rgb(3, 37, 58);
-} */
-/* .card{
+}
+.icons{
+    font-size: 25px;
+    background: rgba(244, 242, 242, 0.4);
+    padding: 10px;
+}
+.About-card p{
+    color: aliceblue;
+}
+
+/* .About-card{
     background-color: rgb(199, 163, 163);
 }
-.card:hover{
+.About-card:hover{
     background-color: rgb(76, 39, 39);
+    e8e3e3
 } */
 
 /* background-color: rgb(107, 54, 54); */
@@ -18,7 +29,28 @@
 /* .people-details{
     background: rgb(198, 207, 206);
 } */
-
+.people-content{
+    /* border:2px dashed rgb(56, 156, 56); */
+}
 .people-details{
     background: rgb(122, 123, 123,0.4);
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .About-card {
+        width: 48%; 
+    }
+}
+@media (max-width: 480px) {
+    .About-card {
+        width: 45%;
+    }
+    .About-card p{
+        font-size: 15px;
+
+    }
 }

@@ -13,8 +13,12 @@ import AdminHome from "./components/Admin/AdminHome";
 import HodDash from "./pages/HodDash";
 import FacultyDash from "./pages/FacultyDash";
 import HodProfile from "./components/hod/HodProfile";
-
-
+import FacultyAttendanceRecord from './components/hod/FacultyAttendenceRecord'
+import ResultStd from './components/ResultStd'
+import Departments from "./components/Departments";
+import CourseDescription from "./components/CourseDescription";
+import AllDept from "./components/AllDept";
+import Courses from "./components/Courses";
 function App() {
   return (
     <>
@@ -26,6 +30,8 @@ function App() {
         <Route path="/studentDash" element={<StudentDash />}></Route>
         <Route path="/hoddash" element={<HodDash />}></Route>
         <Route path="/hod/:hodId" element={<HodProfile  />} />
+        <Route path="/faculty-attendance-record" element={<FacultyAttendanceRecord />} />
+
 
         <Route path="/facultydash" element={<FacultyDash />}></Route>
         
@@ -34,7 +40,14 @@ function App() {
 
 
         <Route path="/home" element={<Home />}></Route>
-        <Route path="/AddHod" element={<AddHod />}></Route> 
+        <Route path="/AddHod" element={<AddHod />}></Route>
+        <Route path="/Departments" element={<Departments/>}/>
+        <Route path="/coursedescription" element={<CourseDescription />} ></Route>
+        <Route path="/AllDept" element={<AllDept />} ></Route>
+
+        <Route path="/Courses" element={<Courses/>}/>
+
+        <Route path="/ResultStd" element={<ResultStd/>}/>
       </Routes>
 \      <ToastContainer />
     </>

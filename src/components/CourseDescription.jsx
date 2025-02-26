@@ -26,9 +26,6 @@ function CourseDescription() {
             </p>
           </div>
           <div className="batch-button">
-            <div>
-              
-            </div>
             <div className="btech">
               <b>B.tech</b>
             </div>

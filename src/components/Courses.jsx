@@ -1,73 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import course from '../assets/course1.webp';
-import phy from '../assets/phy.avif'
-import maths from '../assets/maths.jpg'
-import bca from '../assets/bca.jpg'
-
-import './courses.css';
-import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+import React, { useEffect, useState } from "react";
+import "./courses.css";
+import { getCoursesApi } from "../Services/allAPI";
+import { FaGraduationCap } from "react-icons/fa6";
 
 const Courses = () => {
-  const courses = [
-    { title: "B TECH", image: course },
-    { title: "BSC PHYSICS ", image: phy },
-    { title: "BSC MATHS ", image: maths },
-    { title: "BCA ", image: bca },
-    { title: "Course 5", image: course },
-    { title: "Course 6", image: course },
-    { title: "Course 7", image: course },
-  ];
+  const [courses, setCourses] = useState([]);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCourses = 4; 
-
-  const handleNext = () => {
-    if (currentIndex + visibleCourses < courses.length) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     handleNext();
-  //   }, 3000);
-  
-  //   return () => clearInterval(interval); 
-  // }, [currentIndex]);
-  
-  
+  useEffect(() => {
+    const allCourses = async () => {
+      try {
+        const response = await getCoursesApi();
+        setCourses(response.data);
+      } catch (error) {
+        console.log("Error fetching courses", error);
+      }
+    };
+    allCourses();
+  }, []);
 
   return (
-    <section className="courses container">
-      <h2 className="text-center">Courses</h2>
-      <hr />
-      <div className='d-flex arrows gap-3'>
-        <button className='arrow btn p-2' onClick={handlePrev} disabled={currentIndex === 0}>
-          <SlArrowLeft />
-        </button>
-        <button className='arrow btn p-2' onClick={handleNext} disabled={currentIndex + visibleCourses >= courses.length}>
-          <SlArrowRight />
-        </button>
+    <div className="Courses container mt-3">
+      <div className="course-head">
+        <h3>Courses</h3>
       </div>
 
-      <div className='wrapper d-flex flex-row gap-1 '>
-        {courses.slice(currentIndex, currentIndex + visibleCourses).map((course, index) => (
-          <div key={index} className="course-card ms-auto">
-            <div className="image-container">
-              <img src={course.image} alt='' className="course-image" />
-              <div className="course-title">
-                <h6>{course.title}</h6>
-              </div>
+      <div className="d-flex flex-wrap justify-content-center gap-4 mt-4">
+        {courses.map((c) => (
+          <div className="course-card" key={c.id}>
+            <div className="course-icon">
+              <FaGraduationCap />
             </div>
+            <h2>{c.course_name}</h2>
+            <p>{c.description}</p>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
