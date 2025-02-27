@@ -307,6 +307,30 @@ export const getNotes = async (token) => {
   }
 };
 
+export const getNotesByFcaulty = async (token, facultyId) => {
+  try {
+    const response = await axios.get(`${serverUrl}/notes/faculty/${facultyId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching notes:', error);
+    throw error;
+  }
+};
+// student note by course
+export const getStudentNotesByCourse = async (courseId, token) => {
+  try {
+    const response = await axios.get(`${serverUrl}/notes/course/${courseId}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching student notes:', error);
+    throw error;
+  }
+};
+
 //delete_Studentnote
 export const delete_Studentnote = async (id, token) => {
   return await commonAPI("DELETE", `${serverUrl}/notes/${id}/`, "", {
@@ -428,7 +452,13 @@ export const getAssignmentApi = async (token, assignmentData) => {
     Authorization: `Bearer ${token}`
   });
 };
-
+export const getAssignmentsByBatch = async (token, batchId) => {
+  return await axios.get(`${serverUrl}/student/assignments/${batchId}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
 // edit assignments
 export const editAssignmentApi = async (id, assignD, token) => {
   return await commonAPI("PUT", `${serverUrl}/assignments/${id}/`, assignD, {
@@ -482,15 +512,26 @@ export const getAttendenceRecord = async (token, report) => {
 // 
 export const createFacultyAttendanceApi = async (token, data) => {
   return commonAPI("POST", `${serverUrl}/faculty-attendance/`, data, token, {
-      headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
   });
 };
 
 // ------------result
+// post
+export const uploadExamResultApi = async (token, title, file) => {
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('file', file);
+
+  return await commonAPI("POST", ` ${serverUrl}/exam_result/`, formData, {
+    Authorization: `Bearer ${token}`,
+  });
+};
+
 // Post exam result data
-export const ExamResultApi = async (examResult, token) => {
+export const ExamResultApi = async (token) => {
   try {
-    const response = await axios.post('http://localhost:8000/exam_result/', examResult, {
+    const response = await axios.get(`${serverUrl}/exam_result/`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -498,7 +539,7 @@ export const ExamResultApi = async (examResult, token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('There was an error posting the exam result!', error);
+    console.error('Error fetching exam results!', error);
     throw error;
   }
 };

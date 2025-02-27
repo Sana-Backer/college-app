@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri';
 import './profile.css';
-import { getStudentApi, getUserProfileApi } from '../services/allApi';
+import { getStudentApi, getUserProfileApi } from '../Services/allAPI';
 
 const Profile = () => {
   const [stdDetails, setStdDetails] = useState(null);
