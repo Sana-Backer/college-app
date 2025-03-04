@@ -27,6 +27,8 @@ const College = () => {
           ))}
         </div>
     </div>
+
+
     </div>
   );
 };

@@ -26,16 +26,14 @@ const AssignmentStd = () => {
     } else {
       toast.error("Logged user information not available.");
     }
-  }, []);
+  }, [loggedUser]);
 
   const fetchBatches = async () => {
     try {
       const batchResponse = await getBatchApi(token);
       if (batchResponse.data && batchResponse.data.length > 0) {
         setAvailableBatches(batchResponse.data);
-
-        // Only update batchId if it's not already set
-        if (!batchId) {
+        if (batchResponse.data.length === 1) {
           setBatchId(batchResponse.data[0].id);
           setBatchName(batchResponse.data[0].batch_name);
         }
@@ -51,7 +49,7 @@ const AssignmentStd = () => {
     if (batchId) {
       fetchAssignments();
     }
-  }, [batchId]); // Depend only on batchId
+  }, [batchId, token]);
 
   const fetchAssignments = async () => {
     if (!batchId || !token) {
@@ -59,7 +57,6 @@ const AssignmentStd = () => {
       return;
     }
     try {
-      setLoading(true);
       const response = await getAssignmentsByBatch(token, batchId);
       setAssignments(response.data);
     } catch (error) {
@@ -102,6 +99,7 @@ const AssignmentStd = () => {
 
       if (response.status === 201) {
         toast.success("Assignment submitted successfully!");
+        // Update the submittedAssignments state to reflect that the assignment has been submitted
         setSubmittedAssignments((prev) => ({
           ...prev,
           [assignmentId]: {
@@ -119,15 +117,14 @@ const AssignmentStd = () => {
   };
 
   return (
-    <div className="assignment-container">
-      <h2 className="assignments-title">My Assignments</h2>
-    
+    <div className="assignmentContainer">
+      <h2 className="assignments-title">Assignments</h2>
 
       {/* Batch Selector */}
       {availableBatches.length > 1 && (
         <div className="batch-selector">
           <select value={batchId} onChange={handleBatchChange}>
-            <option value="">All</option>
+            <option value="">select Batch</option>
             {availableBatches.map(batch => (
               <option key={batch.id} value={batch.id}>{batch.batch_name}</option>
             ))}
@@ -141,7 +138,7 @@ const AssignmentStd = () => {
         <p className="assignments-empty">No assignments available for your batch.</p>
       ) : (
         <div className="table-container">
-          <table className="styled-table">
+          <table className="styledTable">
             <thead>
               <tr>
                 <th>SI No</th>
@@ -166,18 +163,15 @@ const AssignmentStd = () => {
                     {submittedAssignments[assignment.id] ? (
                       <Button className="submitted-btn ms-2" disabled>Submitted</Button>
                     ) : (
-                      <>
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, assignment.id)}
-                        />
+                      <div className="upload-container">
+                        <input type="file" onChange={(e) => handleFileChange(e, assignment.id)} />
                         <Button
-                          className="action-btn upload-btn ms-2"
+                          className="actionbtn uploadbtn ms-2"
                           onClick={() => handleFileUpload(assignment.id)}
                         >
                           <FaUpload className="icon" /> Upload
                         </Button>
-                      </>
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -195,6 +189,7 @@ const AssignmentStd = () => {
           <h2 className='text-center'>{selectedTitle}</h2>
           <p>{selectedDescription}</p>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDescriptionModal(false)}>
             Close

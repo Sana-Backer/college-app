@@ -338,6 +338,12 @@ export const delete_Studentnote = async (id, token) => {
   });
 };
 
+// Delete note data
+export const deleteNoteApi = async (id, token) => {
+  return await commonAPI("DELETE", `${serverUrl}/notes/${id}/`, null, {
+    Authorization: `Bearer ${token}`,
+  });
+}
 
 // -----------------------------------------------------------------
 export const addCourseApi = async (data, token) => {
@@ -459,10 +465,27 @@ export const getAssignmentsByBatch = async (token, batchId) => {
     }
   });
 };
+
+// get assignment submission
+export const getAssignmentSubmissions = async (token, assignmentId) => {
+  return await axios.get(`${serverUrl}/assignments/${assignmentId}/submissions/`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
+
 // edit assignments
 export const editAssignmentApi = async (id, assignD, token) => {
   return await commonAPI("PUT", `${serverUrl}/assignments/${id}/`, assignD, {
     Authorization: `Bearer ${token}`,
+  });
+};
+
+// Delete a specific submission
+export const deleteSubmissionApi = async (token, assignmentId, submissionId) => {
+  return await commonAPI("DELETE", `${serverUrl}/assignments/${assignmentId}/submissions/${submissionId}/`, null, {
+    Authorization: ` Bearer ${token}`
   });
 };
 
@@ -540,6 +563,21 @@ export const ExamResultApi = async (token) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching exam results!', error);
+    throw error;
+  }
+};
+// delete
+export const deleteExamResultApi = async (token, id) => {
+
+  try {
+    const response = await axios.delete(`http://localhost:8000/api/exam_result/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error deleting exam result:", error.response ? error.response.data : error.message);
     throw error;
   }
 };

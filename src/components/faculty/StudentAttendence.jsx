@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./attendence.css";
 import { createStudentAttendanceApi, getBatchApi, getSubjectApi, StudentApi } from "../../Services/allAPI";
+import { useNavigate } from "react-router-dom";
 
 const StdAttendance = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
@@ -28,6 +29,8 @@ const StdAttendance = () => {
     const [filteredStudents, setFilteredStudents] = useState([]);
 
     const token = localStorage.getItem('access');
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -149,6 +152,8 @@ const StdAttendance = () => {
             >
                 {loading ? "Submitting..." : "Submit Attendance"}
             </button>
+            <div className="mt-5 "><button className="btn p-2" onClick={() => navigate("/student-attendance-reports")}>view faculty attendence record</button></div>
+
         </div>
     );
 };

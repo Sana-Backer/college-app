@@ -19,6 +19,8 @@ import Departments from "./components/Departments";
 import CourseDescription from "./components/CourseDescription";
 import AllDept from "./components/AllDept";
 import Courses from "./components/Courses";
+import ViewNotifications from "./components/ViewNotifications";
+import AttendanceView from "./components/faculty/AttendenceSheetStd";
 function App() {
   return (
     <>
@@ -31,6 +33,7 @@ function App() {
         <Route path="/hoddash" element={<HodDash />}></Route>
         <Route path="/hod/:hodId" element={<HodProfile  />} />
         <Route path="/faculty-attendance-record" element={<FacultyAttendanceRecord />} />
+        <Route path="/student-attendance-reports" element={<AttendanceView/>}/>
 
 
         <Route path="/facultydash" element={<FacultyDash />}></Route>
@@ -46,7 +49,7 @@ function App() {
         <Route path="/AllDept" element={<AllDept />} ></Route>
 
         <Route path="/Courses" element={<Courses/>}/>
-
+        {/* <Route path="/notification" element={<ViewNotifications/>}/> */}
         <Route path="/ResultStd" element={<ResultStd/>}/>
       </Routes>
 \      <ToastContainer />

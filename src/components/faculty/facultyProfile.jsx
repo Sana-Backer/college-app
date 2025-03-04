@@ -32,7 +32,7 @@ const FacultyProfile = () => {
                     dob: userData.dob,
                     gender: userData.gender,
                     department: userData.department_name,
-                    course: userData.course,
+                    course: userData.course_name,
                     email: userData.email,
                     phone: userData.phone
 

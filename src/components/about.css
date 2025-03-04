@@ -1,19 +1,35 @@
 
 .About-card{
-    background-color: rgb(142, 168, 185);
+    /* background-color: rgb(142, 168, 185); */
+    cursor: pointer;
+    width: 50%;
+    margin-top: -10px;
 
 }
 .About-card:hover{
     transition: 1s;
-    background-color: rgb(3, 37, 58);
+    background-color: rgb(227, 231, 233);
+    color: white;
 }
 .icons{
-    font-size: 25px;
-    background: rgba(244, 242, 242, 0.4);
+    font-size: 50px;
+    color: rgb(112, 152, 201);
+    /* background: rgba(244, 242, 242, 0.4); */
     padding: 10px;
 }
-.About-card p{
-    color: aliceblue;
+.icons:hover{
+    color: rgb(236, 231, 231);
+}
+
+.show-content{
+
+    border: 1px solid #d1cfcf ;
+    border-radius: 10px;
+    width: 73%;
+    margin: auto;
+    padding: 40px;
+    margin-bottom: 25px;
+
 }
 
 /* .About-card{

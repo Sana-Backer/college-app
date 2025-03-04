@@ -10,7 +10,6 @@ import ResultStd from '../components/ResultStd';
 import Notes from '../components/Notes';
 import FacultyProfile from '../components/faculty/FacultyProfile';
 import ViewStudent from '../components/Admin/ViewStudent';
-import AssignmentStd from '../components/AssignmentStd'
 import AddStudent from '../components/Admin/AddStudent';
 import AddAssignment from '../components/AddAssignment';
 import AddNote from '../components/hod/AddNote';
@@ -18,6 +17,8 @@ import StudentAttendence from '../components/faculty/StudentAttendence'
 import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
 import { getNotificationsApi, getUserProfileApi } from '../Services/allAPI';
+import AssignmentView from '../components/AssignmentView';
+import AssignmentStd from '../components/AssignmentStd';
 
 const FacultyDash = () => {
     const [activeFeature, setActiveFeature] = useState(null);
@@ -34,7 +35,7 @@ const FacultyDash = () => {
         photo: ''
     });
     const navigate = useNavigate()
-    const [sidebarVisible, setSidebarVisible] = useState(false); 
+    const [sidebarVisible, setSidebarVisible] = useState(false);
 
 
     const backhome = () => {
@@ -78,15 +79,14 @@ const FacultyDash = () => {
             case "students":
                 return <ViewStudent />;
             case "assignments":
-                return <AssignmentStd />;
+                return <AssignmentView />;
             case "result":
                 return <ResultStd />;
             case "notes":
                 return <Notes />;
-                case "attendence":
-                    return <StudentAttendence />;
-                    case "attendenceView":
-                    return <AttendenceViewStd />;
+            case "attendence":
+                return <StudentAttendence />;
+
             default:
             case "profile":
                 return <FacultyProfile />;
@@ -141,7 +141,7 @@ const FacultyDash = () => {
     };
 
     const handlePhotoClick = () => {
-        setSidebarVisible(!sidebarVisible); 
+        setSidebarVisible(!sidebarVisible);
     };
     return (
         <div className="faculty-dashboard">
@@ -151,76 +151,69 @@ const FacultyDash = () => {
                 <p className="back-link" onClick={backhome}>
                     <RiArrowGoForwardLine /> Back to Home
                 </p>
-              
+
             </div>
 
             <Navbar expand='lg' className="navigation-menu">
-                                <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
-                                    <img src={profile.photo} className='img-fluid' alt="profile" />
-                                </div>
-                                
-                                <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
-                               <Navbar.Collapse id="basic-navbar-nav">
-                
-                <Nav className="nav-links ms-auto me-auto">
-                    <a
-                        href="#profile"
-                        onClick={() => handleActiveFeature("profile")}
-                        className={activeFeature === "profile" ? "active" : ""}
-                    >
-                        Profile
-                    </a>
-                    <a
-                        href="#students"
-                        onClick={() => handleActiveFeature("students")}
-                        className={activeFeature === "students" ? "active" : ""}
-                    >
-                        All Students
-                    </a>
-                    <a
-                        href="#notes"
-                        onClick={() => handleActiveFeature("notes")}
-                        className={activeFeature === "notes" ? "active" : ""}
-                    >
-                        Notes
-                    </a>
-                    <a
-                        href="#assignments"
-                        onClick={() => handleActiveFeature("assignments")}
-                        className={activeFeature === "assignments" ? "active" : ""}
-                    >
-                        Assignments
-                    </a>
-                    <a
-                        href="#attendence"
-                        onClick={() => handleActiveFeature("attendence")}
-                        className={activeFeature === "attendence" ? "active" : ""}
-                    >
-                       Student Attendance
-                    </a>
-                    <a
-                        href="#attendenceView"
-                        onClick={() => handleActiveFeature("attendenceView")}
-                        className={activeFeature === "attendenceView" ? "active" : ""}
-                    >
-                       Student Attendance view
-                    </a>
-                    <a
-                        href="#result"
-                        onClick={() => handleActiveFeature("result")}
-                        className={activeFeature === "result" ? "active" : ""}
-                    >
-                        Result
-                    </a>
-                    <MdNotifications
-                    className="notification-btn"
-                    onClick={handleShowNotifications}
-                />
-                </Nav>
+                <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
+                    <img src={profile.photo} className='img-fluid' alt="profile" />
+                </div>
+
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
+                <Navbar.Collapse id="basic-navbar-nav">
+
+                    <Nav className="nav-links ms-auto me-auto">
+                        <a
+                            href="#profile"
+                            onClick={() => handleActiveFeature("profile")}
+                            className={activeFeature === "profile" ? "active" : ""}
+                        >
+                            Profile
+                        </a>
+                        <a
+                            href="#students"
+                            onClick={() => handleActiveFeature("students")}
+                            className={activeFeature === "students" ? "active" : ""}
+                        >
+                            All Students
+                        </a>
+                        <a
+                            href="#notes"
+                            onClick={() => handleActiveFeature("notes")}
+                            className={activeFeature === "notes" ? "active" : ""}
+                        >
+                            Notes
+                        </a>
+                        <a
+                            href="#assignments"
+                            onClick={() => handleActiveFeature("assignments")}
+                            className={activeFeature === "assignments" ? "active" : ""}
+                        >
+                            Assignments
+                        </a>
+                        <a
+                            href="#attendence"
+                            onClick={() => handleActiveFeature("attendence")}
+                            className={activeFeature === "attendence" ? "active" : ""}
+                        >
+                            Student Attendance
+                        </a>
+                        <a
+                            href="#result"
+                            onClick={() => handleActiveFeature("result")}
+                            className={activeFeature === "result" ? "active" : ""}
+                        >
+                            Result
+                        </a>
+                        <MdNotifications
+                            className="notification-btn"
+                            onClick={handleShowNotifications}
+                        />
+                    </Nav>
                 </Navbar.Collapse>
             </Navbar>
-                       {/* Profile Sidebar - positioned below the navbar */}
-                       {sidebarVisible && (
+            {/* Profile Sidebar - positioned below the navbar */}
+            {sidebarVisible && (
                 <aside className="profile-sidebar">
                     <div className="profile-image">
                         <img src={profile.photo} alt="Profile" />
@@ -238,7 +231,7 @@ const FacultyDash = () => {
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
-                <div className="profile-image">
+                    <div className="profile-image">
                         <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">

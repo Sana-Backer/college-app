@@ -25,20 +25,20 @@ const FacAttendence = () => {
                 // Fetch HOD details
                 // const hodResponse = await HodApi(token);
                 // let hodId = null;
-    
+
                 // if (hodResponse.data) {
                 //     hodId = hodResponse.data.id; 
-                    
+
                 //     // localStorage.setItem('hodId', hodId); 
                 //     setHodId(hodId); // Set HOD name in state
                 // }
-    
+
                 // setHod(hodResponse?.data || []);
-    
+
                 // Fetch faculty list
                 const facultyResponse = await facultyApi(token);
                 setFaculties(facultyResponse?.data || []);
-    
+
                 // Initialize attendance state with faculty details
                 const initialAttendance = facultyResponse?.data.map((faculty, index) => ({
                     SI_No: index + 1,
@@ -47,16 +47,16 @@ const FacAttendence = () => {
                     recordedBy: hodId  // Use HOD name instead of username state
                 }));
                 setAttendance(initialAttendance);
-    
+
             } catch (err) {
                 console.error("Error fetching data:", err);
                 setError("Failed to load data.");
             }
         };
-    
+
         fetchData();
     }, [token]);
-    
+
 
     // Handle status change
     const handleStatusChange = (index, status) => {
@@ -89,7 +89,7 @@ const FacAttendence = () => {
         console.log("Submitting Attendance Data:", attendanceData);
 
         try {
-            const response = await createFacultyAttendanceApi(token,  JSON.stringify({ attendance: attendanceData }));
+            const response = await createFacultyAttendanceApi(token, JSON.stringify({ attendance: attendanceData }));
 
             if (response.status === 201) {
                 setSuccess("Attendance submitted successfully!");
@@ -110,21 +110,21 @@ const FacAttendence = () => {
 
     return (
         <div className="attendance-container">
-           <div>
+            <div>
                 <h2>Faculty Attendance Sheet</h2>
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
-    
+
                 <div className="filters">
-    
+
                     <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
-    
+
                     <label>
-                        Recorded By: 
+                        Recorded By:
                         <input type="text" value={username} readOnly />
                     </label>
                 </div>
-    
+
                 <table>
                     <thead>
                         <tr>
@@ -152,13 +152,13 @@ const FacAttendence = () => {
                         ))}
                     </tbody>
                 </table>
-    
+
                 <button className="submit-btn" onClick={handleSubmitAttendance} disabled={loading}>
                     {loading ? "Submitting..." : "Submit Attendance"}
                 </button>
-                                    <div className="mt-5 "><button className="btn p-2"  onClick={() => navigate("/faculty-attendance-record")}>view faculty attendence record</button></div>
+                <div className="mt-5 "><button className="btn p-2" onClick={() => navigate("/faculty-attendance-record")}>view faculty attendence record</button></div>
 
-           </div>
+            </div>
         </div>
 
 

@@ -29,7 +29,7 @@ import ViewSubject from './ViewSubject';
 import logo from '../../assets/logo.png'
 function AdminHome() {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true); // Toggle state for drawer
+  const [open, setOpen] = useState(true); 
   const [openAdd, setOpenAdd] = useState(false);
   const [openView, setOpenView] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -37,7 +37,7 @@ function AdminHome() {
   const isMediumScreen = useMediaQuery('(max-width:1290px)');
 
 
-  const isLargeScreen = useMediaQuery('(min-width:900px)'); // Sidebar always open on large screens
+  const isLargeScreen = useMediaQuery('(min-width:900px)'); 
 
   const toggleDrawer = () => {
     setOpen((prev) => !prev);
@@ -70,10 +70,10 @@ function AdminHome() {
       </IconButton> */}
       <Drawer
         className="admin-drawer"
-        variant={isLargeScreen ? "permanent" : "temporary"} // Permanent on large screens
+        variant={isLargeScreen ? "permanent" : "temporary"} 
         anchor="left"
-        open={isLargeScreen || open} // Always open if large screen
-        onClose={isLargeScreen ? undefined : toggleDrawer} // Close only on small screens
+        open={isLargeScreen || open}
+        onClose={isLargeScreen ? undefined : toggleDrawer} 
         ModalProps={{ keepMounted: true }}
         sx={{
           width: isLargeScreen ? 240 : 0,

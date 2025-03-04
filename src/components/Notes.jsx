@@ -1,130 +1,99 @@
 import React, { useEffect, useState } from 'react';
-import { getStudentNotesByCourse, getCoursesApi, getSubjectApi, FacultyApi, StudentApi } from '../Services/allAPI';
+import { deleteNoteApi, FacultyApi, getCoursesApi, getNotes, getSubjectApi } from '../Services/allAPI';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './note.css';
+import './note.css';  // Add styles in this file
+import { FaTrash } from 'react-icons/fa';
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [courses, setCourses] = useState([]);
   const [facultyList, setFacultyList] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [userRole, setUserRole] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [courseId, setCourseId] = useState('');
-  const [students, setStudents] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
-  const username = localStorage.getItem("username");
-  const token = JSON.parse(localStorage.getItem("loggedUser"))?.access;
+  const [course, setCourse] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const storedRole = localStorage.getItem('role');
-    if (storedRole) setUserRole(storedRole);
+    const storedCourse = localStorage.getItem('course');
+    const token = localStorage.getItem('access');
 
-    if (!token) {
-      toast.error('Authentication error: Missing token.');
-      return;
+    if (storedRole) {
+      setUserRole(storedRole);
     }
 
+    if (storedCourse) {
+      setCourse(storedCourse);
+    }
+
+    const fetchNotes = async () => {
+      const token = localStorage.getItem('access');
+      if (!token) {
+        toast.error('Authentication error: Missing token.');
+        return;
+      }
+
+      try {
+        // Fetch all notes regardless of the user's role
+        const notesData = await getNotes(token);
+
+        console.log('Notes:', notesData);
+
+        const notesWithDetails = notesData.map(note => ({
+          ...note,
+          facultyName: note.faculty_name || 'Unknown',
+          courseName: note.course_name || 'Unknown',
+          fileUrl: note.file ? `http://localhost:8000${note.file}` : null
+        }));
+
+        setNotes(notesWithDetails);
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+        toast.error('Failed to fetch notes.');
+      }
+    };
+    const fetchCourses = async () => {
+      try {
+        const response = await getCoursesApi(token);
+        if (response.status === 200) {
+          setCourses(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    // const fetchSubjects = async () => {
+    //   try {
+    //     const response = await getSubjectApi(token);
+    //     if (response.status === 200) {
+    //       setSubjects(response.data);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching subjects:', error);
+    //   }
+    // };
+
+    const fetchFacultyList = async () => {
+      try {
+        const response = await FacultyApi();
+        if (response.status === 200) {
+          setFacultyList(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching faculty list:', error);
+      }
+    };
+
+
+
+    fetchNotes();
     fetchCourses();
-    fetchSubjects();
+    // fetchSubjects();
     fetchFacultyList();
-  }, []);
+  }, [course, userRole]);
 
-  useEffect(() => {
-    if (token) {
-      getStudentDetails(token);
-    } else {
-      console.log("No access token found.");
-    }
-  }, [token]);
-
-  // ✅ Move fetchNotesByCourse outside useEffect
-  const fetchNotesByCourse = async (courseId, token) => {
-    try {
-      const notesData = await getStudentNotesByCourse(courseId, token);
-      console.log("Fetched Notes Data:", notesData);
-
-      if (Array.isArray(notesData)) {
-        setNotes(notesData);
-      } else {
-        console.error("Expected an array but received:", notesData);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching notes by course:", error);
-      setLoading(false);
-    }
-  };
-
-  const getStudentDetails = async (token) => {
-    try {
-      const response = await StudentApi(token);
-      console.log("Full API Response:", response);
-
-      let studentsData = response.data.data || response.data;
-      console.log("Fetched Students Data:", JSON.stringify(studentsData, null, 2));
-
-      if (!Array.isArray(studentsData)) {
-        console.error("Expected an array but received:", studentsData);
-        return;
-      }
-
-      if (studentsData.length > 0) {
-        setStudents(studentsData);
-      } else {
-        console.log("No students found.");
-        return;
-      }
-
-      const currentUser = studentsData.find(student => student.full_name === username);
-      console.log("Current User:", currentUser);
-
-      if (currentUser) {
-        console.log("Current User Course ID:", currentUser.course);
-        setCourseId(currentUser.course);
-        fetchNotesByCourse(currentUser.course, token); // ✅ Now this works
-      } else {
-        console.log("Current user not found in student list.");
-      }
-    } catch (error) {
-      console.error("Error fetching student details:", error);
-    }
-  };
-
-  const fetchCourses = async () => {
-    try {
-      const response = await getCoursesApi(token);
-      if (response.status === 200) {
-        setCourses(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-    }
-  };
-
-  const fetchSubjects = async () => {
-    try {
-      const response = await getSubjectApi(token);
-      if (response.status === 200) {
-        setSubjects(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching subjects:', error);
-    }
-  };
-
-  const fetchFacultyList = async () => {
-    try {
-      const response = await FacultyApi();
-      if (response.status === 200) {
-        setFacultyList(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching faculty list:', error);
-    }
-  };
 
   const getCourseName = (courseId) => {
     const course = courses.find(c => c.id === courseId);
@@ -136,35 +105,69 @@ const Notes = () => {
     return faculty ? faculty.full_name : "Unknown Faculty";
   };
 
-  const filteredNotes = selectedSubject
-    ? notes.filter(note => note.subject === selectedSubject)
-    : notes;
+  const handleDeleteNote = async (noteId) => {
+    if (!window.confirm("Are you sure you want to delete this note?")) {
+      return;
+    }
+
+    const token = localStorage.getItem('access');
+    if (!token) {
+      toast.error('Authentication error: Missing token.');
+      return;
+    }
+
+    try {
+      const response = await deleteNoteApi(noteId, token);
+      if (response.status === 204) {
+        toast.success("Note deleted successfully!");
+        setNotes(prev => prev.filter(note => note.id !== noteId));
+      } else {
+        toast.error("Failed to delete note.");
+      }
+    } catch (error) {
+      console.error("Error deleting note:", error.response?.data || error.message);
+      toast.error("Error deleting note.");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+};
+const filteredNotes= notes.filter((note) =>
+  note.title.toLowerCase().includes(searchQuery)
+);
+
 
   return (
     <div className="notes-page">
-      <h1 className="notes-title">Notes</h1>
-      <div className="filter-container">
-        <select id="subject-filter" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} className="custom-dropdown">
-          <option value="">All Subjects</option>
-          {subjects.map(subject => (
-            <option key={subject.id} value={subject.id}>{subject.name}</option>
-          ))}
-        </select>
-      </div>
-
+      <h1 className="notes-title"> Notes </h1>
+      <div className="search-container">
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search by title..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                />
+            </div>
       <div className="notes-grid-container">
+     
         {filteredNotes.map(note => (
           <div className="note-card" key={note.id}>
             <h3 className="note-title">{note.title}</h3>
-            <p className="note-info"><strong>Course:</strong> {getCourseName(note.course)}</p>
-            <p className="note-info"><strong>Faculty:</strong> {getFacultyName(note.faculty)}</p>
-            {note.file ? (
-              <a className="note-link" href={`http://localhost:8000${note.file}`} target="_blank" rel="noopener noreferrer">
+            {/* <p className="note-info">Subject: {note.subject}</p> */}
+            <p className="note-info">Course: {getCourseName(note.course)}</p>
+            <p className="note-info">Faculty: {getFacultyName(note.faculty)}</p>
+            {note.fileUrl ? (
+              <a className="note-link" href={note.fileUrl} target="_blank" rel="noopener noreferrer">
                 Open PDF
               </a>
             ) : (
               <p className="note-info">No PDF available</p>
             )}
+            <button className="note-delete-btn" onClick={() => handleDeleteNote(note.id)}>
+              <FaTrash />
+            </button>
           </div>
         ))}
       </div>

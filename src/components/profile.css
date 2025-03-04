@@ -1,6 +1,32 @@
 .profile {
-    background: rgb(236, 243, 245);
+    /* background: rgb(236, 243, 245); */
     padding: 20px;
 
     border-radius: 10px;
 }
+.profile-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1d41c1;
+    margin-bottom: 20px;
+    /* position: relative; */
+    /* display: inline-block; */
+    text-align: start;
+  }
+  
+  .profile-title::after {
+    content: '';  
+    display: block;
+    width: 90%; /* Make the underline match the title width */
+    height: 4px;
+    background-color: #1d41c1;
+    border-radius: 2px;
+    margin-top: 5px;
+  }
+  @media (max-width: 768px) {
+    .profile-title::after{
+      width: 90%;
+    }
+    
+  }
+  

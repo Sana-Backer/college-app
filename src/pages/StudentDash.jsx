@@ -5,11 +5,11 @@ import { RiArrowGoForwardLine } from "react-icons/ri";
 import AssignmentStd from '../components/AssignmentStd';
 import Profile from '../components/Profile';
 import ResultStd from '../components/ResultStd';
-import Notes from '../components/Notes';
 import { useNavigate } from 'react-router-dom';
 import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/allAPI';
 import { MdNotifications } from 'react-icons/md';
 import { Modal, Nav, Navbar } from 'react-bootstrap';
+import StudentNoteView from '../components/StudentNoteView';
 
 const StudentDash = () => {
 
@@ -36,7 +36,7 @@ const StudentDash = () => {
             case "result":
                 return <ResultStd />;
             case 'notes':
-                return <Notes />
+                return <StudentNoteView />
 
 
             default: case "profile":
@@ -135,7 +135,7 @@ const StudentDash = () => {
                     <div className="profile-image">
                         <img src={profile.photo} alt="Profile" />
                     </div>
-                    <div className="profile-info">
+                    <div className="stdprofile-info">
                         <h4>{profile.full_name}</h4>
                         <hr />
                         <p>{profile.email}</p>
@@ -161,8 +161,6 @@ const StudentDash = () => {
                     <div className="col-lg-9 view " id=''>
                         {renderFeature()}
                     </div>
-
-
                 </div>
 
             </div>

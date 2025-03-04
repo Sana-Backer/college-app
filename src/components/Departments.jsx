@@ -46,6 +46,7 @@ function Departments() {
     <>
       <div className="head-course-text my-2">
         <h2 className="text-center ">Our Departments</h2>
+        {/* <p className="text-center">Explore our academic programs</p> */}
         <hr />
       </div>
 

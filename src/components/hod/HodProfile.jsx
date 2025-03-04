@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiEdit2Fill } from 'react-icons/ri'; // Edit icon
-import { getUserProfileApi } from '../../services/allApi';
+import { getUserProfileApi } from '../../Services/allAPI';
 
 const HodProfile = () => {
     const [userDetails, setUserDetails] = useState(null);
@@ -28,6 +28,7 @@ const HodProfile = () => {
                     email: userData.email,
                     phone: userData.phone,
                     department: userData.department,
+                    
                 });
                 setLoading(false);
             } catch (error) {
