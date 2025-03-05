@@ -169,7 +169,8 @@ const ViewHod = () => {
   };
 
   return (
-    <div className="container">
+    <div className="viewhod">
+      <h2 className='title'>HOD List</h2>
 
       <Row className="justify-content-center">
         <Col lg={10}>
@@ -190,8 +191,8 @@ const ViewHod = () => {
               <Spinner animation="border" size="lg" />
             </div>
           ) : (
-            <div className="table-container p-4">
-              <Table striped bordered hover  className="table bg-white w-100">
+            <div className="tablecontainer p-4" style={{ overflowX: "auto", maxWidth: "100%" }}>
+              <table   className="table bg-white  w-100">
                 <thead>
                   <tr>
                     <th >#</th>
@@ -246,7 +247,7 @@ const ViewHod = () => {
                   )}
                 </tbody>
 
-              </Table>
+              </table>
             </div>
           )}
         </Col>

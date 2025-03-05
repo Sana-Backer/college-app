@@ -8,7 +8,7 @@ import ResultStd from '../components/ResultStd';
 import { useNavigate } from 'react-router-dom';
 import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/allAPI';
 import { MdNotifications } from 'react-icons/md';
-import { Modal, Nav, Navbar } from 'react-bootstrap';
+import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
 import StudentNoteView from '../components/StudentNoteView';
 
 const StudentDash = () => {
@@ -108,7 +108,7 @@ const StudentDash = () => {
             <div>
                 <div className='container d-flex justify-content-end mt-1 me-auto'>
                     <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
-                   
+
                 </div>
                 <Navbar expand='lg' className='dash'>
                     <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
@@ -124,25 +124,25 @@ const StudentDash = () => {
                             <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
                             <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
                             <MdNotifications
-                        className="notification"
-                        onClick={handleShowNotifications}
-                    />
+                                className="notification"
+                                onClick={handleShowNotifications}
+                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                 {sidebarVisible && (
-                <aside className="profile-sidebar">
-                    <div className="profile-image">
-                        <img src={profile.photo} alt="Profile" />
-                    </div>
-                    <div className="stdprofile-info">
-                        <h4>{profile.full_name}</h4>
-                        <hr />
-                        <p>{profile.email}</p>
-                        <p>{profile.phone}</p>
-                    </div>
-                </aside>
-            )}
+                    <aside className="profile-sidebar">
+                        <div className="profile-image">
+                            <img src={profile.photo} alt="Profile" />
+                        </div>
+                        <div className="stdprofile-info">
+                            <h4>{profile.full_name}</h4>
+                            <hr />
+                            <p>{profile.email}</p>
+                            <p>{profile.phone}</p>
+                        </div>
+                    </aside>
+                )}
 
                 <div className='d-flex row'>
                     <div className="sidebar  col-lg-2 col-md-4 col-sm-12 container mb-2" id='hidesidebar'>
@@ -164,7 +164,7 @@ const StudentDash = () => {
                 </div>
 
             </div>
-            <Modal show={showNotifications} onHide={handleCloseNotifications} centered>
+            {/* <Modal size='lg' show={showNotifications} onHide={handleCloseNotifications} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Notifications</Modal.Title>
                 </Modal.Header>
@@ -182,7 +182,30 @@ const StudentDash = () => {
                         <p>No notifications available.</p>
                     )}
                 </Modal.Body>
+            </Modal> */}
+            <Modal
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                size='lg'
+                show={showNotifications}
+                onHide={handleCloseNotifications}
+                dialogClassName="custom-modal"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Notifications
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {notifications.map((n) => (
+                        <div key={n.id}>
+                            <h4>{n.title}</h4>
+                            <p>{n.message}</p>
+                        </div>
+                    ))}
+                </Modal.Body>
             </Modal>
+
         </section>
     )
 }

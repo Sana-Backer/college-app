@@ -2,7 +2,7 @@
 
 .view-department-container {
   padding: 20px;
-  background-color: #f9f9f9;
+  margin: 0;
 }
 
 .title {
@@ -11,19 +11,26 @@
   color: #333;
 }
 
-.filter-container {
+/* .filter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items:start;
   margin-bottom: 20px;
-}
+} */
 
-.filter-container label {
+.dfilter-container label {
   margin-right: 10px;
 }
 
-.filter-container select {
-  padding: 5px;
+.dfilter-container select {
   font-size: 16px;
 }
+.tablecontainer{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
 
+}
 .department-table {
   width: 100%;
   border-collapse: collapse;
@@ -32,20 +39,38 @@
 
 .department-table th,
 .department-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #e4e2e2;
+  padding: 1rem;
   text-align: left;
+  white-space: nowrap;
 }
 
 .department-table th {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #f6f8f6;
+  color: 131b24;
 }
 
 .department-photo {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+
+.coursetd {
+  display: flex;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: rgb(82, 136, 236);
+  background-color: #dde8f4;
+}
+
+/* Add a hover effect if desired */
+.coursetd:hover {
+  background-color: #c5dff1;
 }
 
 .department-table button {
@@ -56,21 +81,25 @@
   cursor: pointer;
 }
 
-.department-table button .fa {
-  font-size: 16px;
-  color: #007bff;
+.department-table .editbtn {
+  font-size: 20px;
+  color: #2779d1;
 }
 
-.department-table .delete-button .fa {
+.department-table .deletebtn {
   color: #dc3545;
+  font-size: 20px;
+
 }
 
 .department-table button:hover .fa {
   opacity: 0.8;
 }
-.full-description{
+
+.full-description {
   width: 300px;
 }
+
 .modal-title {
   text-align: center;
 }
@@ -83,20 +112,34 @@
 .modal-body .form-group {
   margin-bottom: 15px;
 }
+
 @media (max-width: 1000px) {
   .full-description {
-    display: none; /* Hide full description */
+    display: none;
+    /* Hide full description */
   }
+
   .view-details {
-    display: block; /* Show link */
+    display: block;
+    /* Show link */
   }
 }
 
 @media (min-width: 1001px) {
   .full-description {
-    display: block; /* Show full description */
+    display: block;
+    /* Show full description */
   }
+
   .view-details {
-    display: none; /* Hide link */
+    display: none;
+    /* Hide link */
   }
 }
+@media (max-width:768px) {
+  .tablecontainer{
+    overflow-x: auto;
+  }
+  
+}
+

@@ -1,14 +1,50 @@
-/* viewHod.css */
-
-.view-hod {
-  padding: 20px;
+body{
+  margin: 0;
+  padding: 0;
 }
 
 .title {
   text-align: center;
   margin-bottom: 20px;
-  font-size: 2em;
+  font-size: 2.5rem;
+  font-weight: bold;
   color: #333;
+}
+
+.tablecontainer {
+  display: block;
+  justify-content: center;
+  overflow-x: auto; 
+  white-space: nowrap;
+  max-width: 100%;
+  /* padding: 10px; */
+  border-collapse: collapse;
+  margin: 0;
+
+}
+
+.tablecontainer th,
+.tablecontainer td {
+  padding: 1.2rem 1.5rem;
+  /* width: 100%;  */
+  white-space: nowrap; 
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  color: #131b24;
+  font-size: 18px;
+  padding: 10px;
+  text-align: left;
+}
+
+table td {
+  padding: 10px;
+  font-size: 15px;
 }
 
 .hod-list {
@@ -78,7 +114,28 @@
   color: #c82333;
 }
 
+/* RESPONSIVENESS */
+@media (max-width: 1200px) {
+  .tablecontainer {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    padding: 0;
+  }
+}
+
 @media (max-width: 768px) {
+  .title{
+    text-align: center;
+  }
+
+  .tablecontainer {
+    display: block;
+    width: 70%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .hod-item {
     flex-direction: column;
     align-items: flex-start;
@@ -88,32 +145,18 @@
     margin-top: 10px;
   }
 }
-@media (max-width: 600px) {
-  .hod-item {
-    flex-direction: column;
-    align-items: flex-start;
+
+@media (max-width: 599px) {
+  .title{
+    text-align: center;
+  }
+  .tablecontainer {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .tablecontainer {
+    overflow-x: auto;
   }
 
-  .hod-actions {
-    margin-top: 10px;
-  }
 
-  /* Ensure table fits within the screen */
-  .table-container {
-    width: 100%;
-    overflow-x: auto; /* Allows horizontal scrolling */
-  }
-
-  .table {
-    width: 100%;
-    min-width: 600px; /* Prevents content from shrinking too much */
-    border-collapse: collapse;
-  }
-
-  th, td {
-    font-size: 0.9em;
-    padding: 8px;
-    text-align: left;
-    white-space: nowrap; 
-  }
 }

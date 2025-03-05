@@ -76,6 +76,7 @@ function Departments() {
         })}
       </div>
 
+
       <div className="see-more-container">
         <Link to="/alldept" className="see-more-link">
           See More

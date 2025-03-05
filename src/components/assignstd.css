@@ -216,7 +216,8 @@ input[type="file"]:hover {
   .assignments-title {
     font-size: 1.75rem;
   }
-
+  .assignments-title::after {
+  width: 400px;}
   .styled-table th,
   .styled-table td {
     padding: 0.8rem;

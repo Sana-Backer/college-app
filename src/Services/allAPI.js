@@ -11,7 +11,7 @@ const refreshToken = async () => {
   }
 
   try {
-    const response = await axios.post(`${serverUrl}/api/token/refresh/`, {
+    const response = await axios.post(`${serverUrl}/token/refresh/`, {
       refresh: refreshToken,
     });
     const newAccessToken = response.data.access;
@@ -359,6 +359,7 @@ export const addCourseApi = async (data, token) => {
 export const getUserProfileApi = async (userId, token) => {
   return axios.get(`http://localhost:8000/api/profile/${userId}/`, {
     headers: {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   });

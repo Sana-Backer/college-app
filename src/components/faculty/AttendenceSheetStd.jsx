@@ -128,9 +128,9 @@ const AttendanceView = () => {
 
             </div>
 
-            <table>
+            <table className="">
                 <thead>
-                    <tr>
+                    <tr style={{backgroundColor:"white"}}>
                         <th>Attendance ID</th>
                         <th>Student ID</th>
                         <th>Student Name</th>

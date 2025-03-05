@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaFilePdf, FaExclamationTriangle } from 'react-icons/fa';
 import { deleteExamResultApi, ExamResultApi } from '../Services/allAPI';
 import './resultstd.css'
+import { Button } from 'react-bootstrap';
+import { FaTrash } from 'react-icons/fa6';
 
 const ResultStd = () => {
   const [results, setResults] = useState([]);

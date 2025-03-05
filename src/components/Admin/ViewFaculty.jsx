@@ -3,7 +3,7 @@ import { Table, Button, Container, Row, Col, Spinner, Modal, Form, Card } from "
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { deleteFacultyApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
+import { deleteFacultyApi, departmentApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
 import './viewfaculty.css'
 
 function ViewFaculty() {
@@ -15,11 +15,17 @@ function ViewFaculty() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [filteredFaculty, setFilteredFaculty] = useState([]); // Store filtered HODs
+  const [departments, setDepartments] = useState([])
+  const [filterDepartment, setFilterDepartment] = useState('');
+
+  console.log('depp',departments);
+  console.log('filtfaclty',filteredFaculty);
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem("access"); // Fetch the token from localStorage
 
-  // Fetch faculty data
   useEffect(() => {
     const AllFacultyData = async () => {
       try {
@@ -41,13 +47,38 @@ function ViewFaculty() {
     AllFacultyData();
   }, []);
 
+  useEffect(() => {
+    const allDepartments = async () => {
+      try {
+        const response = await departmentApi()
+        setDepartments(response.data)
+      } catch (error) {
+        console.log("error fetching dept", error);
+      }
+    }
+    allDepartments()
+  }, [])
+
+  useEffect(() => {
+    if (!facultyList || facultyList.length === 0) return; // Ensure data exists
+
+    let filteredList = facultyList; // Default: all HODs
+
+    if (filterDepartment) {
+      filteredList = facultyList.filter(fac => String(fac.department) === String(filterDepartment));
+    }
+
+    console.log('Filtered HODs:', filteredList);
+    setFilteredFaculty(filteredList);
+  }, [facultyList, filterDepartment]);
+
+
   // Handle edit faculty details
   const handleEdit = (faculty) => {
     setSelectedFaculty(faculty);
     setShowModal(true);
   };
 
-  // Handle delete faculty
   const handleDelete = async (facultyId) => {
     if (!window.confirm("Are you sure you want to delete this faculty?")) {
       return;
@@ -121,7 +152,21 @@ function ViewFaculty() {
 
   return (
     <div className=" container">
+      <h2 className='title'>Faculty List</h2>
+
       <Row className="justify-content-center">
+        <Col lg={10}>
+          <Form.Select value={filterDepartment} onChange={(e) => setFilterDepartment(e.target.value)}>
+            <option value="">Select Department</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>{dept.department_name}</option>
+            ))}
+
+          </Form.Select>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+
         <Col lg={10}>
 
           {isLoading ? (
@@ -129,7 +174,7 @@ function ViewFaculty() {
               <Spinner animation="border" size="lg" />
             </div>
           ) : (
-            <div className="p-4 ">
+            <div className="tablecontainer p-4 ">
               <Table striped bordered hover className="bg-white w-100">
                 <thead>
                   <tr>
@@ -144,24 +189,26 @@ function ViewFaculty() {
                   </tr>
                 </thead>
                 <tbody>
-                  {facultyList.length > 0 ? (
-                    facultyList.map((faculty, index) => (
+                  {filteredFaculty.length > 0 ? (
+                    filteredFaculty.map((faculty, index) => (
                       <tr key={faculty.id}>
                         <td>{index + 1}</td>
                         <td>{faculty.full_name}</td>
                         <td>{faculty.email}</td>
                         <td>{faculty.phone}</td>
-                        <td>{faculty.department}</td>
+                        <td>
+                          {departments.find(dept => dept.id === faculty.department)?.department_name || "N/A"}
+                        </td>
                         <td>{faculty.gender}</td>
                         <td>
                           {faculty.photo ? (
                             <img
-                              src={`${serverUrl} ${faculty.photo}`}
-                          alt={faculty.full_name}
-                          style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                              src={`${serverUrl}${faculty.photo}`}
+                              alt={faculty.full_name}
+                              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
                             />
                           ) : (
-                          "No Photo"
+                            "No Photo"
                           )}
                         </td>
                         <td>

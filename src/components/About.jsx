@@ -17,19 +17,30 @@ import ViewNotifications from './ViewNotifications';
 import email from '../assets/email.png'
 import book from '../assets/book.png'
 import trophy from '../assets/wreath.png'
+import ResultStd from './ResultStd';
 
 const About = () => {
   const [showNotifications, setShowNotifications] = useState(false)
   const [showEvents, setShowEvents] = useState(false)
+  const [showResults, setShowResults] = useState(false)
 
   const toggleNotifications = () => {
     setShowNotifications(true);
+    setShowResults(false)
+    setShowEvents(false);
+
   };
   const toggleEvents = () => {
     setShowEvents(true);
     setShowNotifications(false)
-  };
+    setShowResults(false)
 
+  };
+  const toggleResults = () => {
+    setShowEvents(false);
+    setShowNotifications(false)
+    setShowResults(true)
+  };
   const navigate = useNavigate()
   return (
     <>
@@ -61,7 +72,7 @@ const About = () => {
           <h5>Courses</h5>
           {/* <p >Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> */}
         </div>
-        <div className='About-card p-2 shadow  text-center' onClick={() => navigate('/ResultStd')}>
+        <div className='About-card p-2 shadow  text-center' onClick={toggleResults}>
           <div className='icons d-flex align-items-center justify-content-center'>
             
           <img src={trophy} style={{width:'50px', height:'60px'}} alt="" />
@@ -73,7 +84,7 @@ const About = () => {
         </div>
       </div>
       {showNotifications &&
-        <div className='show-content shadow'>
+        <div className='show-content not shadow'>
           <ViewNotifications />
         </div>
 
@@ -82,7 +93,10 @@ const About = () => {
         <div className='show-content shadow'>
           <Courses />
         </div>}
-
+        {showResults &&
+        <div className='show-content shadow'>
+          <ResultStd />
+        </div>}
       <Departments />
       <College />
 

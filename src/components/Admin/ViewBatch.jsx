@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Table, Alert } from 'react-bootstrap';
-import { getBatchApi } from '../../services/allApi';
+import { getBatchApi } from '../../Services/allAPI';
 
 const ViewBatch = () => {
     const [batches, setBatches] = useState([]);
@@ -32,28 +32,30 @@ const ViewBatch = () => {
             <Container className="mt-4">
                 <h2>Batch List</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Batch Name</th>
-                            <th>Course Name</th>
-                            <th>Start Year</th>
-                            <th>End Year</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {batches.map((batch) => (
-                            <tr key={batch.id}>
-                                <td>{batch.id}</td>
-                                <td>{batch.batch_name}</td>
-                                <td>{batch.course}</td>
-                                <td>{batch.start_year}</td>
-                                <td>{batch.end_year}</td>
+               <div className='tablecontainer'>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Batch Name</th>
+                                <th>Course Name</th>
+                                <th>Start Year</th>
+                                <th>End Year</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {batches.map((batch) => (
+                                <tr key={batch.id}>
+                                    <td>{batch.id}</td>
+                                    <td>{batch.batch_name}</td>
+                                    <td>{batch.course}</td>
+                                    <td>{batch.start_year}</td>
+                                    <td>{batch.end_year}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+               </div >
             </Container>
         </div>
     )

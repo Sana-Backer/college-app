@@ -154,17 +154,30 @@ const ViewDepartment = () => {
     const course = courses.find(course => course.id === id);
     return course ? course.course_name : 'Unknown Course';
   };
+  departments.forEach(department => {
+    console.log(typeof department.courses, department.courses);
+  });
 
   const filteredDepartments = selectedCourse
-    ? departments.filter(department => Array.isArray(department.courses) && department.courses.includes(selectedCourse))
+    ? departments.filter(department => {
+      const courseIds = Array.isArray(department.courses)
+        ? department.courses.map(id => Number(id))  // Ensure all are numbers
+        : String(department.courses).split(",").map(id => Number(id)); // Convert comma-separated string to array
+      return courseIds.includes(Number(selectedCourse));
+    })
     : departments;
 
   return (
     <div className="view-department-container">
       <h1 className="title">Departments</h1>
-      <div className="filter-container">
+      <div className="dfilter-container ">
         <label htmlFor="course">Filter by Course: </label>
-        <select id="course" name="course" value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+        <select
+          id="course"
+          name="course"
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+        >
           <option value="">All</option>
           {courses.map((course) => (
             <option key={course.id} value={course.id}>
@@ -173,70 +186,83 @@ const ViewDepartment = () => {
           ))}
         </select>
       </div>
-      <table className="department-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Department Name</th>
-            <th>Description</th>
-            <th>Courses</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredDepartments.length > 0 ? (
-            filteredDepartments.map((department, index) => (
-              <tr key={department.id}>
-                <td>{index + 1}</td>
-                <td>
-                  {department.photo && (
-                    <img src={`${serverUrl}${department.photo}`} alt={`${department.department_name} photo`} className="department-photo" />
-                  )}
-                </td>
-                <td>{department.department_name}</td>
-                <td>
-        {/* Full description visible on large screens */}
-        <span className="full-description">{department.description}</span>
-
-        {/* View Details link on small screens */}
-        <a 
-          href="#" 
-          className="view-details" 
-          onClick={(e) => {
-            e.preventDefault();
-            setShowFullDescription(!showFullDescription);
-          }}
-        >
-          View Details
-        </a>
-
-        {/* Expandable description for small screens */}
-        {showFullDescription && (
-          <div className="expanded-description">
-            {department.description}
-          </div>
-        )}
-</td>
-
-                <td>{Array.isArray(department.courses) && department.courses.length > 0 ? department.courses.map(courseId => getCourseNameById(courseId)).join(', ') : 'No courses available'}</td>
-                <td>
-                  <button onClick={() => handleEdit(department)}>
-                    <FaEdit />
-                  </button>
-                  <button onClick={() => handleDelete(department.id)} className="delete-button">
-                    <FaTrashAlt />
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
+     <div className='tablecontainer'>
+        <table className="department-table">
+          <thead>
             <tr>
-              <td colSpan="6">No departments found.</td>
+              <th>Id</th>
+              <th>Image</th>
+              <th>Department Name</th>
+              <th>Description</th>
+              <th>Courses</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredDepartments.length > 0 ? (
+              filteredDepartments.map((department, index) => (
+                <tr key={department.id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    {department.photo && (
+                      <img src={`${serverUrl}${department.photo}`} alt={`${department.department_name} photo`} className="department-photo" />
+                    )}
+                  </td>
+                  <td>{department.department_name}</td>
+                  <td  style={{ wordWrap: "break-word", whiteSpace: "normal", maxWidth: "300px" }}>
+                    {/* Full description visible on large screens */}
+                    <span className="full-description">{department.description}</span>
+  
+                    {/* View Details link on small screens */}
+                    <a
+                      href="#"
+                      className="view-details"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowFullDescription(!showFullDescription);
+                      }}
+                    >
+                      View Details
+                    </a>
+  
+                    {/* Expandable description for small screens */}
+                    {showFullDescription && (
+                      <div className="expanded-description">
+                        {department.description}
+                      </div>
+                    )}
+                  </td>          <td>
+                    {department.courses &&
+                      (Array.isArray(department.courses)
+                        ? department.courses.map((courseId, index) => (
+                          <span key={index} className='coursetd'>
+                            {getCourseNameById(courseId)}
+                          </span>
+                        ))
+                        : department.courses.split(",").map((courseId, index) => (
+                          <span key={index} className='coursetd'>
+                            {getCourseNameById(Number(courseId))}
+                          </span>
+                        )))}
+                  </td>
+                  <td>
+                    <button className='editbtn' onClick={() => handleEdit(department)}>
+                      <FaEdit />
+                    </button>
+                    <button onClick={() => handleDelete(department.id)} className="deletebtn">
+                      <FaTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">No departments found.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+     </div>
       {selectedDepartment && (
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <Modal.Header closeButton>

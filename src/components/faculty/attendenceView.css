@@ -41,6 +41,9 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+.table-c th{
+    background-color: #fff;
+}
 
 th, td {
     padding: 10px;

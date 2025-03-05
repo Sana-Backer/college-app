@@ -98,17 +98,17 @@ const Notification = () => {
             setMessage('');
             setRecipientType('');
             setRecipientIds([]);
-            allNotifications(); // Refresh notifications
+            allNotifications(); 
         } catch (error) {
             console.error('Error sending notification:', error);
             toast.error('Failed to send notification.');
         }
     };
 
-    const handleSelectChange = (selectedOptions) => {
-        const ids = selectedOptions ? selectedOptions.map(option => option.value) : [];
-        setRecipientIds(ids);
-    };
+    // const handleSelectChange = (selectedOptions) => {
+    //     const ids = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    //     setRecipientIds(ids);
+    // };
 
     const handleDeleteNotification = async (id) => {
         const token = localStorage.getItem('access');
@@ -175,10 +175,10 @@ const Notification = () => {
                         <option value="faculty">All</option>
                         <option value="faculty">Faculty</option>
                         <option value="allStudents">All Students</option>
-                        <option value="particularStudent">Particular Student</option>
+                        {/* <option value="particularStudent">Particular Student</option> */}
                     </select>
                 </div>
-                {recipientType === 'particularStudent' && (
+                {/* {recipientType === 'particularStudent' && (
                     <div className="form-group">
                         <label htmlFor="recipientIds">Student Names</label>
                         <Select
@@ -191,7 +191,7 @@ const Notification = () => {
                             placeholder="Search and select students"
                         />
                     </div>
-                )}
+                )} */}
                 <button type="submit" className="btn btn-primary">{selectedNotification ? 'Update' : 'Send'}</button>
             </form>
             

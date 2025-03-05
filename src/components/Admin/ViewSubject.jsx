@@ -31,7 +31,7 @@ const ViewSubject = () => {
     return (
         <Container className="mt-4">
             <h2>Subjects List</h2>
-            <div className="table-res">
+            <div className="tablecontainer">
                 <Table striped bordered hover className="table">
                     <thead>
                         <tr>

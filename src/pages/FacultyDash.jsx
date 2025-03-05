@@ -18,9 +18,10 @@ import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
 import { getNotificationsApi, getUserProfileApi } from '../Services/allAPI';
 import AssignmentView from '../components/AssignmentView';
-import AssignmentStd from '../components/AssignmentStd';
 
 const FacultyDash = () => {
+    const serverUrl = 'http://localhost:8000';
+
     const [activeFeature, setActiveFeature] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showForm, setShowForm] = useState(null);
@@ -32,7 +33,7 @@ const FacultyDash = () => {
         department: '',
         email: '',
         phone: '',
-        photo: ''
+        photo: null
     });
     const navigate = useNavigate()
     const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -56,11 +57,13 @@ const FacultyDash = () => {
                 const profileData = response.data;
                 setProfile({
                     full_name: profileData.full_name,
-                    department: profileData.department_name,
+                    department: profileData.department,
                     email: profileData.email,
                     phone: profileData.phone,
-                    photo: profileData.photo
+                    photo: profileData.photo ? `${serverUrl}${profileData.photo}` : ''
                 });
+                console.log('profile data', profileData);
+
             } catch (error) {
                 console.error('Error fetching profile data:', error);
                 toast.error('Failed to fetch profile data.');
@@ -145,13 +148,10 @@ const FacultyDash = () => {
     };
     return (
         <div className="faculty-dashboard">
-
-
             <div className="faculty-header">
                 <p className="back-link" onClick={backhome}>
                     <RiArrowGoForwardLine /> Back to Home
                 </p>
-
             </div>
 
             <Navbar expand='lg' className="navigation-menu">
@@ -216,7 +216,11 @@ const FacultyDash = () => {
             {sidebarVisible && (
                 <aside className="profile-sidebar">
                     <div className="profile-image">
-                        <img src={profile.photo} alt="Profile" />
+                        {profile.photo ? (
+                            <img src={profile.photo} alt="Profile"  />
+                        ) : (
+                           ' no image'
+                        )}
                     </div>
                     <div className="profile-info">
                         <h4>{profile.full_name}</h4>

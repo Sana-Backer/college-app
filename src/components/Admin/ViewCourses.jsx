@@ -32,24 +32,26 @@ const ViewCourse = () => {
         <Container className="mt-4">
             <h2>Courses List</h2>
             {error && <Alert variant="danger">{error}</Alert>}
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Course Name</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {courses.map((course) => (
-                        <tr key={course.id}>
-                            <td>{course.id}</td>
-                            <td>{course.course_name}</td>
-                            <td>{course.description}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+               <div className='tablecontainer'>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Course Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {courses.map((course) => (
+                                <tr key={course.id}>
+                                    <td>{course.id}</td>
+                                    <td>{course.course_name}</td>
+                                    <td>{course.description}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+               </div>
         </Container>
     );
 };

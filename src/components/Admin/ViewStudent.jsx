@@ -3,7 +3,8 @@ import './viewstd.css';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form, Container, Row, Col, Spinner, Table } from 'react-bootstrap';
 import { toast, ToastContainer } from "react-toastify";
-import { deleteStudentApi, departmentApi, editStdApi, getBatchApi,getCoursesApi, StudentApi } from '../../Services/allAPI';
+import { deleteStudentApi, departmentApi, editStdApi, getBatchApi, getCoursesApi, StudentApi } from '../../Services/allAPI';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const ViewStudent = () => {
   const serverUrl = 'http://localhost:8000';
@@ -20,6 +21,9 @@ const ViewStudent = () => {
   const [filterBatch, setFilterBatch] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('');
   const [filterCourse, setFilterCourse] = useState('');
+  console.log('stddep', departments);
+  console.log('filtstd', filteredStudents);
+
 
   const [selectedStudent, setSelectedStudent] = useState({
     full_name: '',
@@ -150,7 +154,7 @@ const ViewStudent = () => {
   return (
     <Container>
       <ToastContainer />
-      <Row className="mb-3">
+      <Row className=" filter-container ">
         <Col md={4}>
           <Form.Select value={filterBatch} onChange={(e) => setFilterBatch(e.target.value)}>
             <option value="">Filter by Batch</option>
@@ -187,44 +191,50 @@ const ViewStudent = () => {
         </Col>
       </Row>
 
-      <Table striped bordered hover responsive className="bg-white">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Department</th>
-            <th>Course</th>
-            <th>Batch</th>
-            <th>Photo</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredStudents.map((student, index) => (
-            <tr key={student.id}>
-              <td>{index + 1}</td>
-              <td>{student.full_name}</td>
-              <td>{student.email}</td>
-              <td>{student.phone}</td>
-              <td>{departments.find(dept => dept.id === student.department)?.department_name || 'Unknown'}</td>
-              <td>{courses.find(course => course.id === student.course)?.course_name || 'Unknown'}</td>
-              <td>{batches.find(batch => batch.id === student.batch)?.batch_name || 'Unknown'}</td>
-              <td>
-                {student.photo ? (
-                  <img src={`${serverUrl} ${student.photo}`} alt={student.full_name} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-                ) : "No Photo"}
-              </td>
-              <td>
-                <Button size="sm" onClick={() => handleEdit(student)}>Edit</Button>
-                <Button size="sm" variant="danger" onClick={() => handleDelete(student.id)}>Delete</Button>
-              </td>
+      <div className='tablecontainer'>
+        <Table striped bordered hover responsive className="student-table bg-white">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Department</th>
+              <th>Course</th>
+              <th>Batch</th>
+              <th>Photo</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {filteredStudents.map((student, index) => (
+              <tr key={student.id}>
+                <td>{index + 1}</td>
+                <td>{student.full_name}</td>
+                <td>{student.email}</td>
+                <td>{student.phone}</td>
+                <td>{departments.find(dept => dept.id === student.department)?.department_name || 'Unknown'}</td>
+                <td>{courses.find(course => course.id === student.course)?.course_name || 'Unknown'}</td>
+                <td>{batches.find(batch => batch.id === student.batch)?.batch_name || 'Unknown'}</td>
+                <td>
+                  {student.photo ? (
+                    <img src={`${serverUrl}${student.photo}`} alt={student.full_name} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+                  ) : "No Photo"}
+                </td>
+                <td>
+                  <button className='editbtn' onClick={() => handleEdit(student)}>
+                    <FaEdit />
+                  </button>
+                  <button onClick={() => handleDelete(student.id)} className="deletebtn">
+                    <FaTrashAlt />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
+      </div>
 
 
 
@@ -252,6 +262,14 @@ const ViewStudent = () => {
                   type="email"
                   value={selectedStudent.email}
                   onChange={(e) => setSelectedStudent({ ...selectedStudent, email: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group controlId="password" className="mt-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={selectedStudent.phone}
+                  onChange={(e) => setSelectedStudent({ ...selectedStudent, phone: e.target.value })}
                 />
               </Form.Group>
 

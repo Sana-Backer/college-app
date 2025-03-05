@@ -162,26 +162,18 @@ hr {
 .action-menu button {
     width: 140px;
 }
-
-.modal-container {
-    width: 50vw; /* Adjust width (e.g., 50% of viewport width) */
-    max-width: 600px; /* Set a max width */
-    height: auto; /* Adjust height dynamically */
-    max-height: 80vh; /* Prevent overflowing */
-    padding: 20px; /* Add padding for better spacing */
+.custom-modal .modal-dialog {
+    width: auto; 
+    max-width: 80%;
 }
 
-/* Ensure it is centered */
-.modal-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    overflow-y: auto; /* Enable scrolling if content overflows */
+.custom-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding: 20px;
 }
+
 
 
 @media (max-width: 1200px) {
