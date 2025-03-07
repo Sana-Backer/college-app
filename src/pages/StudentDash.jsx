@@ -5,7 +5,7 @@ import { RiArrowGoForwardLine } from "react-icons/ri";
 import AssignmentStd from '../components/AssignmentStd';
 import Profile from '../components/Profile';
 import ResultStd from '../components/ResultStd';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/allAPI';
 import { MdNotifications } from 'react-icons/md';
 import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
@@ -106,8 +106,10 @@ const StudentDash = () => {
         <section>
 
             <div>
-                <div className='container d-flex justify-content-end mt-1 me-auto'>
-                    <a href="" onClick={backhome} className='tohome'><RiArrowGoForwardLine /> Back to Home</a>
+                <div className='backtohome  d-flex justify-content-end mt-2 '>
+                    <Link to={'/home'} className='tohome'>
+                    {/* <RiArrowGoForwardLine /> */}
+                     Back to Home</Link>
 
                 </div>
                 <Navbar expand='lg' className='dash'>

@@ -1,34 +1,59 @@
 .college-section {
   text-align: center;
-  padding: 40px 10px;
+  padding-top:  30px;
 }
 
-.main-photo {
-  width: 100%;
-  height: 100%;
-  max-width: 630px;
-}
-
-.college-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
-  max-width: 1200px;
+.head {
+  height: 60%;
+  border-left: 8px solid #2d5a3b; /* Blue left border */
+  padding: 5px;
   margin: auto;
+}
+.head h1{
+  font-size: 3rem;
+  font-weight: bold;
+  color: #004d00;
+  text-align: left;
+  padding: 8px;
+}
+.head span{
+color: #559b55;
+}
+.college-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
 }
 
 .college-card {
-  position: relative;
-  /* border-radius: 8px; */
-  overflow: hidden;
-  height: 300px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+  padding: 15px;
+  border-bottom: 4px solid green; /* Adds the bottom border */
+  transition: transform 0.3s ease-in-out;
 }
 
 .college-card img {
   width: 100%;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
-  display: block;
+  border-radius: 5px;
+}
+
+.college-card h3 {
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #004d00;
+}
+
+.college-card:hover {
+  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {

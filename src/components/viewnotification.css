@@ -1,3 +1,22 @@
+.notification-view{
+    /* max-height: 300px; 
+    overflow-y: auto;
+    overflow-x: hidden; */
+}
+.search-bar{
+    display: flex;
+    justify-content: center;
+}
+.search-icon{
+    font-size: 27px;
+}
+.search-bar input{
+    gap: 10px;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #aeaead;
+}
 .notification-card {
     display: flex;
     justify-content: flex-start;
@@ -19,9 +38,11 @@
 
 .notification-title {
     display: flex;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     padding-left: 10px;
     margin: 10px auto;
+    font-weight: bold;
     gap: 10px;
 }
 

@@ -14,7 +14,6 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between; 
-  /* align-items: center;  */
   width: 100%;
   margin-bottom: 15px;
   margin-left: 50px;
@@ -35,7 +34,6 @@ h1 {
   color: #131313;
   padding: 1rem;
 }
-/* Student List Styling */
 .student-list {
   display: flex;
   flex-wrap: wrap;
@@ -112,4 +110,12 @@ h1 {
 
 .student-table button:hover .fa {
   opacity: 0.8;
+}
+@media (max-width:768px) {
+  .filter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+  }  
+  
 }

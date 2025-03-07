@@ -61,11 +61,7 @@ const FacultyProfile = () => {
 
     return (
         <div className="profile mt-2 border py-3 px-3">
-            <h2>PROFILE</h2>
-            <div className='d-flex justify-content-end'>
-                <RiEdit2Fill />
-            </div>       
-            <hr />
+            <h2 className='profile-title'>PROFILE</h2>
             <div className='profile-details d-flex flex-row'>
                 <div className='col-lg-3'>Faculty Name </div>:
                 <div className='col-lg-5 ms-2'>{faculty.full_name}</div>

@@ -6,6 +6,7 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import Select from 'react-select';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 const serverUrl = 'http://localhost:8000';
 
@@ -17,12 +18,18 @@ const ViewDepartment = () => {
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photo, setPhoto] = useState(null);
-  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState({});
 
   useEffect(() => {
     AllDepartments();
     fetchCourses();
   }, []);
+  const toggleDescription = (deptId) => {
+    setShowFullDescription((prev) => ({
+      ...prev,
+      [deptId]: !prev[deptId],
+    }));
+  };
 
   const AllDepartments = async () => {
     const token = localStorage.getItem('access');
@@ -59,6 +66,7 @@ const ViewDepartment = () => {
       toast.error('Error fetching courses:', error);
     }
   };
+
 
   const handleCourseChangeMulti = (selectedOptions) => {
     const courseIds = selectedOptions.map(option => option.id);
@@ -186,7 +194,7 @@ const ViewDepartment = () => {
           ))}
         </select>
       </div>
-     <div className='tablecontainer'>
+      <div className='tablecontainer'>
         <table className="department-table">
           <thead>
             <tr>
@@ -209,29 +217,30 @@ const ViewDepartment = () => {
                     )}
                   </td>
                   <td>{department.department_name}</td>
-                  <td  style={{ wordWrap: "break-word", whiteSpace: "normal", maxWidth: "300px" }}>
+                  <td style={{ wordWrap: "break-word", whiteSpace: "normal", maxHeight:'200px' }}>
                     {/* Full description visible on large screens */}
                     <span className="full-description">{department.description}</span>
-  
+
                     {/* View Details link on small screens */}
-                    <a
-                      href="#"
+                    <Link
                       className="view-details"
                       onClick={(e) => {
                         e.preventDefault();
-                        setShowFullDescription(!showFullDescription);
+                        toggleDescription(department.id);
                       }}
                     >
-                      View Details
-                    </a>
-  
+                      {showFullDescription[department.id] ? "Hide Details" : "View Details"}
+
+                    </Link>
+
                     {/* Expandable description for small screens */}
-                    {showFullDescription && (
+                    {showFullDescription[department.id] && (
                       <div className="expanded-description">
                         {department.description}
                       </div>
                     )}
-                  </td>          <td>
+                  </td>
+                  <td>
                     {department.courses &&
                       (Array.isArray(department.courses)
                         ? department.courses.map((courseId, index) => (
@@ -262,90 +271,92 @@ const ViewDepartment = () => {
             )}
           </tbody>
         </table>
-     </div>
+      </div>
       {selectedDepartment && (
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Department</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formDepartmentName">
-                <Form.Label>Department Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter department name"
-                  name="department_name"
-                  value={selectedDepartment.department_name}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formDescription" className="mt-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Enter description"
-                  name="description"
-                  value={selectedDepartment.description}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formCourses" className="mt-3">
-                <Form.Label>Courses</Form.Label>
-                <Select
-                  isMulti
-                  options={courses}
-                  value={courses.filter(course =>
-                    Array.isArray(selectedDepartment.course_type) &&
-                    selectedDepartment.course_type.includes(course.id)
+      <div className='modal-dialog modal-lg custom-modal'>
+          <Modal show={showModal} onHide={() => setShowModal(false)} centered >
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="formDepartmentName">
+                  <Form.Label>Department Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter department name"
+                    name="department_name"
+                    value={selectedDepartment.department_name}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                  />
+                </Form.Group>
+  
+                <Form.Group controlId="formDescription" className="mt-3">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Enter description"
+                    name="description"
+                    value={selectedDepartment.description}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                  />
+                </Form.Group>
+  
+                <Form.Group controlId="formCourses" className="mt-3">
+                  <Form.Label>Courses</Form.Label>
+                  <Select
+                    isMulti
+                    options={courses}
+                    value={courses.filter(course =>
+                      Array.isArray(selectedDepartment.course_type) &&
+                      selectedDepartment.course_type.includes(course.id)
+                    )}
+                    getOptionLabel={option => option.course_name}
+                    getOptionValue={option => option.id}
+                    onChange={handleCourseChangeMulti}
+                    isDisabled={isSubmitting}
+                  />
+                </Form.Group>
+  
+                <Form.Group controlId="formPhoto" className="mt-3">
+                  <Form.Label>Photo</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="photo"
+                    onChange={handlePhotoChange}
+                    disabled={isSubmitting}
+                  />
+                  {photo ? (
+                    <div className="mt-3">
+                      <img
+                        src={URL.createObjectURL(photo)}
+                        alt="Selected"
+                        style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+                      />
+                    </div>
+                  ) : selectedDepartment.photo ? (
+                    <div className="mt-3">
+                      <img
+                        src={`${serverUrl}${selectedDepartment.photo}`}
+                        alt="Existing Department Photo"
+                        style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="mt-3">No photo available</div>
                   )}
-                  getOptionLabel={option => option.course_name}
-                  getOptionValue={option => option.id}
-                  onChange={handleCourseChangeMulti}
-                  isDisabled={isSubmitting}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formPhoto" className="mt-3">
-                <Form.Label>Photo</Form.Label>
-                <Form.Control
-                  type="file"
-                  name="photo"
-                  onChange={handlePhotoChange}
-                  disabled={isSubmitting}
-                />
-                {photo ? (
-                  <div className="mt-3">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="Selected"
-                      style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
-                    />
-                  </div>
-                ) : selectedDepartment.photo ? (
-                  <div className="mt-3">
-                    <img
-                      src={`${serverUrl}${selectedDepartment.photo}`}
-                      alt="Existing Department Photo"
-                      style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
-                    />
-                  </div>
-                ) : (
-                  <div className="mt-3">No photo available</div>
-                )}
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="mt-4" disabled={isSubmitting}>
-                {isSubmitting ? 'Updating...' : 'Update'}
-              </Button>
-            </Form>
-          </Modal.Body>
-        </Modal>
+                </Form.Group>
+  
+                <Button variant="primary" type="submit" className="mt-4" disabled={isSubmitting}>
+                  {isSubmitting ? 'Updating...' : 'Update'}
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
+      </div>
 
       )}
       <ToastContainer />

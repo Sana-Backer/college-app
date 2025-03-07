@@ -68,7 +68,12 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
+  .viewnotification{
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+  }
   /* Toast container custom styles */
   .Toastify__toast-container {
     width: 320px;
@@ -78,7 +83,47 @@
     border-radius: 4px;
     font-size: 14px;
   }
-  
+  .notifications-list {
+    max-height: 300px; /* Adjust as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.notifications-list h2{
+  font-weight: bold;
+  color: #6669ca;
+}
+  .notifications{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: #38176e 4px solid;
+    border-radius: 4px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  }
+  .notifications h3{
+    font-size: 27px ;
+    font-weight: bold;
+  }
+  .notification-actions{
+    display: flex;
+    gap: 1rem;
+  }
+  .n-edit{
+    color: #007bff;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 25px;
+  }
+  .n-delete{
+    color: #dc3545;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 25px;
+  }
   /* Responsive styles */
   @media (max-width: 768px) {
     .send-notification-page {

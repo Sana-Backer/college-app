@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './assign.css';
-import {  getAssignmentSubmissions, deleteSubmissionApi, StudentApi, getAssignmentApi } from '../Services/allAPI';
+import {  getAssignmentSubmissions, deleteSubmissionApi, StudentApi, getAssignmentApi, deleteAssignmentApi } from '../Services/allAPI';
 import { FaEye, FaTrash, FaFilePdf } from "react-icons/fa";
 import { Button, Modal } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
@@ -84,6 +84,19 @@ const AssignmentView = () => {
             toast.error("Error fetching submissions.");
         }
     };
+    // const handleDeleteAssignment = async(assignmentId)=>{
+    //         try{
+    //             const response = await deleteAssignmentApi(token, assignmentId);
+    //             if(response.status === 204){
+    //                 toast.success("Assignment deleted successfully.");
+    //                 setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+    //             }
+    //         }catch(error){
+    //             console.error("Error deleting assignment:", error);
+    //             toast.error("Error deleting assignment.");
+    //         }
+        
+    // }
 
     const handleDeleteSubmission = async (assignmentId, submissionId) => {
         if (window.confirm("Are you sure you want to delete this submission?")) {
@@ -112,17 +125,19 @@ const AssignmentView = () => {
 
     return (
         <div className="assignment-view-container">
-            <div className="search-container">
+                  <h1 className="Assignment-title"> Assignments </h1>
+
+            <div className="search-assigment">   
                 <input
                     type="text"
                     className="search-input"
-                    placeholder="Search by title..."
+                    placeholder="🔍Search by title..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                 />
             </div>
 
-            <div className="table-container">
+            <div className="tablecontainer">
                 {loading ? <p>Loading assignments...</p> : (
                     <table className="styled-table">
                         <thead>
@@ -132,6 +147,7 @@ const AssignmentView = () => {
                                 <th>Topic</th>
                                 <th>Deadline</th>
                                 <th>Actions</th>
+                                <th>Remove</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,73 +165,80 @@ const AssignmentView = () => {
                                             <FaEye className="icon" /> View Submissions
                                         </button>
                                     </td>
+                                    <td>
+                                        <button className='delete-btn' onClick={() => handleDeleteAssignment(A.id)}>
+                                            <FaTrash /> 
+                                        </button>
+                                    </td>
                                 </tr>
                             )) : <tr><td colSpan="5">No assignments found.</td></tr>}
                         </tbody>
                     </table>
                 )}
             </div>
-
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Submissions for Assignment ID: {selectedAssignment}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {submissions.length > 0 ? (
-                        <table className="styled-table">
-                            <thead>
-                                <tr>
-                                    <th>SI No</th>
-                                    <th>Student ID</th>
-                                    <th>Name</th>
-                                    <th>Response</th>
-                                    <th>Submitted At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {submissions.map((S, index) => (
-                                    <tr key={S.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{S.student || "N/A"}</td>
-                                        <td>{students[S.student] || "Fetching..."}</td>
-                                        <td>
-                                            {S.file ? (
-                                                <a
-                                                    href={`http://localhost:8000${S.file}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <FaFilePdf className="icon" /> {/* Display PDF icon */}
-                                                </a>
-                                            ) : (
-                                                "No File"
-                                            )}
-                                        </td>
-                                        <td>{S.submitted_at ? new Date(S.submitted_at).toLocaleString() : "N/A"}</td>
-                                        <td>
-                                            <button
-                                                className="action-btn delete-btn"
-                                                onClick={() => handleDeleteSubmission(selectedAssignment, S.id)}
-                                            >
-                                                <FaTrash className="icon" />
-                                            </button>
-                                        </td>
+            <div className='modal-dialog modal-lg custom-modal'>
+    
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Submissions for Assignment ID: {selectedAssignment}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {submissions.length > 0 ? (
+                            <table className="table-submitted">
+                                <thead>
+                                    <tr>
+                                        <th>SI No</th>
+                                        <th>Student ID</th>
+                                        <th>Name</th>
+                                        <th>Response</th>
+                                        <th>Submitted At</th>
+                                        <th>Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No submissions found for this assignment.</p>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
+                                </thead>
+                                <tbody>
+                                    {submissions.map((S, index) => (
+                                        <tr key={S.id}>
+                                            <td>{index + 1}</td>
+                                            <td>{S.student || "N/A"}</td>
+                                            <td>{students[S.student] || "Fetching..."}</td>
+                                            <td>
+                                                {S.file ? (
+                                                    <a
+                                                        href={`http://localhost:8000${S.file}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <FaFilePdf className="icon" /> {/* Display PDF icon */}
+                                                    </a>
+                                                ) : (
+                                                    "No File"
+                                                )}
+                                            </td>
+                                            <td>{S.submitted_at ? new Date(S.submitted_at).toLocaleString() : "N/A"}</td>
+                                            <td>
+                                                <button
+                                                    className="delete-btn"
+                                                    onClick={() => handleDeleteSubmission(selectedAssignment, S.id)}
+                                                >
+                                                    <FaTrash className="icon" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>No submissions found for this assignment.</p>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+    
+</div>
             <ToastContainer />
         </div>
     );

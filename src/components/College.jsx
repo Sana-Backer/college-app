@@ -10,19 +10,22 @@ const images = [
   { src: classroom, title: "Classroom" },
   { src: canteen, title: "Canteen" },
   { src: sports, title: "Sports" }
+  
 ];
 
 const College = () => {
   return (
     <div className="college-section">
-      <h2>Our College</h2>
       
     <div className='photos d-flex'>
-        <div ><img src={campus} className='main-photo'  alt="" /></div>
+        <div className='head'>
+          <h1> Our <br /> <span >Campus</span> <br /> View</h1>
+        </div>
         <div className="college-grid">
           {images.map((image, index) => (
             <div className="college-card" key={index}>
               <img src={image.src} alt={image.title} /> 
+              <h3>{image.title}</h3>
             </div>
           ))}
         </div>

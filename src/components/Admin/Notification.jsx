@@ -4,7 +4,8 @@ import { addNotificationApi, updateNotificationApi, deleteNotificationApi, getNo
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './notif.css';
-import { FaEye } from 'react-icons/fa'; 
+import { FaEdit, FaEye } from 'react-icons/fa'; 
+import { FaTrash } from 'react-icons/fa6';
 
 const Notification = () => {
     const [title, setTitle] = useState('');
@@ -195,23 +196,27 @@ const Notification = () => {
                 <button type="submit" className="btn btn-primary">{selectedNotification ? 'Update' : 'Send'}</button>
             </form>
             
-            <button className="btn btn-secondary" onClick={toggleNotifications}>
+            <button className="viewnotification" onClick={toggleNotifications}>
                 <FaEye /> {showNotifications ? 'Hide Notifications' : 'View Notifications'}
             </button>
             <ToastContainer/>
             {showNotifications && notifications.length > 0 && (
                 <div className="notifications-list">
-                    <h3>All Notifications</h3>
-                    <ul>
+                    <h2 className='text-center mt-4'>All Notifications</h2>
+                    <div >
                         {notifications.map(notification => (
-                            <li key={notification.id}>
-                                <h4>{notification.title}</h4>
-                                <p>{notification.message}</p>
-                                <button onClick={() => handleEditNotification(notification)}>Edit</button>
-                                <button onClick={() => handleDeleteNotification(notification.id)}>Delete</button>
-                            </li>
+                            <div key={notification.id} className='notifications '>
+                               <div>
+                                    <h3>{notification.title}</h3>
+                                    <p>{notification.message}</p>
+                               </div>
+                               <div className='notification-actions '>
+                                    <button className='n-edit' onClick={() => handleEditNotification(notification)}> <FaEdit /></button>
+                                    <button className='n-delete' onClick={() => handleDeleteNotification(notification.id)}> <FaTrash /></button>
+                               </div>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             )}
         </div>

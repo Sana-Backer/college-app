@@ -117,23 +117,24 @@ table td {
 /* RESPONSIVENESS */
 @media (max-width: 1200px) {
   .tablecontainer {
-    display: flex;
+    display: block;
     justify-content: center;
     overflow-x: auto;
     padding: 0;
+    white-space: nowrap;
+
   }
 }
 
 @media (max-width: 768px) {
-  .title{
-    text-align: center;
-  }
 
   .tablecontainer {
     display: block;
     width: 70%;
+    min-width: 700px;
     overflow-x: auto;
     white-space: nowrap;
+    margin-right: -800px;
   }
 
   .hod-item {

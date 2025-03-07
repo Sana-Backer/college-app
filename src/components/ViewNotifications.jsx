@@ -8,6 +8,8 @@ const ViewNotifications = () => {
   
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
+      const [searchQuery, setSearchQuery] = useState(""); 
+    
   const token = localStorage.getItem('access')
         useEffect(()=>{
             const fetchNotifications = async () => {
@@ -31,15 +33,31 @@ const ViewNotifications = () => {
             //     setShowNotifications(false);
             // };
         
-    
+            const handleSearchChange = (e) => {
+                setSearchQuery(e.target.value.toLowerCase());
+              };
+            
+              // Filter results based on search query
+              const filteredNotifications = notifications.filter((notify) =>
+                notify.title.toLowerCase().includes(searchQuery)
+              );
   return (
-    <div className='container'>
+    <div className='container notification-view'>
         <h1 className='notification-title'>Notifications</h1>
-        <p className=''>Stay update with your academic notifications</p>
+        <p className='text-center'>Stay update with your academic notifications</p>
 
         <div>
+        <div className="search-bar">
+      {/* <span className="search-icon">🔍</span> */}
+      <input type="text"
+       className="search-notification w-50 p-2"
+        placeholder="🔍 Search notifications..."
+        value={searchQuery}
+          onChange={handleSearchChange}
+          />
+    </div>
         <div className='d-flex flex-column gap-2'>
-        {notifications.map((n)=>(
+        {filteredNotifications.map((n)=>(
 
                 <div className='notification-card d-flex shadow gap-3'>
                     <div className=' notify-icon p-3'>

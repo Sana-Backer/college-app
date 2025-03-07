@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { deleteNoteApi, FacultyApi, getCoursesApi, getNotes, getSubjectApi } from '../Services/allAPI';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './note.css';  // Add styles in this file
+import './note.css'; 
 import { FaTrash } from 'react-icons/fa';
 
 const Notes = () => {
@@ -141,21 +141,19 @@ const filteredNotes= notes.filter((note) =>
   return (
     <div className="notes-page">
       <h1 className="notes-title"> Notes </h1>
-      <div className="search-container">
+      <div className="search-note">
                 <input
                     type="text"
                     className="search-input"
-                    placeholder="Search by title..."
+                    placeholder="🔍Search by title..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                 />
             </div>
-      <div className="notes-grid-container">
-     
+      <div className="notes-grid-container">  
         {filteredNotes.map(note => (
           <div className="note-card" key={note.id}>
             <h3 className="note-title">{note.title}</h3>
-            {/* <p className="note-info">Subject: {note.subject}</p> */}
             <p className="note-info">Course: {getCourseName(note.course)}</p>
             <p className="note-info">Faculty: {getFacultyName(note.faculty)}</p>
             {note.fileUrl ? (

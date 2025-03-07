@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import AssignmentStd from '../components/AssignmentStd';
 
-import './hoddash.css'
+// import './hoddash.css'
 import AddAssignment from '../components/AddAssignment';
 
 const HodDash = () => {
@@ -119,9 +119,9 @@ const HodDash = () => {
     };
 
     return (
-        <div className="hod-dashboard">
+        <div className=''>
             <div className="hod-header">
-                <Link to="/home" className="back-link">
+                <Link to="/home" className="tohome">
                     <RiArrowGoForwardLine /> Back to Home
                 </Link>
             </div>
@@ -133,7 +133,7 @@ const HodDash = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
                 
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="nav-links ms-auto me-auto">
+                    <Nav className="nav-links ms-auto me-auto mt-2">
                         <a
                             href="#profile"
                             onClick={() => handleActiveFeature("profile")}
@@ -183,11 +183,11 @@ const HodDash = () => {
 
             {/* Profile Sidebar - positioned below the navbar */}
             {sidebarVisible && (
-                <aside className="profile-sidebar">
-                    <div className="profile-image">
+                <aside className="hprofile-sidebar">
+                    <div className="hprofile-image">
                         <img src={profile.photo} alt="Profile" />
                     </div>
-                    <div className="profile-info">
+                    <div className="hprofile-info">
                         <h4>{profile.full_name}</h4>
                         <p>{profile.department_name}</p>
                         <hr />
@@ -199,7 +199,7 @@ const HodDash = () => {
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
-                    <div className="profile-image">
+                    <div className="profile-image img-fluid">
                         <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">

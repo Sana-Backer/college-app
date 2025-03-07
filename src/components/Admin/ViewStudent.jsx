@@ -50,6 +50,8 @@ const ViewStudent = () => {
         if (Array.isArray(studentResponse.data)) {
           setStudents(studentResponse.data);
           setFilteredStudents(studentResponse.data);
+          console.log(studentResponse);
+          
         }
 
         const deptResponse = await departmentApi(token);
@@ -154,7 +156,7 @@ const ViewStudent = () => {
   return (
     <Container>
       <ToastContainer />
-      <Row className=" filter-container ">
+      <Row className="filter-container ">
         <Col md={4}>
           <Form.Select value={filterBatch} onChange={(e) => setFilterBatch(e.target.value)}>
             <option value="">Filter by Batch</option>

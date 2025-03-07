@@ -15,6 +15,7 @@ function StudentRegistration() {
     course: '',
     department: '',
     batch: '',
+    photo:null,
     role: 'student',
   });
 
@@ -56,20 +57,34 @@ function StudentRegistration() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     setUserData({ ...userData, [name]: value });
-  };
+        if (name === "photo") {
+          const file = files[0];
+          if (file && file.type.startsWith("image/")) {
+            if (file.size <= 2 * 1024 * 1024) {
+              setUserData({ ...userData, photo: file });
+            } else {
+              toast.error("Image size must be less than 2MB.");
+            }
+          } else {
+            toast.error("Please upload a valid image file.");
+          }
+        } else {
+          setUserData({ ...userData, [name]: value });
+        }
+      };
+    
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true); 
 
-    const { full_name, dob, gender, email, phone, password, course, department, batch, role } = userData;
+    const { full_name, dob, gender, email, phone, password, course, department, batch, photo, role } = userData;
 
-    // Check if any field is empty
-    if (!full_name || !dob || !gender || !email || !phone || !password || !course || !department || !batch) {
+    if (!full_name || !dob || !gender || !email || !phone || !password || !course || !department || !batch || !photo) {
       toast.warning('Please fill out all fields');
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false); 
       return;
     }
 
@@ -84,10 +99,11 @@ function StudentRegistration() {
         course,
         department,
         batch,
+        photo,
         role,
       });
 
-      console.log('User Data:', userData); // Debug log to check data being sent
+      console.log('User Data:', userData);
 
       if (response.status === 200) {
         toast.success('OTP sent successfully');
@@ -101,6 +117,7 @@ function StudentRegistration() {
           course: '',
           department: '',
           batch: '',
+          photo: null,
           role: 'student',
         });
         navigate('/Otp', { state: { email } });
@@ -111,7 +128,7 @@ function StudentRegistration() {
       console.error('Error during registration:', error);
       toast.error('An unexpected error occurred. Please try again.');
     } finally {
-      setIsLoading(false); // Reset loading state after the request
+      setIsLoading(false);
     }
   };
 
@@ -254,6 +271,10 @@ function StudentRegistration() {
                     <option key={course.id} value={course.id}>{course.course_name}</option>
                   ))}
                 </select>
+              </div>
+              <div className="input-group">
+                <label htmlFor="photo">Profile Image</label>
+                <input type="file" id="photo" name="photo" onChange={handleChange} className="input-field" />
               </div>
             </div>
 

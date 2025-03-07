@@ -100,7 +100,7 @@ const About = () => {
       <Departments />
       <College />
 
-      <div className=''>
+      {/* <div className=''>
         <div className='d-flex flex-row gap-2 m-2'>
           <div className="people py-2 ms-auto">
             <h4 className="text-center">Principal</h4>
@@ -133,7 +133,7 @@ const About = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
 
     </>

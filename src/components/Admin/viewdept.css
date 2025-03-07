@@ -1,7 +1,6 @@
 /* viewdept.css */
 
 .view-department-container {
-  padding: 20px;
   margin: 0;
 }
 
@@ -26,11 +25,14 @@
 .dfilter-container select {
   font-size: 16px;
 }
-.tablecontainer{
+
+.tablecontainer {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on touch devices */
 
 }
+
 .department-table {
   width: 100%;
   border-collapse: collapse;
@@ -42,12 +44,12 @@
   border: 1px solid #e4e2e2;
   padding: 1rem;
   text-align: left;
-  white-space: nowrap;
 }
+
 
 .department-table th {
   background-color: #f6f8f6;
-  color: 131b24;
+  color: #131b24;
 }
 
 .department-photo {
@@ -96,11 +98,11 @@
   opacity: 0.8;
 }
 
-.full-description {
+/* .full-description {
   width: 300px;
-}
+} */
 
-.modal-title {
+/* .modal-title {
   text-align: center;
 }
 
@@ -111,35 +113,67 @@
 
 .modal-body .form-group {
   margin-bottom: 15px;
+} */
+.modal-dialog {
+  max-width: 70% !important;
+  width: 70% !important;
+  margin-right:  1% !important;
+  
 }
 
-@media (max-width: 1000px) {
-  .full-description {
-    display: none;
-    /* Hide full description */
-  }
-
-  .view-details {
-    display: block;
-    /* Show link */
-  }
+.modal-content {
+  width: 50% !important;
+  display: flex !important;
 }
 
 @media (min-width: 1001px) {
   .full-description {
     display: block;
-    /* Show full description */
   }
 
   .view-details {
-    display: none;
-    /* Hide link */
+    display: none; 
   }
-}
-@media (max-width:768px) {
-  .tablecontainer{
-    overflow-x: auto;
-  }
-  
 }
 
+@media (max-width: 1000px) {
+  .full-description {
+    display: none; /* Hide full description */
+  }
+
+  .view-details {
+    display: block; /* Show link */
+  }
+
+  .department-table th:nth-child(3),
+  .department-table td:nth-child(3) {
+    width: 10%;
+    white-space: wrap;
+  }
+
+  .department-table th:nth-child(4),
+  .department-table td:nth-child(4) {
+    width: 40%; /* Increase width */
+    max-width: 400px; /* Adjust max width */
+    white-space: normal; /* Allow text wrapping */
+    overflow-wrap: break-word;
+  }
+}
+
+
+
+
+@media (max-width:768px) {
+  .tablecontainer {
+    overflow-x: auto;
+  }
+
+  .department-table th:nth-child(4),
+  .department-table td:nth-child(4) {
+    width: 30%;
+    /* max-width: 400px; */
+    /* Optional: Prevent too much stretching */
+    /* white-space: normal; */
+  }
+
+}

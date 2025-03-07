@@ -213,6 +213,19 @@ const FacultyDash = () => {
                 </Navbar.Collapse>
             </Navbar>
             {/* Profile Sidebar - positioned below the navbar */}
+            {/* {sidebarVisible && (
+                    <aside className="profile-sidebar">
+                        <div className="profile-image">
+                            <img src={profile.photo} alt="Profile" />
+                        </div>
+                        <div className="stdprofile-info">
+                            <h4>{profile.full_name}</h4>
+                            <hr />
+                            <p>{profile.email}</p>
+                            <p>{profile.phone}</p>
+                        </div>
+                    </aside>
+                )} */}
             {sidebarVisible && (
                 <aside className="profile-sidebar">
                     <div className="profile-image">
@@ -222,7 +235,7 @@ const FacultyDash = () => {
                            ' no image'
                         )}
                     </div>
-                    <div className="profile-info">
+                    <div className="stdprofile-info">
                         <h4>{profile.full_name}</h4>
                         <p>{profile.department}</p>
                         <hr />
@@ -236,7 +249,7 @@ const FacultyDash = () => {
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image">
-                        <img src={profile.photo} alt="Profile" />
+                        <img src={prof3} alt="Profile" />
                     </div>
                     <div className="profile-info">
                         <h4>{profile.full_name}</h4>

@@ -1,7 +1,7 @@
 /* note.css */
 .notes-page {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 ;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
@@ -18,14 +18,20 @@
 .notes-title::after {
   content: '';  
   display: block;
-  width: 1000px; /* Make the underline match the title width */
+  width: 90%; /* Make the underline match the title width */
   height: 4px;
   background-color: #1d41c1;
   border-radius: 2px;
   margin-top: 5px;
 }
+.search-note input{
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 
-
+}
   .filter-container {
     display: flex;
     margin-top: 10px;

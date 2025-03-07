@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addhod.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { registerApi } from "../../Services/allAPI";
+import { departmentApi, registerApi } from "../../Services/allAPI";
 
 function AddHod() {
   const [userData, setUserData] = useState({
@@ -13,50 +13,115 @@ function AddHod() {
     phone: "",
     password: "",
     department: "",
+    photo: null,
     role: "hod",
   });
-
+  const [departments, setDepartments] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const departments = async () => {
+      try {
+        const response = await departmentApi()
+        setDepartments(response.data)
+      } catch (error) {
+        setError("Failed to fetch departments", error)
+      }
+    }
+    departments()
+  },[])
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value , files} = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "photo") {
+      const file = files[0];
+      if (file && file.type.startsWith("image/")) {
+        if (file.size <= 2 * 1024 * 1024) {
+          setUserData({ ...userData, photo: file });
+        } else {
+          toast.error("Image size must be less than 2MB.");
+        }
+      } else {
+        toast.error("Please upload a valid image file.");
+      }
+    } else {
+      setUserData({ ...userData, [name]: value });
+    }
   };
 
   const handleRegistration = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const { full_name, dob, gender, email, phone, password, department } = userData;
-    if (!full_name || !dob || !gender || !email || !phone || !password || !department) {
+    const { full_name, dob, gender, email, phone, password, department , photo } = userData;
+    if (!full_name || !dob || !gender || !email || !phone || !password || !department || !photo) {
       toast.warning("Please fill out all fields");
       setIsLoading(false);
       return;
     }
 
-    try {
-      const response = await registerApi({ ...userData, department: Number(department) });
-      if (response.status === 200) {
-        toast.success("OTP sent successfully");
-        setUserData({ full_name: "", dob: "", gender: "", email: "", phone: "", password: "", department: "", role: "hod" });
-        navigate("/Otp", { state: { email: userData.email } });
-      } else {
-        toast.error("Registration failed! Please try again.");
-      }
-    } catch (error) {
-      console.error("Error during registration:", error.response?.data || error.message);
-      if (error.response?.data) {
-        Object.keys(error.response.data).forEach((field) => {
-          toast.error(`${field}: ${error.response.data[field].join(", ")}`);
-        });
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        try {
+          const formData = new FormData();
+          formData.append("full_name", full_name);
+          formData.append("dob", dob);
+          formData.append("gender", gender);
+          formData.append("email", email);
+          formData.append("phone", phone);
+          formData.append("password", password);
+          formData.append("department", department);
+          formData.append("role", userData.role);
+          formData.append("photo", photo);
+    
+          const response = await registerApi(formData);
+          if (response.status === 200) {
+            toast.success("OTP sent successfully");
+            setUserData({
+              full_name: "",
+              dob: "",
+              gender: "",
+              email: "",
+              phone: "",
+              password: "",
+              department: "",
+              photo: null,
+              role: "hod",
+            });
+            navigate("/Otp", { state: { email } });
+          } else {
+            toast.error("Registration failed! Please try again.");
+          }
+        } catch (error) {
+          toast.error("An unexpected error occurred. Please try again.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+  //   try {
+  //     const response = await registerApi({ ...userData, department: Number(department) });
+  //     if (response.status === 200) {
+  //       toast.success("OTP sent successfully");
+  //       setUserData({ full_name: "", dob: "", gender: "", email: "", phone: "", password: "", department: "", role: "hod" });
+  //       navigate("/Otp", { state: { email: userData.email } });
+  //     } else {
+  //       toast.error("Registration failed! Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during registration:", error.response?.data || error.message);
+  //     if (error.response?.data) {
+  //       Object.keys(error.response.data).forEach((field) => {
+  //         toast.error(`${field}: ${error.response.data[field].join(", ")}`);
+  //       });
+  //     } else {
+  //       toast.error("An unexpected error occurred. Please try again.");
+  //     }
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="registration-page">
@@ -108,9 +173,16 @@ function AddHod() {
                 <label htmlFor="department">Department</label>
                 <select id="department" name="department" value={userData.department} onChange={handleChange} className="select-field">
                   <option value="">Select Department</option>
-                  <option value="1">B.Tech</option>
-                  <option value="2">M.Tech</option>
+                  {departments.map((D)=>(
+                    <option key={D.id} value={D.id}>{D.department_name}</option>
+                  ))
+                    
+                 }
                 </select>
+              </div>
+              <div className="input-group">
+                <label htmlFor="photo">Profile Image</label>
+                <input type="file" id="photo" name="photo" onChange={handleChange} className="input-field" />
               </div>
             </div>
 
