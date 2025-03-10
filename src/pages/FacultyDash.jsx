@@ -149,7 +149,7 @@ const FacultyDash = () => {
     return (
         <div className="faculty-dashboard">
             <div className="faculty-header">
-                <p className="back-link" onClick={backhome}>
+                <p className="tohome" onClick={backhome}>
                     <RiArrowGoForwardLine /> Back to Home
                 </p>
             </div>
