@@ -96,8 +96,8 @@ const StdAttendance = () => {
       
 
     return (
-        <div className="attendance-container">
-            <h2>Attendance Sheet</h2>
+        <div className="student-attendance-container">
+            <h2 className="attendence-title"> Attendance Sheet</h2>
             {error && <p className="error-message">{error}</p>}
             {success && <p className="success-message">Attendance submitted successfully!</p>}
             <div className="filters">
@@ -116,9 +116,9 @@ const StdAttendance = () => {
                 <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
             </div>
 
-            <table>
+            <table className="std-attendence-table">
                 <thead>
-                    <tr>
+                    <tr className="table-header">
                         <th>Attendance ID</th>
                         <th>Student ID</th>
                         <th>Student Name</th>
@@ -137,6 +137,7 @@ const StdAttendance = () => {
                                         onChange={(e) => handleStatusChange(student.studentId, e.target.value)}                                    >
                                         <option value="present">Present</option>
                                         <option value="absent">Absent</option>
+                                        <option value="absent">Duty Leave</option>
                                     </select>
                                 </td>
 
