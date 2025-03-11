@@ -1,0 +1,20 @@
+
+.course-actions{
+    gap: 1rem;
+}
+.course-actions .editbtn{
+    color: #007bff;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 25px;
+
+}
+.course-actions .deletebtn{
+    color: #dc3545;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 25px;
+
+}

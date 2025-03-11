@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addCourseApi } from "../../Services/allAPI";
-// import "./addCourse.css";
 
 const AddCourse = () => {
   const [courseData, setCourseData] = useState({
     course_name: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,23 +18,33 @@ const AddCourse = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('access'); // Retrieve the token from localStorage
+
+    if (!courseData.course_name.trim() || !courseData.description.trim()) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    const token = localStorage.getItem("access");
     if (!token) {
       toast.error("You must be logged in to add a course.");
       return;
     }
 
+    setLoading(true);
+
     try {
       const response = await addCourseApi(courseData, token);
-      if (response.status === 200) {
-        toast.success("The course has been added successfully.");
+      if (response.status === 201) {
+        toast.success("Course added successfully.");
         navigate("/view-courses");
       } else {
-        toast.error("There was a problem adding the course. Please try again.");
+        toast.error(response.data?.message || "Error adding course. Try again.");
       }
     } catch (error) {
-      console.error("Error adding course:", error.response || error.message);
-      toast.error("An unexpected error occurred. Please try again later.");
+      console.error("Error adding course:", error);
+      toast.error(error.response?.data?.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,8 +63,10 @@ const AddCourse = () => {
                 placeholder="Enter course name"
                 value={courseData.course_name}
                 onChange={handleChange}
+                required
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="description">Description</label>
               <textarea
@@ -63,14 +75,16 @@ const AddCourse = () => {
                 placeholder="Enter course description"
                 value={courseData.description}
                 onChange={handleChange}
+                required
               ></textarea>
             </div>
+
             <div className="form-buttons">
-              <button type="button" className="cancel" onClick={() => navigate('/view-courses')}>
+              <button type="button" className="cancel" onClick={() => navigate("/view-courses")}>
                 Cancel
               </button>
-              <button type="submit" className="create">
-                Add Course
+              <button type="submit" className="create" disabled={loading}>
+                {loading ? "Adding..." : "Add Course"}
               </button>
             </div>
           </form>

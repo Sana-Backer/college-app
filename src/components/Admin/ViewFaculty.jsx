@@ -73,11 +73,7 @@ function ViewFaculty() {
   }, [facultyList, filterDepartment]);
 
 
-  // Handle edit faculty details
-  const handleEdit = (faculty) => {
-    setSelectedFaculty(faculty);
-    setShowModal(true);
-  };
+
 
   const handleDelete = async (facultyId) => {
     if (!window.confirm("Are you sure you want to delete this faculty?")) {
@@ -97,6 +93,11 @@ function ViewFaculty() {
       toast.error("An error occurred while deleting.");
     }
   };
+    // Handle edit faculty details
+    const handleEdit = (faculty) => {
+      setSelectedFaculty(faculty);
+      setShowModal(true);
+    };
 
   // Handle form input change
   const handleChange = (e) => {

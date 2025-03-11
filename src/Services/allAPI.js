@@ -231,15 +231,10 @@ export const editFacultyApi = async (id, facultydetails, token) => {
 
 // faculty list
 export const FacultyApi = async () => {
-  // Retrieve token from localStorage
   const token = localStorage.getItem("access");
-
-  // Check if token is available
   if (!token) {
     throw new Error("Token is missing");
   }
-
-  // Make API call using commonAPI function
   return await commonAPI("GET", `${serverUrl}/falist/`, null, {
     Authorization: `Bearer ${token}`,
   });
@@ -345,13 +340,6 @@ export const deleteNoteApi = async (id, token) => {
   });
 }
 
-// -----------------------------------------------------------------
-export const addCourseApi = async (data, token) => {
-  return await commonAPI("POST", `${serverUrl}/courses-list/`, data, {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-};
 
 
 
@@ -416,6 +404,14 @@ export const getBatchApi = async (token) => {
   });
 };
 // ---------------------COURSE
+// -----------------------------------------------------------------
+export const addCourseApi = async (data, token) => {
+  return await commonAPI("POST", `${serverUrl}/courses-list/`, data, {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+};
+
 // all courses
 export const getCoursesApi = async (token) => {
   return await commonAPI("GET", `${serverUrl}/courses-list/`, "",
@@ -424,6 +420,31 @@ export const getCoursesApi = async (token) => {
     }
   )
 }
+// Edit Course API
+export const editCourseApi = async (courseId, token, courseData) => {
+  return await commonAPI("PUT", `${serverUrl}/courses/${courseId}/`, courseData, {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+  });
+};
+
+// Delete Course API
+export const deleteCourseApi = async (courseId, token) => {
+  try {
+    const response = await commonAPI(
+      "DELETE",
+      `${serverUrl}/courses/${courseId}/`,  // ✅ Ensure trailing slash
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    throw error;
+  }
+};
 // ---------------------subject
 
 // add subject
