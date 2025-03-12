@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Container, Row, Col, Spinner, Modal, Form, Card } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaTrashAlt } from "react-icons/fa";
 import { deleteFacultyApi, departmentApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
 import './viewfaculty.css'
 
@@ -19,8 +19,8 @@ function ViewFaculty() {
   const [departments, setDepartments] = useState([])
   const [filterDepartment, setFilterDepartment] = useState('');
 
-  console.log('depp',departments);
-  console.log('filtfaclty',filteredFaculty);
+  console.log('depp', departments);
+  console.log('filtfaclty', filteredFaculty);
 
   const navigate = useNavigate();
 
@@ -93,11 +93,11 @@ function ViewFaculty() {
       toast.error("An error occurred while deleting.");
     }
   };
-    // Handle edit faculty details
-    const handleEdit = (faculty) => {
-      setSelectedFaculty(faculty);
-      setShowModal(true);
-    };
+  // Handle edit faculty details
+  const handleEdit = (faculty) => {
+    setSelectedFaculty(faculty);
+    setShowModal(true);
+  };
 
   // Handle form input change
   const handleChange = (e) => {
@@ -213,21 +213,12 @@ function ViewFaculty() {
                           )}
                         </td>
                         <td>
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => handleEdit(faculty)}
-                            className="me-2"
-                          >
+                          <button className='edit-icon' onClick={() => handleEdit(faculty)}>
                             <FaEdit />
-                          </Button>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            onClick={() => handleDelete(faculty.id)}
-                          >
-                            <FaTrash />
-                          </Button>
+                          </button>
+                          <button onClick={() => handleDelete(faculty.id)} className="delete-icon">
+                            <FaTrashAlt />
+                          </button>
                         </td>
                       </tr>
                     ))

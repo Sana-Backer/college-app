@@ -46,7 +46,7 @@ const ViewCourse = () => {
 
     const handleUpdate = async () => {
         try {
-            const response = await editCourseApi(selectedCourse.id, token, selectedCourse);  // ✅ Fixed parameter order
+            const response = await editCourseApi(selectedCourse.id, token, selectedCourse);  
             if (response.status === 200) {
                 setCourses(courses.map(course => (course.id === selectedCourse.id ? response.data : course)));
                 toast.success("Course updated successfully.");
@@ -84,7 +84,7 @@ const ViewCourse = () => {
             <h2>Courses List</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <div className='tablecontainer'>
-                <Table striped bordered hover>
+                <Table striped bordered hover className='course-table'>
                     <thead>
                         <tr>
                             <th>ID</th>

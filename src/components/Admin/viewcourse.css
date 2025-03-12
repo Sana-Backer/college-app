@@ -1,5 +1,16 @@
 
+
+.tablecontainer {
+    width: 100%;
+    overflow-x: auto;  
+}
+
+.course-table {
+    min-width: 600px; 
+}
+
 .course-actions{
+    display: flex;
     gap: 1rem;
 }
 .course-actions .editbtn{

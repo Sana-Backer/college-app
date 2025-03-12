@@ -1,30 +1,24 @@
-/* Modern container styles */
 .assignmentContainer {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background: transparent; /* Removes background color */
   min-height: 100vh;}
 
   .assignments-title {
     font-size: 2rem;
     font-weight: bold;
     color: #1d41c1;
-    position: relative;
-    display: inline-block;
     text-align: start;
-  }
+}
 
 .assignments-title::after {
-  content: '';
-  display: block;
-  width: 990px;
-  /* Adjust the width similar to Notes */
-  height: 4px;
-  background-color: #1d41c1;
-  border-radius: 2px;
-  margin-top: 5px;
-  margin-left: auto;
+    content: '';  
+    display: block;
+    width: 90%; /* Make the underline match the title width */
+    height: 4px;
+    background-color: #1d41c1;
+    border-radius: 2px;
+    margin-top: 5px;
 }
 
 .assignments-loading,
@@ -34,16 +28,13 @@
   font-size: 1.2rem;
   color: #7f8c8d;
   font-weight: 300;
-  background: #fff;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Elegant table styles */
 .table-container {
   overflow-x: auto;
   margin: 2rem 0;
-  background: #ffffff; /* Pure white background */
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   scrollbar-width: none;
@@ -198,9 +189,9 @@ input[type="file"]:hover {
     padding: 1.5rem;
   }
 
-  .assignments-title {
-    font-size: 2rem;
-  }
+  .assignments-title::after {
+    width: 90%;
+}
 
   .styled-table th,
   .styled-table td {
@@ -217,7 +208,8 @@ input[type="file"]:hover {
     font-size: 1.75rem;
   }
   .assignments-title::after {
-  width: 400px;}
+  width: 90%;
+}
   .styled-table th,
   .styled-table td {
     padding: 0.8rem;

@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { HodApi, deleteHodApi, departmentApi, editHodApi } from '../../Services/allAPI';
 import './viewhod.css';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaTrashAlt } from 'react-icons/fa';
 
 const ViewHod = () => {
 
@@ -192,7 +192,7 @@ const ViewHod = () => {
             </div>
           ) : (
             <div className="tablecontainer p-4" style={{ overflowX: "auto", maxWidth: "100%" }}>
-              <table   className="table bg-white  w-100">
+              <Table striped bordered hover responsive className=' w-100'>
                 <thead>
                   <tr>
                     <th >#</th>
@@ -230,13 +230,14 @@ const ViewHod = () => {
                             "No Photo"
                           )}
                         </td>
-                        <td>
-                          <Button variant="outline-primary" size="sm" onClick={() => handleEdit(hod)} className="me-2">
-                            <FaEdit />
-                          </Button>
-                          <Button variant="outline-danger" size="sm" onClick={() => handleDelete(hod.id)}>
-                            <FaTrash />
-                          </Button>
+                        <td className='hod-actions'>
+          
+                          <button className='edit-icon' onClick={() => handleEdit(hod)}>
+                                              <FaEdit />
+                                            </button>
+                                            <button onClick={() => handleDelete(hod.id)} className="delete-icon">
+                                              <FaTrashAlt />
+                                            </button>
                         </td>
                       </tr>
                     ))
@@ -247,7 +248,7 @@ const ViewHod = () => {
                   )}
                 </tbody>
 
-              </table>
+              </Table>
             </div>
           )}
         </Col>

@@ -156,6 +156,8 @@ const ViewStudent = () => {
   return (
     <Container>
       <ToastContainer />
+      <h2 className='title'>Student List</h2>
+
       <Row className="filter-container ">
         <Col md={4}>
           <Form.Select value={filterBatch} onChange={(e) => setFilterBatch(e.target.value)}>
@@ -194,6 +196,7 @@ const ViewStudent = () => {
       </Row>
 
       <div className='tablecontainer'>
+
         <Table striped bordered hover responsive className="student-table bg-white">
           <thead>
             <tr>

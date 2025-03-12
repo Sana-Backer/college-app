@@ -1,37 +1,98 @@
-.result{
-    max-width: 900px;
-    margin: auto;
-    background:#f8f9fa;
+.result-upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: fit-content;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-
-}
-
-.table-container{
-    overflow-x: auto;
-}
-.table{
-    width: 100%;
-    border-collapse: collapse;
+  }
+  
+  .exam-card {
     background: white;
+    padding: 20px;
     border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-.table th, .table td{
-    padding: 12px 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%; 
+    max-width: 800px; 
     text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-.table th{
-    background: #007bff;
-    color: white;
+  }
+  
+  .exam-card h2 {
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
     font-weight: bold;
-
-}
-.table tr:hover{
-    background: #f1f1f1;
-
-}
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .result-upload-btn {
+    background-color: #5c67f2;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .result-upload-btn:hover {
+    background-color: #4a54e1;
+  }
+  
+  @media (max-width: 768px) {
+    .exam-card {
+      width: 100%; 
+      padding: 15px;
+    }
+  
+    .form-group input {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .result-upload-btn {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .exam-card {
+      padding: 10px;
+    }
+  
+    .exam-card h2 {
+      font-size: 18px;
+    }
+  
+    .form-group label {
+      font-size: 14px;
+    }
+  
+    .form-group input {
+      font-size: 13px;
+      padding: 6px;
+    }
+  
+    .result-upload-btn {
+      padding: 8px;
+      font-size: 13px;
+    }
+  }
+  

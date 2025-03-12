@@ -26,7 +26,7 @@ const AssignmentStd = () => {
     } else {
       toast.error("Logged user information not available.");
     }
-  }, [loggedUser]);
+  }, []);
 
   const fetchBatches = async () => {
     try {
@@ -49,7 +49,7 @@ const AssignmentStd = () => {
     if (batchId) {
       fetchAssignments();
     }
-  }, [batchId, token]);
+  }, [batchId]);
 
   const fetchAssignments = async () => {
     if (!batchId || !token) {
@@ -99,7 +99,6 @@ const AssignmentStd = () => {
 
       if (response.status === 201) {
         toast.success("Assignment submitted successfully!");
-        // Update the submittedAssignments state to reflect that the assignment has been submitted
         setSubmittedAssignments((prev) => ({
           ...prev,
           [assignmentId]: {
@@ -120,7 +119,6 @@ const AssignmentStd = () => {
     <div className="assignmentContainer">
       <h2 className="assignments-title">Assignments</h2>
 
-      {/* Batch Selector */}
       {availableBatches.length > 1 && (
         <div className="batch-selector">
           <select value={batchId} onChange={handleBatchChange}>

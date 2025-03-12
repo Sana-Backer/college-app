@@ -106,11 +106,6 @@ const Notification = () => {
         }
     };
 
-    // const handleSelectChange = (selectedOptions) => {
-    //     const ids = selectedOptions ? selectedOptions.map(option => option.value) : [];
-    //     setRecipientIds(ids);
-    // };
-
     const handleDeleteNotification = async (id) => {
         const token = localStorage.getItem('access');
         try {
@@ -173,26 +168,12 @@ const Notification = () => {
                         required
                     >
                         <option value="">Select recipient type</option>
-                        <option value="faculty">All</option>
+                        <option value="all">All</option>
                         <option value="faculty">Faculty</option>
                         <option value="allStudents">All Students</option>
-                        {/* <option value="particularStudent">Particular Student</option> */}
                     </select>
                 </div>
-                {/* {recipientType === 'particularStudent' && (
-                    <div className="form-group">
-                        <label htmlFor="recipientIds">Student Names</label>
-                        <Select
-                            id="recipientIds"
-                            options={studentOptions}
-                            onChange={handleSelectChange}
-                            value={studentOptions.filter(option => recipientIds.includes(option.value))}
-                            isMulti
-                            isClearable
-                            placeholder="Search and select students"
-                        />
-                    </div>
-                )} */}
+              
                 <button type="submit" className="btn btn-primary">{selectedNotification ? 'Update' : 'Send'}</button>
             </form>
             
