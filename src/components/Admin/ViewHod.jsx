@@ -231,13 +231,13 @@ const ViewHod = () => {
                           )}
                         </td>
                         <td className='hod-actions'>
-          
+
                           <button className='edit-icon' onClick={() => handleEdit(hod)}>
-                                              <FaEdit />
-                                            </button>
-                                            <button onClick={() => handleDelete(hod.id)} className="delete-icon">
-                                              <FaTrashAlt />
-                                            </button>
+                            <FaEdit />
+                          </button>
+                          <button onClick={() => handleDelete(hod.id)} className="delete-icon">
+                            <FaTrashAlt />
+                          </button>
                         </td>
                       </tr>
                     ))

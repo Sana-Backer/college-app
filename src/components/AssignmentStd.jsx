@@ -4,6 +4,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import { FaUpload } from "react-icons/fa";
 import './assignstd.css';
+import { Link } from 'react-router-dom';
 
 const AssignmentStd = () => {
   const [assignments, setAssignments] = useState([]);
@@ -153,9 +154,9 @@ const AssignmentStd = () => {
                   <td>{assignment.title}</td>
                   <td>{assignment.deadline}</td>
                   <td>
-                    <a href="#" onClick={(e) => { e.preventDefault(); handleShowModal(assignment.title, assignment.description); }}>
+                    <Link onClick={(e) => { e.preventDefault(); handleShowModal(assignment.title, assignment.description); }}>
                       Check details
-                    </a>
+                    </Link>
                   </td>
                   <td>
                     {submittedAssignments[assignment.id] ? (

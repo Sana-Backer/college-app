@@ -10,7 +10,8 @@ import { getNotificationsApi, getUserProfileApi, StudentApi } from '../Services/
 import { MdNotifications } from 'react-icons/md';
 import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
 import StudentNoteView from '../components/StudentNoteView';
-
+import AttendenceView from '../components/AttendanceReport'
+import AttendanceReport from '../components/AttendanceReport';
 const StudentDash = () => {
 
     const [activeFeature, setActiveFeature] = useState(null)
@@ -37,6 +38,8 @@ const StudentDash = () => {
                 return <ResultStd />;
             case 'notes':
                 return <StudentNoteView />
+            case 'attendence':
+                return <AttendanceReport />
 
 
             default: case "profile":
@@ -108,8 +111,8 @@ const StudentDash = () => {
             <div>
                 <div className='backtohome  d-flex justify-content-end mt-2 '>
                     <Link to={'/home'} className='tohome'>
-                    {/* <RiArrowGoForwardLine /> */}
-                     Back to Home</Link>
+                        {/* <RiArrowGoForwardLine /> */}
+                        Back to Home</Link>
 
                 </div>
                 <Navbar expand='lg' className='dash'>
@@ -120,11 +123,11 @@ const StudentDash = () => {
                     <Navbar.Collapse id="basic-navbar-nav">
 
                         <Nav className='stdOptions ms-auto me-auto  mt-2 '>
-                            <a href="#profile" onClick={() => handleActiveFeature("profile")}>Profile</a>
-                            <a href="#assignment" onClick={() => handleActiveFeature("assignment")}>Assignments</a>
-                            <a href="#notes" onClick={() => handleActiveFeature("notes")}>Notes</a>
-                            <a href="#attendence" onClick={() => handleActiveFeature("attendence")}>Attendance</a>
-                            <a href="#result" onClick={() => handleActiveFeature("result")}>Result</a>
+                            <Link onClick={() => handleActiveFeature("profile")}>Profile</Link>
+                            <Link onClick={() => handleActiveFeature("assignment")}>Assignments</Link>
+                            <Link onClick={() => handleActiveFeature("notes")}>Notes</Link>
+                            <Link onClick={() => handleActiveFeature("attendence")}>Attendance</Link>
+                            <Link onClick={() => handleActiveFeature("result")}>Result</Link>
                             <MdNotifications
                                 className="notification"
                                 onClick={handleShowNotifications}

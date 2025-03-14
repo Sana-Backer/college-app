@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './fadash.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import prof3 from '../assets/proff3.jpg';
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
@@ -148,10 +148,9 @@ const FacultyDash = () => {
     };
     return (
         <div className="faculty-dashboard">
-            <div className="faculty-header">
-                <p className="tohome" onClick={backhome}>
-                    <RiArrowGoForwardLine /> Back to Home
-                </p>
+            <div className='backtohome  d-flex justify-content-end mt-2 '>
+                <Link to={'/home'} className='tohome'>
+                    Back to Home</Link>
             </div>
 
             <Navbar expand='lg' className="navigation-menu">
@@ -230,9 +229,9 @@ const FacultyDash = () => {
                 <aside className="profile-sidebar">
                     <div className="profile-image">
                         {profile.photo ? (
-                            <img src={profile.photo} alt="Profile"  />
+                            <img src={profile.photo} alt="Profile" />
                         ) : (
-                           ' no image'
+                            ' no image'
                         )}
                     </div>
                     <div className="stdprofile-info">

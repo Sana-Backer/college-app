@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaTrashAlt } from "react-icons/fa";
 import { deleteFacultyApi, departmentApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
-import './viewfaculty.css'
+// import './viewfaculty.css'
 
 function ViewFaculty() {
 

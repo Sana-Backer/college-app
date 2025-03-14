@@ -28,7 +28,7 @@ const HodDash = () => {
     const [showForm, setShowForm] = useState(null);
     const [profile, setProfile] = useState({
         full_name: '',
-        department_name: '',
+        department: '',
         email: '',
         phone: '',
         photo: ''
@@ -42,33 +42,34 @@ const HodDash = () => {
         const fetchProfileDetails = async () => {
             const token = localStorage.getItem('access');
             const userId = localStorage.getItem('userId');
-
+    
             if (!token || !userId) {
                 toast.error('Authentication error: Missing token or user ID.');
                 return;
             }
-
+    
             try {
                 const response = await getUserProfileApi(userId, token);
                 const profileData = response.data;
-                const departmentNameResponse = await departmentApi(profileData.department);
-                const departmentName = departmentNameResponse.data ? departmentNameResponse.data.name : "N/A";
-
+    
                 setProfile({
                     full_name: profileData.full_name || "N/A",
-                    department_name: departmentName,
                     email: profileData.email || "N/A",
                     phone: profileData.phone || "N/A",
-                    photo: profileData.photo || prof3
+                    photo: profileData.photo || prof3,
+                    department: profileData.department?.id || "N/A"  // Ensure department name is fetched
                 });
+                console.log(profileData);
+                
             } catch (error) {
                 console.error('Error fetching profile data:', error);
                 toast.error('Failed to fetch profile data.');
             }
         };
-
+    
         fetchProfileDetails();
     }, []);
+    
 
     const handleActiveFeature = (feature) => {
         setShowNotifications(false);
@@ -120,11 +121,10 @@ const HodDash = () => {
 
     return (
         <div className=''>
-            <div className="hod-header">
-                <Link to="/home" className="tohome">
-                    <RiArrowGoForwardLine /> Back to Home
-                </Link>
-            </div>
+             <div className='backtohome  d-flex justify-content-end mt-2 '>
+                            <Link to={'/home'} className='tohome'>
+                                Back to Home</Link>
+                        </div>
             <Navbar expand="lg" className="navigation-menu">
                 <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
                     <img src={profile.photo} className='img-fluid' alt="profile" />
@@ -182,7 +182,7 @@ const HodDash = () => {
             </Navbar>
 
             {/* Profile Sidebar - positioned below the navbar */}
-            {sidebarVisible && (
+            {/* {sidebarVisible && (
                 <aside className="hprofile-sidebar">
                     <div className="hprofile-image">
                         <img src={profile.photo} alt="Profile" />
@@ -195,16 +195,16 @@ const HodDash = () => {
                         <p>{profile.phone}</p>
                     </div>
                 </aside>
-            )}
+            )} */}
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image img-fluid">
-                        <img src={profile.photo} alt="Profile" />
+                        <img src={profile.profile} alt="Profile" />
                     </div>
                     <div className="profile-info">
                         <h3>{profile.full_name}</h3>
-                        <p>{profile.department_name}</p>
+                        <p>{profile.department}</p>
                         <hr />
                         <p>{profile.email}</p>
                         <p>{profile.phone}</p>

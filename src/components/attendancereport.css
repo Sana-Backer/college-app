@@ -1,0 +1,84 @@
+/* AttendanceReport.css */
+.attendance-report-container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    padding: 20px;
+    /* background-color: #f4f4f4; */
+    min-height: 100vh;
+  }
+  
+  /* .attendance-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #444;
+  } */
+ .attendance-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1d41c1;
+    text-align: start;
+}
+
+.attendance-title::after {
+    content: '';  
+    display: block;
+    width: 90%; /* Make the underline match the title width */
+    height: 4px;
+    background-color: #1d41c1;
+    border-radius: 2px;
+    margin-top: 5px;
+}
+  
+  .attendance-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+  }
+  
+  .attendance-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .attendance-card:hover {
+    transform: translateY(-5px);
+  }
+
+  
+  .attendance-info {
+    flex: 1;
+  }
+  
+  .subject-code {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .subject-details {
+    /* font-size: 14px; */
+    color: #666;
+  }
+  
+  .progress-circle {
+    width: 70px;
+    height: 70px;
+  }
+  @media (max-width:768px) {
+
+      .attendance-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 10px;
+  }
+  }

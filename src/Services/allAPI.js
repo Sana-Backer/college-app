@@ -146,13 +146,11 @@ export const deleteDeptApi = async (id, token) => {
 //edit department
 export const editDeptApi = async (id, deptdetails, token) => {
   return await commonAPI(
-    "PUT",
-    `${serverUrl}/departments/${id}/`,
-    deptdetails,
+    "PUT",`${serverUrl}/departments/${id}/`,deptdetails,
     {
       Authorization: `Bearer ${token}`,
     }
-  ); m
+  ); 
 };
 // dept view
 export const departmentApi = async () => {
@@ -205,13 +203,12 @@ export const facultyApi = async (token) => {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
-        // Pass token in Authorization header
       },
     });
     return response;
   } catch (error) {
     console.error("Error fetching faculty data", error);
-    throw error; // Rethrow error for proper handling in the component
+    throw error;
   }
 };
 
@@ -237,6 +234,16 @@ export const FacultyApi = async () => {
   }
   return await commonAPI("GET", `${serverUrl}/falist/`, null, {
     Authorization: `Bearer ${token}`,
+  });
+};
+
+// profile
+export const getUserProfileApi = async (userId, token) => {
+  return axios.get(`http://localhost:8000/api/profile/${userId}/`, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -286,7 +293,7 @@ export const upload_Studentnote = async (formData, reqHeader) => {
     return response;
   } catch (err) {
     console.error("Error in upload_Studentnote:", err.response || err.message);
-    throw err; // Re-throw to let the caller handle it
+    throw err;
   }
 };
 
@@ -339,19 +346,6 @@ export const deleteNoteApi = async (id, token) => {
     Authorization: `Bearer ${token}`,
   });
 }
-
-
-
-
-// profile
-export const getUserProfileApi = async (userId, token) => {
-  return axios.get(`http://localhost:8000/api/profile/${userId}/`, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
 
 // ---------------------notifications
 
