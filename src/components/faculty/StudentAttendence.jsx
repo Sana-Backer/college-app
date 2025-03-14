@@ -1,51 +1,50 @@
 import React, { useState, useEffect } from "react";
 import "./attendence.css";
-import { createStudentAttendanceApi, getBatchApi, getSubjectApi, StudentApi } from "../../Services/allAPI";
+import { 
+    createStudentAttendanceApi, 
+    getBatchApi, 
+    getSubjectApi, 
+    StudentApi,
+    getDepartmentsApi
+} from "../../Services/allAPI";
 import { useNavigate } from "react-router-dom";
 
 const StdAttendance = () => {
+    // State variables
+    const [departments, setDepartments] = useState([]);
+    const [batches, setBatches] = useState([]);
+    const [subjects, setSubjects] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [filteredStudents, setFilteredStudents] = useState([]);
     const [attendanceRecords, setAttendanceRecords] = useState([]);
-    const [batch, setBatch] = useState("");
-    const [subject, setSubject] = useState("");
-    const [date, setDate] = useState("");
+
+    const [selectedDepartment, setSelectedDepartment] = useState("");
     const [selectedBatch, setSelectedBatch] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
-    const [students, setStudents] = useState([]);
-    const [attendence, setAttendence] = useState([
-      { attendenceId:'',
-       studentId:'',
-       studentName:'',
-       Status:null}
 
-    ])
-    console.log('attendance',attendence);
-    
-    const [batches, setBatches] = useState([]);
-    const [subjects, setSubjects] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-    const [filteredStudents, setFilteredStudents] = useState([]);
 
-    const token = localStorage.getItem('access');
-    const navigate = useNavigate()
+    const token = localStorage.getItem("access");
+    const navigate = useNavigate();
 
-
+    // Fetch data: Departments, Batches, Subjects, and Students
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [batchResponse, subjectResponse, studentResponse] = await Promise.all([
+                const [deptResponse, batchResponse, subjectResponse, studentResponse] = await Promise.all([
+                    getDepartmentsApi(token),
                     getBatchApi(token),
                     getSubjectApi(token),
                     StudentApi(token)
                 ]);
 
+                setDepartments(deptResponse?.data || []);
                 setBatches(batchResponse?.data || []);
                 setSubjects(subjectResponse?.data || []);
-                setStudents(studentResponse?.data || [])
-                console.log(studentResponse);
-                
+                setStudents(studentResponse?.data || []);
             } catch (err) {
                 console.error("Error fetching data:", err);
                 setError("Failed to load data.");
@@ -54,107 +53,153 @@ const StdAttendance = () => {
 
         fetchData();
     }, [token]);
-    // filtering
+
+    // Filter students based on selected batch
     useEffect(() => {
-        if (batch) {
-            setFilteredStudents(students.filter(student => student.batch.toString() === batch));
+        if (selectedBatch) {
+            const filtered = students.filter(student => student.batch && String(student.batch) === String(selectedBatch));
+            setFilteredStudents(filtered);
+            // Initialize attendanceRecords for filtered students
+            setAttendanceRecords(filtered.map(student => ({
+                student_id: student.id,
+                status: "absent" // Default status
+            })));
         } else {
-            setFilteredStudents(students);
+            setFilteredStudents([]);
+            setAttendanceRecords([]);
         }
-    }, [batch, students]);
+    }, [selectedBatch, students]);
 
-
+    // Handle attendance status change
     const handleStatusChange = (index, status) => {
-        const updatedRecords = [...attendanceRecords];
-        updatedRecords[index] = { ...updatedRecords[index], status };
-        setAttendanceRecords(updatedRecords);
+        setAttendanceRecords(prevRecords => {
+            const updatedRecords = [...prevRecords];
+            updatedRecords[index] = { ...updatedRecords[index], status };
+            return updatedRecords;
+        });
     };
 
-    // Submit Attendance 
-    const handleSubmitAttendance = async (e) => {
-        e.preventDefault();
-      
-        const formData = new FormData();
-        formData.append("batch", selectedBatch);
-        formData.append("subject", selectedSubject);
-        formData.append("date", selectedDate);
-        formData.append("attendance_id",setAttendence)
-      
-        console.log("Submitting Attendance Data:", Object.fromEntries(formData.entries()));
-      
-        try {
-          const response = await createStudentAttendanceApi(token, formData);
-          if (response.status === 201) {
-            setSuccess("Attendance submitted successfully!");
-          } else {
-            setError("Failed to submit attendance.");
-          }
-        } catch (error) {
-          console.error("Error submitting attendance:", error);
+    // Submit attendance
+    const handleSubmitAttendance = async () => {
+        if (!selectedDepartment || !selectedBatch || !selectedSubject || !selectedDate) {
+            setError("Please select department, batch, subject, and date.");
+            return;
         }
-      };
-      
+        if (filteredStudents.length === 0) {
+            setError("No students available for attendance.");
+            return;
+        }
+
+        const attendanceData = attendanceRecords.map((record, index) => ({
+            student_id: parseInt(record.student_id),  
+            batch: parseInt(selectedBatch),
+            subject: parseInt(selectedSubject),
+            department: parseInt(selectedDepartment), 
+            date: selectedDate,  
+            status: record.status
+        }));
+console.log(attendanceData);
+
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const response = await createStudentAttendanceApi(token, attendanceData);
+            if (response.status === 201) {
+                setSuccess("Attendance submitted successfully!");
+                setAttendanceRecords([]);
+            } else {
+                setError(response.data?.error || "Failed to submit attendance.");
+            }
+        } catch (error) {
+            console.error("Error submitting attendance:", error);
+            setError(error.response?.data?.error || "Failed to submit attendance.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="student-attendance-container">
             <h2 className="attendence-title"> Attendance Sheet</h2>
             {error && <p className="error-message">{error}</p>}
-            {success && <p className="success-message">Attendance submitted successfully!</p>}
+            {success && <p className="success-message">{success}</p>}
+
+            {/* Filters */}
             <div className="filters">
+                <select value={selectedDepartment} onChange={(e) => setSelectedDepartment(e.target.value)}>
+                    <option value="">Select Department</option>
+                    {departments.map((dept) => (
+                        <option key={dept.id} value={dept.id}>{dept.department_name}</option>
+                    ))}
+                </select>
+
                 <select value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}>
                     <option value="">Select Batch</option>
                     {batches.map((b) => (
-                        <option key={b.id} value={b.batch_name}>{b.batch_name}</option>
+                        <option key={b.id} value={b.id}>{b.batch_name}</option>
                     ))}
                 </select>
+
                 <select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
                     <option value="">Select Subject</option>
                     {subjects.map((sub) => (
-                        <option key={sub.id} value={sub.name}>{sub.name}</option>
+                        <option key={sub.id} value={sub.id}>{sub.name}</option>
                     ))}
                 </select>
+
                 <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
             </div>
 
+            {/* Attendance Table */}
             <table className="std-attendence-table">
                 <thead>
                     <tr className="table-header">
-                        <th>Attendance ID</th>
+                        <th>#</th>
                         <th>Student ID</th>
                         <th>Student Name</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredStudents.map((student, index) => (
+                    {filteredStudents.length > 0 ? (
+                        filteredStudents.map((student, index) => (
                             <tr key={student.id}>
-                                <td value={attendence.id} >{index + 1}</td>
+                                <td>{index + 1}</td>
                                 <td>{student.id}</td>
                                 <td>{student.full_name}</td>
                                 <td>
                                     <select
-                                        value={student.status}
-                                        onChange={(e) => handleStatusChange(student.studentId, e.target.value)}                                    >
+                                        value={attendanceRecords[index]?.status || "absent"}
+                                        onChange={(e) => handleStatusChange(index, e.target.value)}
+                                    >
                                         <option value="present">Present</option>
                                         <option value="absent">Absent</option>
-                                        <option value="absent">Duty Leave</option>
+                                        <option value="duty_leave">Duty Leave</option>
                                     </select>
                                 </td>
-
-                            </tr>))
-                    }
-
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="4">No students found.</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 
-            <button
-                className="submit-btn"
-                onClick={handleSubmitAttendance}
-            >
+            {/* Submit Button */}
+            <button className="submit-btn" onClick={handleSubmitAttendance} disabled={loading}>
                 {loading ? "Submitting..." : "Submit Attendance"}
             </button>
-            <div className="mt-5 "><button className="btn p-2" onClick={() => navigate("/student-attendance-reports")}>view faculty attendence record</button></div>
 
+            {/* View Faculty Attendance Record */}
+            <div className="mt-5">
+                <button className="btn p-2" onClick={() => navigate("/student-attendance-reports")}>
+                    View Faculty Attendance Record
+                </button>
+            </div>
         </div>
     );
 };
