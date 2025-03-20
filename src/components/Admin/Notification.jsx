@@ -4,7 +4,7 @@ import { addNotificationApi, updateNotificationApi, deleteNotificationApi, getNo
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './notif.css';
-import { FaEdit, FaEye } from 'react-icons/fa'; 
+import { FaEdit, FaEye } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa6';
 
 const Notification = () => {
@@ -22,52 +22,30 @@ const Notification = () => {
         allNotifications();
     }, []);
 
-    useEffect(() => {
-        if (recipientType === 'particularStudent') {
-            fetchStudents();
-        } else {
-            setStudents([]);
-            setStudentOptions([]);
-        }
-    }, [recipientType]);
 
-    const fetchStudents = async () => {
-        const token = localStorage.getItem('access');
-        try {
-            const response = await StudentApi(token);
-            if (response.status === 200) {
-                const studentsData = response.data;
-                setStudents(studentsData);
-                const options = studentsData.map(student => ({
-                    value: student.id,
-                    label: student.full_name
-                }));
-                setStudentOptions(options);
-            } else if (response.status === 404) {
-                toast.error('Students not found.');
-            }
-        } catch (error) {
-            console.error('Error fetching students:', error);
-            toast.error('Failed to fetch students.');
-        }
-    };
 
     const allNotifications = async () => {
         const token = localStorage.getItem('access');
         try {
             const response = await getNotificationsApi(token);
-            if (response.status === 200) {
-                setNotifications(response.data);
+            console.log("API Response:", response); // ✅ Debugging
+    
+            // If response itself is an array, directly set notifications
+            if (Array.isArray(response)) {
+                setNotifications(response); // ✅ Corrected
+            } else if (response?.data && Array.isArray(response.data)) {
+                setNotifications(response.data); // ✅ Handles both cases
             } else {
-                toast.error('No notifications found.');
+                console.error("Invalid response format:", response);
+                setNotifications([]); // ✅ Avoids errors
             }
         } catch (error) {
             console.error('Error fetching notifications:', error);
             toast.error('Failed to fetch notifications.');
+            setNotifications([]); // ✅ Ensures no undefined errors
         }
     };
-
-    const handleSendNotification = async (e) => {
+        const handleSendNotification = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('access');
 
@@ -75,7 +53,7 @@ const Notification = () => {
             title,
             message,
             recipientType,
-            recipientIds: recipientType === 'particularStudent' ? recipientIds : []
+            // recipientIds: recipientType === 'particularStudent' ? recipientIds : []
         };
 
         try {
@@ -99,19 +77,19 @@ const Notification = () => {
             setMessage('');
             setRecipientType('');
             setRecipientIds([]);
-            allNotifications(); 
+            allNotifications();
         } catch (error) {
             console.error('Error sending notification:', error);
             toast.error('Failed to send notification.');
         }
     };
 
-    const handleDeleteNotification = async (id) => {
+    const handleDeleteNotification = async (notificationId) => {
         const token = localStorage.getItem('access');
         try {
-            const response = await deleteNotificationApi(id, token);
+            const response = await deleteNotificationApi(notificationId, token);
             if (response.status === 204) {
-                setNotifications(notifications.filter(notification => notification.id !== id));
+                setNotifications(notifications.filter(notification => notification.id !== notificationId));
                 toast.success('Notification deleted successfully.');
             } else if (response.status === 404) {
                 toast.error('Notification not found.');
@@ -173,33 +151,37 @@ const Notification = () => {
                         <option value="allStudents">All Students</option>
                     </select>
                 </div>
-              
+
                 <button type="submit" className="btn btn-primary">{selectedNotification ? 'Update' : 'Send'}</button>
             </form>
-            
+
             <button className="viewnotification" onClick={toggleNotifications}>
                 <FaEye /> {showNotifications ? 'Hide Notifications' : 'View Notifications'}
             </button>
-            <ToastContainer/>
-            {showNotifications && notifications.length > 0 && (
-                <div className="notifications-list">
-                    <h2 className='text-center mt-4'>All Notifications</h2>
-                    <div >
-                        {notifications.map(notification => (
-                            <div key={notification.id} className='notifications '>
-                               <div>
-                                    <h3>{notification.title}</h3>
-                                    <p>{notification.message}</p>
-                               </div>
-                               <div className='notification-actions '>
-                                    <button className='n-edit' onClick={() => handleEditNotification(notification)}> <FaEdit /></button>
-                                    <button className='n-delete' onClick={() => handleDeleteNotification(notification.id)}> <FaTrash /></button>
-                               </div>
-                            </div>
-                        ))}
+            <ToastContainer />
+            {/* ✅ Fix: Check if notifications is defined before accessing .length */}
+            {showNotifications && Array.isArray(notifications) && notifications.length > 0 ? (
+                notifications.map(notification => (
+                    <div key={notification.id} className="notifications">
+                        <div>
+                            <h3>{notification.title}</h3>
+                            <p>{notification.message}</p>
+                        </div>
+                        <div className="notification-actions">
+                            <button className="n-edit" onClick={() => handleEditNotification(notification)}>
+                                <FaEdit />
+                            </button>
+                            <button className="n-delete" onClick={() => handleDeleteNotification(notification.id)}>
+                                <FaTrash />
+                            </button>
+                        </div>
                     </div>
-                </div>
+                ))
+            ) : (
+               <></>
             )}
+
+
         </div>
     );
 };

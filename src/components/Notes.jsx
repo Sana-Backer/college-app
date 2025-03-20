@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { deleteNoteApi, FacultyApi, getCoursesApi, getNotes, getSubjectApi } from '../Services/allAPI';
+import { deleteNoteApi, FacultyApi, getCoursesApi, getNotes } from '../Services/allAPI';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './note.css'; 
@@ -9,9 +9,9 @@ const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [courses, setCourses] = useState([]);
   const [facultyList, setFacultyList] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-
+  const [searchQuery, setSearchQuery] = useState('');
   const [course, setCourse] = useState('');
+  const [semester, setSemester] = useState(''); // ✅ Semester filter state
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
@@ -28,17 +28,13 @@ const Notes = () => {
     }
 
     const fetchNotes = async () => {
-      const token = localStorage.getItem('access');
       if (!token) {
         toast.error('Authentication error: Missing token.');
         return;
       }
 
       try {
-        // Fetch all notes regardless of the user's role
         const notesData = await getNotes(token);
-
-        console.log('Notes:', notesData);
 
         const notesWithDetails = notesData.map(note => ({
           ...note,
@@ -53,6 +49,7 @@ const Notes = () => {
         toast.error('Failed to fetch notes.');
       }
     };
+
     const fetchCourses = async () => {
       try {
         const response = await getCoursesApi(token);
@@ -63,17 +60,6 @@ const Notes = () => {
         console.error('Error fetching courses:', error);
       }
     };
-
-    // const fetchSubjects = async () => {
-    //   try {
-    //     const response = await getSubjectApi(token);
-    //     if (response.status === 200) {
-    //       setSubjects(response.data);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching subjects:', error);
-    //   }
-    // };
 
     const fetchFacultyList = async () => {
       try {
@@ -86,27 +72,23 @@ const Notes = () => {
       }
     };
 
-
-
     fetchNotes();
     fetchCourses();
-    // fetchSubjects();
     fetchFacultyList();
   }, [course, userRole]);
 
-
   const getCourseName = (courseId) => {
     const course = courses.find(c => c.id === courseId);
-    return course ? course.course_name : "Unknown Course";
+    return course ? course.course_name : 'Unknown Course';
   };
 
   const getFacultyName = (facultyId) => {
     const faculty = facultyList.find(f => f.id === facultyId);
-    return faculty ? faculty.full_name : "Unknown Faculty";
+    return faculty ? faculty.full_name : 'Unknown Faculty';
   };
 
   const handleDeleteNote = async (noteId) => {
-    if (!window.confirm("Are you sure you want to delete this note?")) {
+    if (!window.confirm('Are you sure you want to delete this note?')) {
       return;
     }
 
@@ -119,42 +101,64 @@ const Notes = () => {
     try {
       const response = await deleteNoteApi(noteId, token);
       if (response.status === 204) {
-        toast.success("Note deleted successfully!");
+        toast.success('Note deleted successfully!');
         setNotes(prev => prev.filter(note => note.id !== noteId));
       } else {
-        toast.error("Failed to delete note.");
+        toast.error('Failed to delete note.');
       }
     } catch (error) {
-      console.error("Error deleting note:", error.response?.data || error.message);
-      toast.error("Error deleting note.");
+      console.error('Error deleting note:', error.response?.data || error.message);
+      toast.error('Error deleting note.');
     }
   };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
-};
-const filteredNotes= notes.filter((note) =>
-  note.title.toLowerCase().includes(searchQuery)
-);
+  };
 
+  // ✅ Filter notes by search query and selected semester
+  const filteredNotes = notes.filter(note =>
+    note.title.toLowerCase().includes(searchQuery) &&
+    (semester === '' || note.semester === parseInt(semester))
+  );
 
   return (
     <div className="notes-page">
       <h1 className="notes-title"> Notes </h1>
-      <div className="search-note">
-                <input
-                    type="text"
-                    className="search-input"
-                    placeholder="🔍Search by title..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                />
-            </div>
+
+      {/* ✅ Search Input */}
+      <div className="search-note me-auto">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="🔍 Search by title..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+
+      {/* ✅ Semester Filter Dropdown */}
+      <div className="filter-container">
+        <label htmlFor="semester">Filter by Semester:</label>
+        <select
+          id="semester"
+          value={semester}
+          onChange={(e) => setSemester(e.target.value)}
+        >
+          <option value="">All Semesters</option>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+            <option key={sem} value={sem}>{`Semester ${sem}`}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* ✅ Notes List */}
       <div className="notes-grid-container">  
         {filteredNotes.map(note => (
           <div className="note-card" key={note.id}>
             <h3 className="note-title">{note.title}</h3>
             <p className="note-info">Course: {getCourseName(note.course)}</p>
+            <p className="note-info">Semester: {note.semester}</p>
             <p className="note-info">Faculty: {getFacultyName(note.faculty)}</p>
             {note.fileUrl ? (
               <a className="note-link" href={note.fileUrl} target="_blank" rel="noopener noreferrer">

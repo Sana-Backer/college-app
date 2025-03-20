@@ -62,25 +62,28 @@ const StudentNoteView = () => {
     try {
       const response = await StudentApi(token);
       console.log("Full API Response:", response);
-
+  
       let studentsData = response.data.data || response.data;
       console.log("Fetched Students Data:", JSON.stringify(studentsData, null, 2));
-
-      if (!Array.isArray(studentsData)) {
-        console.error("Expected an array but received:", studentsData);
-        return;
-      }
-
-      if (studentsData.length > 0) {
+  
+      // ✅ Check if the response is an array or a single object
+      if (Array.isArray(studentsData)) {
         setStudents(studentsData);
+      } else if (typeof studentsData === 'object' && studentsData !== null) {
+        // ✅ Convert single object to array format
+        setStudents([studentsData]); // Wrap object in an array
       } else {
-        console.log("No students found.");
+        console.error("Unexpected response format:", studentsData);
         return;
       }
-
-      const currentUser = studentsData.find(student => student.full_name === username);
+  
+      // ✅ Find current user
+      const currentUser = studentsData.find
+        ? studentsData.find(student => student.full_name === username)
+        : studentsData; // If single student, use directly
+  
       console.log("Current User:", currentUser);
-
+  
       if (currentUser) {
         console.log("Current User Course ID:", currentUser.course);
         setCourseId(currentUser.course);
@@ -92,6 +95,7 @@ const StudentNoteView = () => {
       console.error("Error fetching student details:", error);
     }
   };
+  
 
   const fetchCourses = async () => {
     try {
@@ -132,9 +136,11 @@ const StudentNoteView = () => {
   };
 
   const getFacultyName = (facultyId) => {
-    const faculty = facultyList.find(f => f.id === facultyId);
+    if (!facultyList.length) return "Loading..."; // Ensure faculty list is loaded
+
+    const faculty = facultyList.find(f => Number(f.id) === Number(facultyId));
     return faculty ? faculty.full_name : "Unknown Faculty";
-  };
+};
 
   const filteredNotes = selectedSubject
     ? notes.filter(note => note.subject === selectedSubject)

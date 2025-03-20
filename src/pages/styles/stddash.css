@@ -188,9 +188,9 @@ hr {
 
 @media (max-width: 1200px) {
     .sidebar {
-        top: -10px;
+        top: -80px;
         max-height: 450px;
-        width: 20%;
+        width: fit-content;
         padding: 10px;
     }
 

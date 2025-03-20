@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaTrashAlt } from "react-icons/fa";
 import { deleteFacultyApi, departmentApi, editFacultyApi, FacultyApi } from "../../Services/allAPI";
-// import './viewfaculty.css'
+import './viewfaculty.css'
 
 function ViewFaculty() {
 
@@ -96,7 +96,10 @@ function ViewFaculty() {
   // Handle edit faculty details
   const handleEdit = (faculty) => {
     setSelectedFaculty(faculty);
+    console.log(faculty);
+
     setShowModal(true);
+
   };
 
   // Handle form input change
@@ -124,7 +127,7 @@ function ViewFaculty() {
     const formData = new FormData();
     formData.append("full_name", selectedFaculty.full_name);
     formData.append("email", selectedFaculty.email);
-    // formData.append("password", selectedFaculty.password);
+    formData.append("password", selectedFaculty.password);
     formData.append("phone", selectedFaculty.phone);
     formData.append("dob", selectedFaculty.dob);
     formData.append("gender", selectedFaculty.gender);
@@ -149,8 +152,7 @@ function ViewFaculty() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
+  }
   return (
     <div className=" container">
       <h2 className='title'>Faculty List</h2>
@@ -197,9 +199,7 @@ function ViewFaculty() {
                         <td>{faculty.full_name}</td>
                         <td>{faculty.email}</td>
                         <td>{faculty.phone}</td>
-                        <td>
-                          {departments.find(dept => dept.id === faculty.department)?.department_name || "N/A"}
-                        </td>
+                        <td>{faculty.department?.department_name || "N/A"}</td>
                         <td>{faculty.gender}</td>
                         <td>
                           {faculty.photo ? (
@@ -212,7 +212,7 @@ function ViewFaculty() {
                             "No Photo"
                           )}
                         </td>
-                        <td>
+                        <td className="faculty-actions">
                           <button className='edit-icon' onClick={() => handleEdit(faculty)}>
                             <FaEdit />
                           </button>
@@ -254,16 +254,31 @@ function ViewFaculty() {
               <Form.Control type="email" name="email" value={selectedFaculty?.email || ""} onChange={handleChange} />
             </Form.Group>
             {/* <Form.Group className="mt-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" value={selectedFaculty?.password || ""} onChange={handleChange} />
-            </Form.Group> */}
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" name="password" value={selectedFaculty?.password || ""} onChange={handleChange} />
+        </Form.Group> */}
             <Form.Group className="mt-3">
               <Form.Label>Phone</Form.Label>
               <Form.Control type="number" name="phone" value={selectedFaculty?.phone || ""} onChange={handleChange} />
             </Form.Group>
-            <Form.Group className="mt-3">
+            <Form.Group controlId="department" className="mt-3">
               <Form.Label>Department</Form.Label>
-              <Form.Control type="text" name="department" value={selectedFaculty?.department || ""} onChange={handleChange} />
+              <Form.Select
+                value={selectedFaculty?.department?.id || ""}
+                onChange={(e) =>
+                  setSelectedFaculty({
+                    ...selectedFaculty,
+                    department: { id: e.target.value, department_name: departments.find(d => d.id == e.target.value)?.department_name }
+                  })
+                }
+              >
+                <option value="">Select Department</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.department_name}
+                  </option>
+                ))}
+              </Form.Select>
             </Form.Group>
             <Form.Group className="mt-3">
               <Form.Label>Gender</Form.Label>

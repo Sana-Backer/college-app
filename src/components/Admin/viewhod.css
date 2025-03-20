@@ -128,15 +128,15 @@ table td {
 
 @media (max-width: 768px) {
 
-  .tablecontainer {
-    display: block;
-    width: 70%;
-    min-width: 700px;
-    overflow-x: auto;
-    white-space: nowrap;
-    margin-right: -800px;
+  @media (max-width: 768px) {
+    .tablecontainer {
+      width: 100%;
+      min-width: 700px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
   }
-
+  
   .hod-item {
     flex-direction: column;
     align-items: flex-start;
@@ -145,19 +145,29 @@ table td {
   .hod-actions {
     margin-top: 10px;
   }
+  table {
+    min-width: 800px;
+  }
+  
 }
-
-@media (max-width: 599px) {
-  .title{
-    text-align: center;
-  }
+@media (max-width: 600px) {
   .tablecontainer {
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  .tablecontainer {
-    overflow-x: auto;
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    display: block;
   }
 
+  table {
+    width: 100%;
+    min-width: 600px; /* Prevents table from shrinking */
+    border-collapse: collapse;
+  }
 
+  table th,
+  table td {
+    padding: 8px; /* Adjust padding for better fit */
+    font-size: 14px; /* Reduce font size for better spacing */
+    text-align: left;
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
 }

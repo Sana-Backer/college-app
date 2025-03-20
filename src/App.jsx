@@ -21,6 +21,9 @@ import AllDept from "./components/AllDept";
 import Courses from "./components/Courses";
 import ViewNotifications from "./components/ViewNotifications";
 import AttendanceView from "./components/faculty/AttendenceSheetStd";
+import ChatInterface from "./components/chatbot";
+import AttendanceRecord from "./components/faculty/AttendanceRecord";
+import StudentAttendance from './components/faculty/StudentAttendence'
 function App() {
   return (
     <>
@@ -33,7 +36,8 @@ function App() {
         <Route path="/hoddash" element={<HodDash />}></Route>
         <Route path="/hod/:hodId" element={<HodProfile  />} />
         <Route path="/faculty-attendance-record" element={<FacultyAttendanceRecord />} />
-        <Route path="/student-attendance-reports" element={<AttendanceView/>}/>
+        <Route path="/student-attendance" element={<AttendanceRecord/>}/>
+        <Route path="/attendance" element={<StudentAttendance/>}/>
 
 
         <Route path="/facultydash" element={<FacultyDash />}></Route>
@@ -51,6 +55,7 @@ function App() {
         <Route path="/Courses" element={<Courses/>}/>
         {/* <Route path="/notification" element={<ViewNotifications/>}/> */}
         <Route path="/ResultStd" element={<ResultStd/>}/>
+        <Route path="/chat" element={<ChatInterface/>}></Route>
       </Routes>
 \      <ToastContainer />
     </>

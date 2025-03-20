@@ -10,8 +10,6 @@
   font-size: 2rem;
   font-weight: bold;
   color: #1d41c1;
-  /* position: relative; */
-  /* display: inline-block; */
   text-align: start;
 }
 
@@ -24,6 +22,8 @@
   border-radius: 2px;
   margin-top: 5px;
 }
+
+
 .search-note input{
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -35,6 +35,8 @@
   .filter-container {
     display: flex;
     margin-top: 10px;
+    justify-content: flex-end;
+    
   }
   
   .custom-dropdown {

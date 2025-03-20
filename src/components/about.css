@@ -1,23 +1,25 @@
-
-.About-card{
+.About-card {
     /* background-color: rgb(142, 168, 185); */
     cursor: pointer;
     width: 50%;
     margin-top: -10px;
 
 }
-.About-card:hover{
+
+.About-card:hover {
     transition: 1s;
     background-color: rgb(227, 231, 233);
     color: white;
 }
-.icons{
+
+.icons {
     font-size: 50px;
     color: rgb(112, 152, 201);
     /* background: rgba(244, 242, 242, 0.4); */
     padding: 10px;
 }
-.icons:hover{
+
+.icons:hover {
     color: rgb(236, 231, 231);
 }
 
@@ -25,18 +27,22 @@
     border: 1px solid #d1cfcf;
     border-radius: 10px;
     width: 73%;
-    max-height: 500px; 
+    max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
     margin: auto;
     padding: 40px;
     margin-bottom: 25px;
-    background-color: #fff;  /* Ensures a clean background */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    background-color: #fff;
+    /* Ensures a clean background */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow */
 }
-.not{
-    overflow-y:  auto;
+
+.not {
+    overflow-y: auto;
 }
+
 /* Styling for notification cards */
 
 
@@ -53,11 +59,26 @@
 /* .people-details{
     background: rgb(198, 207, 206);
 } */
-.people-content{
-    /* border:2px dashed rgb(56, 156, 56); */
+.college-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 350px;
+    border: 1px solid #d1cfcf;
+    background-color: rgb(52, 63, 53);
+    color: #d1cfcf;
 }
-.people-details{
-    background: rgb(122, 123, 123,0.4);
+
+.college-container .college-info {
+    width: 500px;
+    text-align: center;
+    font-size: 18px;
+}
+.college-info h3{
+    font-weight: 600;
+}
+.college-contact-d{
+    font-style: italic;
 }
 @media (max-width: 768px) {
     .container {
@@ -65,15 +86,18 @@
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .About-card {
-        width: 48%; 
+        width: 48%;
     }
 }
+
 @media (max-width: 480px) {
     .About-card {
         width: 45%;
     }
-    .About-card p{
+
+    .About-card p {
         font-size: 15px;
 
     }

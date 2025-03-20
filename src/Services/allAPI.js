@@ -96,11 +96,13 @@ export const addStudentApi = async (formData, reqHeader) => {
   }
 };
 
-export const getStudentApi = async (token, userId) => {
-  return await commonAPI("GET", `${serverUrl}/stlist/${userId}`, null, {
+export const getStudentApi = async (id, token, isStudent) => {
+  const url = isStudent ? `${serverUrl}/stlist/` : `${serverUrl}/stlist/${id}`;
+  return await commonAPI("GET", url, null, {
     Authorization: `Bearer ${token}`,
   });
 };
+
 
 //delete student api
 export const deleteStudentApi = async (id, token) => {
@@ -146,11 +148,11 @@ export const deleteDeptApi = async (id, token) => {
 //edit department
 export const editDeptApi = async (id, deptdetails, token) => {
   return await commonAPI(
-    "PUT",`${serverUrl}/departments/${id}/`,deptdetails,
+    "PUT", `${serverUrl}/departments/${id}/`, deptdetails,
     {
       Authorization: `Bearer ${token}`,
     }
-  ); 
+  );
 };
 // dept view
 export const departmentApi = async () => {
@@ -349,11 +351,27 @@ export const deleteNoteApi = async (id, token) => {
 
 // ---------------------notifications
 
+
 export const getNotificationsApi = async (token) => {
-  return await commonAPI("GET", `${serverUrl}/notifications/view/`, null, {
-    Authorization: `Bearer ${token}`
-  });
+  try {
+    const response = await commonAPI("GET", `${serverUrl}/notifications/`, null, {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+
+    if (!response.data || !Array.isArray(response.data)) {
+      console.error("Invalid response data:", response.data);
+      return [];
+    }
+
+    return response.data.filter(notification => notification.is_student === true);
+    
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return []; // Return an empty array to avoid breaking `.map()` in React
+  }
 };
+
 
 export const getNotificationByIdApi = async (userId, token) => {
   return await commonAPI("GET", `${serverUrl}/notifications/${userId}/`, null, {
@@ -375,11 +393,41 @@ export const updateNotificationApi = async (id, data, token) => {
   });
 };
 
-export const deleteNotificationApi = async (id, token) => {
-  return await commonAPI("DELETE", `${serverUrl}/notifications/${id}/`, null, {
+export const deleteNotificationApi = async (notificationId, token) => {
+  return await commonAPI("DELETE", `${serverUrl}/notifications/${notificationId}/`, null, {
     Authorization: `Bearer ${token}`
   });
 };
+
+export const sendNotificationtoFacApi = async (data, token) => {
+  const requestData = {
+    ...data,  // Spread existing data
+    is_student: false, // Explicitly set is_student to false
+  };
+
+  return await commonAPI("POST", `${serverUrl}/notifications/`, requestData, {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  });
+};
+
+export const getNotificationsbyHodApi = async (token) => {
+  try {
+    const response = await commonAPI("GET", `${serverUrl}/notifications/`, null, {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+
+    // ✅ Filter notifications where `is_student` is `false`
+    return response.data.filter(notification => notification.is_student === false);
+    
+  } catch (error) {
+    console.error("Error fetching HOD notifications:", error);
+    throw error;
+  }
+};
+
+
 
 // --------------------Batch
 
@@ -417,8 +465,8 @@ export const getCoursesApi = async (token) => {
 // Edit Course API
 export const editCourseApi = async (courseId, token, courseData) => {
   return await commonAPI("PUT", `${serverUrl}/courses/${courseId}/`, courseData, {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
   });
 };
 
@@ -457,6 +505,15 @@ export const getSubjectApi = async (token, subjectData) => {
     Authorization: `Bearer ${token}`
   });
 };
+export const editSubjectApi = async (subjectid, token, subjectData) => {
+  return await commonAPI("PUT", `${serverUrl}/subjects/${subjectid}/`, subjectData, {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  });
+};
+
+
+
 // ----------------------Assignment
 
 export const addAssignmentApi = async (token, assignmentData) => {
@@ -506,11 +563,12 @@ export const deleteSubmissionApi = async (token, assignmentId, submissionId) => 
 };
 
 // delete assignment
-export const deleteAssignmentApi = async (id, token) => {
+export const deleteAssignmentApi = async (token, id) => {  // ✅ Corrected order
   return await commonAPI("DELETE", `${serverUrl}/assignments/${id}/`, null, {
     Authorization: `Bearer ${token}`
   });
 };
+
 
 // Get submissions for a specific assignment
 export const getSubmissionsApi = async (token, assignmentId) => {
@@ -530,31 +588,87 @@ export const createSubmissionApi = async (token, assignmentId, submissionData) =
 
 
 // Create student attendance
-export const createStudentAttendanceApi = async (data, token) => {
-  return await commonAPI("POST", `${serverUrl}/student_attendance/`, data, {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  });
-};
-export const getStudentAttendenceApi = async (token, data) => {
-  return await commonAPI("GET", `${serverUrl}/student_attendance/`, data, {
-    Authorization: ` Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-};
-export const getAttendenceRecord = async (token, report) => {
-  return await commonAPI("GET", `${serverUrl}/student-attendance-reports/`, report, {
-    Authorization: ` Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-};
-// 
-export const createFacultyAttendanceApi = async (token, data) => {
-  return commonAPI("POST", `${serverUrl}/faculty-attendance/`, data, token, {
-    headers: { "Content-Type": "application/json" },
-  });
+export const createStudentAttendanceApi = async (data,token) => {
+  return await commonAPI(
+    "POST",
+    `${serverUrl}/student_attendance/`, // Correct template literal
+    JSON.stringify(data),               // Ensure JSON is stringified
+    {
+      Authorization: `Bearer ${token}`, // Correct template literal
+      "Content-Type": "application/json",
+    }
+  );
 };
 
+export const getStudentAttendenceApi = async (filters) => {
+    try {
+        const response = await axios.get(`${serverUrl}/student_attendance/`, {
+            params: filters,  // Send filters as query params
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getAttendanceToStudentApi = async (userId, token) => {
+  try {
+      const response = await commonAPI("GET", `${serverUrl}/student_attendance/${userId}/`, null, {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+      });
+
+      console.log("API Response:", response.data); // Debugging log
+      return response.data; // ✅ Extract only the data array
+  } catch (error) {
+      console.error("API Error:", error.response ? error.response.data : error.message);
+      return []; // ✅ Return empty array instead of `{ data: [] }`
+  }
+};
+
+
+
+// fac attendance
+export const getFacultyAttendanceRecords = async (token) => {
+  try {
+    const response = await axios.get(`${serverUrl}/faculty-attendance/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching faculty attendance records:", error);
+    throw error;
+  }
+};
+
+
+
+
+export const createFacultyAttendanceApi = async (data, token) => {
+  try {
+      console.log("📤 Sending Request Data:", data);  // Debugging log
+      const response = await axios.post(
+          `${serverUrl}/faculty-attendance/`,
+          data,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      return response;
+  } catch (error) {
+      console.error("🚨 API Error Response:", error.response?.data || error);
+      throw error;
+  }
+};
 // ------------result
 // post
 export const uploadExamResultApi = async (token, title, file) => {

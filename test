@@ -1,0 +1,173 @@
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
+import { RiArrowGoForwardLine } from "react-icons/ri";
+import { FaPlus } from 'react-icons/fa';
+import { MdNotifications } from 'react-icons/md';
+import { toast } from 'react-toastify';
+import { getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
+
+import './fadash.css';
+import prof3 from '../assets/proff3.jpg';
+import ResultStd from '../components/ResultStd';
+import Notes from '../components/Notes';
+import FacultyProfile from '../components/faculty/FacultyProfile';
+import ViewStudent from '../components/Admin/ViewStudent';
+import AddStudent from '../components/Admin/AddStudent';
+import AddAssignment from '../components/AddAssignment';
+import AddNote from '../components/hod/AddNote';
+import StudentAttendence from '../components/faculty/StudentAttendence';
+import AssignmentView from '../components/AssignmentView';
+import { serverUrl } from '../Services/serverUrl';
+
+const FacultyDash = () => {
+    // const serverUrl = 'http://localhost:8000';
+    const navigate = useNavigate();
+
+    const [activeFeature, setActiveFeature] = useState("profile");
+    const [showModal, setShowModal] = useState(false);
+    const [showForm, setShowForm] = useState(null);
+    const [showActionMenu, setShowActionMenu] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [profile, setProfile] = useState({
+        full_name: '',
+        department: '',
+        email: '',
+        phone: '',
+        photo: null
+    });
+
+    useEffect(() => {
+        const fetchProfileDetails = async () => {
+            const token = localStorage.getItem('access');
+            const userId = localStorage.getItem('userId');
+            if (!token || !userId) {
+                toast.error('No token or user ID found in localStorage.');
+                return;
+            }
+            try {
+                const response = await getUserProfileApi(userId, token);
+                const profileData = response.data;
+                setProfile({
+                    full_name: profileData.full_name,
+                    department: profileData.department,
+                    email: profileData.email,
+                    phone: profileData.phone,
+                    photo: profileData.photo ? `${serverUrl}${profileData.photo}` : ''
+                });
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+                toast.error('Failed to fetch profile data.');
+            }
+        };
+        fetchProfileDetails();
+    }, []);
+
+    const fetchNotifications = async () => {
+        const token = localStorage.getItem("access");
+        try {
+            const response = await getNotificationsbyHodApi(token);
+            setNotifications(response);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+            toast.error("Failed to fetch notifications.");
+        }
+    };
+
+    const handleShowNotifications = () => {
+        fetchNotifications();
+        setShowNotifications(true);
+    };
+
+    const renderFeature = () => {
+        switch (activeFeature) {
+            case "students": return <ViewStudent />;
+            case "assignments": return <AssignmentView />;
+            case "result": return <ResultStd />;
+            case "notes": return <Notes />;
+            case "attendence": return <StudentAttendence />;
+            default: return <FacultyProfile />;
+        }
+    };
+
+    return (
+        <div className="faculty-dashboard">
+            <div className='backtohome d-flex justify-content-end mt-2'>
+                <Link to={'/home'} className='tohome'>Back to Home</Link>
+            </div>
+
+            <Navbar expand='lg' className="navigation-menu">
+                <div className='icon-photo ms-2 d-lg-none' onClick={() => setSidebarVisible(!sidebarVisible)}>
+                    <img src={profile.photo || prof3} className='img-fluid' alt="profile" />
+                </div>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="nav-links ms-auto me-auto">
+                        {["profile", "students", "notes", "assignments", "attendence", "result"].map(feature => (
+                            <a key={feature} href={`#${feature}`} onClick={() => setActiveFeature(feature)}
+                                className={activeFeature === feature ? "active" : ""}>
+                                {feature.charAt(0).toUpperCase() + feature.slice(1)}
+                            </a>
+                        ))}
+                        <MdNotifications className="notification-btn" onClick={handleShowNotifications} />
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+
+            {sidebarVisible && (
+                <aside className="profile-sidebar">
+                    <div className="profile-image">
+                        <img src={profile.photo || prof3} alt="Profile" />
+                    </div>
+                    <div className="stdprofile-info">
+                        <h4>{profile.full_name}</h4>
+                        <p>{profile.department}</p>
+                        <hr />
+                        <p>{profile.email}</p>
+                        <p>{profile.phone}</p>
+                    </div>
+                </aside>
+            )}
+
+            <div className="dashboard-content">
+                <main className="main-content">{renderFeature()}</main>
+            </div>
+
+            <button className="floating-action-btn" onClick={() => setShowActionMenu(!showActionMenu)}>
+                <FaPlus />
+            </button>
+
+            {showActionMenu && (
+                <div className="action-menu-container">
+                    <Button variant="primary" onClick={() => { setShowForm("Student"); setShowModal(true); }}>Add Student</Button>
+                    <Button variant="info" onClick={() => { setShowForm("Note"); setShowModal(true); }}>Add Note</Button>
+                    <Button variant="success" onClick={() => { setShowForm("Assignment"); setShowModal(true); }}>Add Assignment</Button>
+                </div>
+            )}
+
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add {showForm}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showForm === "Student" ? <AddStudent /> : showForm === "Note" ? <AddNote /> : <AddAssignment />}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showNotifications} onHide={() => setShowNotifications(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Notifications</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {notifications.length ? notifications.map((n, i) => (
+                        <div key={i}><h5>{n.title}</h5><p>{n.message}</p></div>
+                    )) : <p>No notifications available.</p>}
+                </Modal.Body>
+            </Modal>
+        </div>
+    );
+};
+
+export default FacultyDash;

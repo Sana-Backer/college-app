@@ -1,104 +1,76 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./AtendenceRecord.css";
-import { getBatchApi, getSubjectApi, StudentApi } from "../../Services/allAPI";
+import { getFacultyAttendanceRecords } from "../../Services/allAPI";
 
 const FacAttendanceView = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
-    const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectedStudent, setSelectedStudent] = useState("");
-    const [attendanceStatus, setAttendanceStatus] = useState("present");
 
+    const token = localStorage.getItem("access");
 
-    const token = localStorage.getItem('access');
+    useEffect(() => {
+        const fetchAttendanceRecords = async () => {
+            try {
+                setLoading(true);
+                setError(null);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const [batchResponse, subjectResponse, studentResponse] = await Promise.all([
-    //                 getBatchApi(token),
-    //                 getSubjectApi(token),
-    //                 StudentApi(token)
-    //             ]);
+                // ✅ Pass token when calling API
+                const response = await getFacultyAttendanceRecords(token);
 
-    //             setBatches(batchResponse?.data || []);
-    //             setSubjects(subjectResponse?.data || []);
-    //             setStudents(studentResponse?.data || [])
-    //         } catch (err) {
-    //             console.error("Error fetching data:", err);
-    //             setError("Failed to load data.");
-    //         }
-    //     };
+                console.log("Fetched Attendance:", response); // Debugging log
+                setAttendanceRecords(response);
+            } catch (error) {
+                console.error("Error fetching attendance records:", error);
+                setError("Failed to load attendance records.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    //     fetchData();
-    // }, [token]);
+        if (token) {
+            fetchAttendanceRecords();
+        } else {
+            setError("Unauthorized: Please log in.");
+        }
+    }, [token]);
 
-    // useEffect(() => {
-    //     if (batch) {
-    //         setFilteredStudents(students.filter(student => student.batch.toString() === batch));
-    //     } else {
-    //         setFilteredStudents(students);
-    //     }
-    // }, [batch, students]);
-
-    // Fetch attendancerecords
-    // const fetchAttendance = async () => {
-    //     setLoading(true);
-    //     setError(null);
-
-   
-    //     try {
-    //         const response = await axios.get("http://127.0.0.1:8000/api/faculty-attendance-reports/", {
-    //             headers: { Authorization: `Bearer ${token}` }
-    //         });
-
-    //         if (Array.isArray(response.data)) {
-    //             setStudents(response.data);
-    //         } else {
-    //             setStudents([]);
-    //             setError("Unexpected response format.");
-    //         }
-    //     } catch (err) {
-    //         console.error("Error fetching attendance:", err);
-    //         setError("Failed to fetch attendance records.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
- 
     return (
         <div className="attendance-view-container">
-            <h2>View Attendance Records</h2>
+            <h2>Faculty Attendance Records</h2>
+
             {error && <p className="error-message">{error}</p>}
-    
+            {loading && <p className="loading-message">Loading...</p>}
+
             <table>
                 <thead>
                     <tr>
-                        <th> ID</th>
-                        <th> Faculty</th>
-                        <th>Attendence</th>
+                        <th>SI No.</th>
+                        <th>Faculty id</th>
+                        <th>Attendance Date</th>
                         <th>Status</th>
-                        <th>created_at</th>
-                        <th >updated_at</th>
+                      
                     </tr>
                 </thead>
                 <tbody>
-              
-                            <tr >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td ></td>
+                    {attendanceRecords.length > 0 ? (
+                        attendanceRecords.map((record, index) => (
+                            <tr key={record.id}>
+                                <td>{index + 1}</td> {/* Serial Number */}
+                                <td>{record.faculty_id || "N/A"}</td>
+                                <td>{record.attendance_date}</td>
+                                <td>{record.status}</td>
                             </tr>
-                     
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="6" style={{ textAlign: "center" }}>
+                                No attendance records found
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
-
         </div>
     );
 };

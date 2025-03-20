@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { addAssignmentApi, getBatchApi, FacultyApi, facultyApi, HodApi, getSubjectApi } from '../Services/allAPI';
 
 const AddAssignment = () => {
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [batch, setBatch] = useState('');
@@ -82,6 +83,7 @@ const AddAssignment = () => {
     e.preventDefault();
 
     const assignmentData = {
+      id,
       title,
       description,
       sub,
@@ -97,7 +99,6 @@ const AddAssignment = () => {
 
       if (response.status === 201) {
         toast.success('Assignment uploaded successfully!');
-        navigate('/assignments'); // Redirect to assignments page after successful upload
       } else {
         toast.error('Failed to upload assignment');
       }
@@ -147,7 +148,7 @@ const AddAssignment = () => {
                 ))}
               </Form.Control>
             </Form.Group>
-        {role?.toLowerCase() === "hod" && (
+        {role?.toLowerCase() === "faculty" && (
           <>
             <Form.Group controlId="batch">
               <Form.Label>Batch</Form.Label>
@@ -166,45 +167,9 @@ const AddAssignment = () => {
               </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="hod">
-              <Form.Label>Select HOD</Form.Label>
-              <Form.Control
-                as="select"
-                value={hod}
-                onChange={(e) => setHod(e.target.value)}
-                required
-              >
-                <option value="">Select HOD</option>
-                {hods.map((h) => (
-                  <option key={h.id} value={h.id}>
-                    {h.full_name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
           </>
         )}
 
-       { role ==='faculty ' && (
-        <>
-           <Form.Group controlId="faculty">
-           <Form.Label>Select Faculty</Form.Label>
-           <Form.Control
-             as="select"
-             value={faculty}
-             onChange={(e) => setFaculty(e.target.value)}
-             required
-           >
-             <option value="">Select Faculty</option>
-             {faculties.map((f) => (
-               <option key={f.id} value={f.id}>
-                 {f.full_name}
-               </option>
-             ))}
-           </Form.Control>
-         </Form.Group>
-        </>
-       )}
 
         <Form.Group controlId="deadline">
           <Form.Label>Deadline</Form.Label>
@@ -215,7 +180,10 @@ const AddAssignment = () => {
             required
           />
         </Form.Group>
-
+        <Form.Group controlId="facultyId">
+          <Form.Label>Faculty ID</Form.Label>
+          <Form.Control type="text" value={localStorage.getItem('userId')} readOnly />
+        </Form.Group>
         <Button className="my-2" variant="primary" type="submit">
           Upload
         </Button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './assign.css';
-import {  getAssignmentSubmissions, deleteSubmissionApi, StudentApi, getAssignmentApi, deleteAssignmentApi } from '../Services/allAPI';
+import { getAssignmentSubmissions, deleteSubmissionApi, StudentApi, getAssignmentApi, deleteAssignmentApi } from '../Services/allAPI';
 import { FaEye, FaTrash, FaFilePdf } from "react-icons/fa";
 import { Button, Modal } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
@@ -68,13 +68,22 @@ const AssignmentView = () => {
     }, [token]);
 
     const handleViewSubmissions = async (assignmentId) => {
+        console.log("Assignment ID received:", assignmentId);  // Debug Log
+    
+        if (!assignmentId) {
+            console.error("Error: assignmentId is undefined or null.");
+            toast.error("Invalid assignment ID. Please try again.");
+            return;
+        }
+    
         setSubmissions([]);
         setSelectedAssignment(assignmentId);
         setShowModal(true);
-
+    
         try {
             const response = await getAssignmentSubmissions(token, assignmentId);
             if (response.status === 200 && Array.isArray(response.data)) {
+                console.log("Submissions data:", response.data);
                 setSubmissions(response.data);
             } else {
                 toast.info("No submissions found for this assignment.");
@@ -84,19 +93,23 @@ const AssignmentView = () => {
             toast.error("Error fetching submissions.");
         }
     };
-    // const handleDeleteAssignment = async(assignmentId)=>{
-    //         try{
-    //             const response = await deleteAssignmentApi(token, assignmentId);
-    //             if(response.status === 204){
-    //                 toast.success("Assignment deleted successfully.");
-    //                 setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
-    //             }
-    //         }catch(error){
-    //             console.error("Error deleting assignment:", error);
-    //             toast.error("Error deleting assignment.");
-    //         }
-        
-    // }
+    
+    const handleDeleteAssignment = async (assignmentId) => {
+        try {
+            const response = await deleteAssignmentApi(token, assignmentId);
+            
+            if (response?.status === 204) {
+                toast.success("Assignment deleted successfully.");
+                setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+            } else {
+                toast.error("Failed to delete assignment. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error deleting assignment:", error);
+            toast.error(error.response?.data?.detail || "Error deleting assignment.");
+        }
+    };
+    
 
     const handleDeleteSubmission = async (assignmentId, submissionId) => {
         if (window.confirm("Are you sure you want to delete this submission?")) {
@@ -125,9 +138,9 @@ const AssignmentView = () => {
 
     return (
         <div className="assignment-view-container">
-                  <h1 className="Assignment-title"> Assignments </h1>
+            <h1 className="Assignment-title"> Assignments </h1>
 
-            <div className="search-assigment">   
+            <div className="search-assigment">
                 <input
                     type="text"
                     className="search-input"
@@ -167,7 +180,7 @@ const AssignmentView = () => {
                                     </td>
                                     <td>
                                         <button className='delete-btn' onClick={() => handleDeleteAssignment(A.id)}>
-                                            <FaTrash /> 
+                                            <FaTrash />
                                         </button>
                                     </td>
                                 </tr>
@@ -177,7 +190,7 @@ const AssignmentView = () => {
                 )}
             </div>
             <div className='modal-dialog modal-lg custom-modal'>
-    
+
                 <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>Submissions for Assignment ID: {selectedAssignment}</Modal.Title>
@@ -200,7 +213,7 @@ const AssignmentView = () => {
                                         <tr key={S.id}>
                                             <td>{index + 1}</td>
                                             <td>{S.student || "N/A"}</td>
-                                            <td>{students[S.student] || "Fetching..."}</td>
+                                            <td>{S.student_name}</td>
                                             <td>
                                                 {S.file ? (
                                                     <a
@@ -237,8 +250,8 @@ const AssignmentView = () => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-    
-</div>
+
+            </div>
             <ToastContainer />
         </div>
     );

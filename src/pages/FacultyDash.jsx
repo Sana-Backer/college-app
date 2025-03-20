@@ -16,7 +16,7 @@ import AddNote from '../components/hod/AddNote';
 import StudentAttendence from '../components/faculty/StudentAttendence'
 import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
-import { getNotificationsApi, getUserProfileApi } from '../Services/allAPI';
+import { getNotificationsApi, getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
 import AssignmentView from '../components/AssignmentView';
 
 const FacultyDash = () => {
@@ -123,21 +123,21 @@ const FacultyDash = () => {
         setShowActionMenu(!showActionMenu);
     };
 
-    const fetchNotifications = async () => {
-        const token = localStorage.getItem('access');
-        try {
-            const response = await getNotificationsApi(token);
-            setNotifications(response.data);
-        } catch (error) {
-            console.error('Error fetching notifications:', error);
-            toast.error('Failed to fetch notifications.');
-        }
-    };
-
-    const handleShowNotifications = () => {
-        fetchNotifications();
-        setShowNotifications(true);
-    };
+       const fetchNotifications = async () => {
+           const token = localStorage.getItem("access");
+           try {
+               const response = await getNotificationsbyHodApi(token);
+               setNotifications(response);
+           } catch (error) {
+               console.error("Error fetching notifications:", error);
+               toast.error("Failed to fetch notifications.");
+           }
+       };
+   
+       const handleShowNotifications = () => {
+           fetchNotifications();
+           setShowNotifications(true);
+       };
 
     const handleCloseNotifications = () => {
         setShowNotifications(false);
@@ -146,6 +146,8 @@ const FacultyDash = () => {
     const handlePhotoClick = () => {
         setSidebarVisible(!sidebarVisible);
     };
+
+
     return (
         <div className="faculty-dashboard">
             <div className='backtohome  d-flex justify-content-end mt-2 '>
@@ -204,58 +206,25 @@ const FacultyDash = () => {
                         >
                             Result
                         </a>
-                        <MdNotifications
-                            className="notification-btn"
-                            onClick={handleShowNotifications}
-                        />
+                        <MdNotifications className="notification-btn" onClick={handleShowNotifications} />
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            {/* Profile Sidebar - positioned below the navbar */}
-            {/* {sidebarVisible && (
-                    <aside className="profile-sidebar">
-                        <div className="profile-image">
-                            <img src={profile.photo} alt="Profile" />
-                        </div>
-                        <div className="stdprofile-info">
-                            <h4>{profile.full_name}</h4>
-                            <hr />
-                            <p>{profile.email}</p>
-                            <p>{profile.phone}</p>
-                        </div>
-                    </aside>
-                )} */}
-            {sidebarVisible && (
-                <aside className="profile-sidebar">
-                    <div className="profile-image">
-                        {profile.photo ? (
-                            <img src={profile.photo} alt="Profile" />
-                        ) : (
-                            ' no image'
-                        )}
-                    </div>
-                    <div className="stdprofile-info">
-                        <h4>{profile.full_name}</h4>
-                        <p>{profile.department}</p>
-                        <hr />
-                        <p>{profile.email}</p>
-                        <p>{profile.phone}</p>
-                    </div>
-                </aside>
-            )}
+          
+        
 
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image">
-                        <img src={prof3} alt="Profile" />
+                        <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">
-                        <h4>{profile.full_name}</h4>
+                        {/* <h4>{profile.full_name}</h4>
                         <p>{profile.department}</p>
                         <hr />
                         <p>{profile.email}</p>
-                        <p>{profile.phone}</p>
+                        <p>{profile.phone}</p> */}
                     </div>
                 </aside>
 
@@ -313,25 +282,16 @@ const FacultyDash = () => {
             </Modal>
 
             {/* Notifications Modal */}
-            <Modal show={showNotifications} onHide={handleCloseNotifications} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Notifications</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {notifications.length > 0 ? (
-                        <ul className="notification-list">
-                            {notifications.map((notification, index) => (
-                                <li key={index} className="notification-item">
-                                    <h5>{notification.title}</h5>
-                                    <p>{notification.message}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No notifications available.</p>
-                    )}
-                </Modal.Body>
-            </Modal>
+            <Modal show={showNotifications} onHide={() => setShowNotifications(false)} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Notifications</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {notifications.length ? notifications.map((n, i) => (
+                                    <div key={i}><h5>{n.title}</h5><p>{n.message}</p></div>
+                                )) : <p>No notifications available.</p>}
+                            </Modal.Body>
+                        </Modal>
         </div>
     );
 };

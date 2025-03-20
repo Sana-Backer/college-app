@@ -10,7 +10,6 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const StdAttendance = () => {
-    // State variables
     const [departments, setDepartments] = useState([]);
     const [batches, setBatches] = useState([]);
     const [subjects, setSubjects] = useState([]);
@@ -59,10 +58,10 @@ const StdAttendance = () => {
         if (selectedBatch) {
             const filtered = students.filter(student => student.batch && String(student.batch) === String(selectedBatch));
             setFilteredStudents(filtered);
-            // Initialize attendanceRecords for filtered students
+
             setAttendanceRecords(filtered.map(student => ({
-                student_id: student.id,
-                status: "absent" // Default status
+                student_id: student.student_id || null,  
+                status: "present" 
             })));
         } else {
             setFilteredStudents([]);
@@ -89,23 +88,25 @@ const StdAttendance = () => {
             setError("No students available for attendance.");
             return;
         }
-
+    
         const attendanceData = attendanceRecords.map((record, index) => ({
-            student_id: parseInt(record.student_id),  
-            batch: parseInt(selectedBatch),
-            subject: parseInt(selectedSubject),
-            department: parseInt(selectedDepartment), 
-            date: selectedDate,  
+            student_id: filteredStudents[index].user,
+            batch: selectedBatch,
+            subject: selectedSubject,
+            department: selectedDepartment,
+            date: selectedDate,
             status: record.status
         }));
-console.log(attendanceData);
-
+        
+    
+        console.log("📌 Submitting Attendance Data:", attendanceData);
+    
         setLoading(true);
         setError(null);
         setSuccess(null);
-
+    
         try {
-            const response = await createStudentAttendanceApi(token, attendanceData);
+            const response = await createStudentAttendanceApi(attendanceData, token);
             if (response.status === 201) {
                 setSuccess("Attendance submitted successfully!");
                 setAttendanceRecords([]);
@@ -113,12 +114,13 @@ console.log(attendanceData);
                 setError(response.data?.error || "Failed to submit attendance.");
             }
         } catch (error) {
-            console.error("Error submitting attendance:", error);
+            console.error("❌ Error submitting attendance:", error);
             setError(error.response?.data?.error || "Failed to submit attendance.");
         } finally {
             setLoading(false);
         }
     };
+    
 
     return (
         <div className="student-attendance-container">
@@ -165,13 +167,13 @@ console.log(attendanceData);
                 <tbody>
                     {filteredStudents.length > 0 ? (
                         filteredStudents.map((student, index) => (
-                            <tr key={student.id}>
+                            <tr key={student.student_id}>  {/* ✅ Use student.id instead of student.student_id */}
                                 <td>{index + 1}</td>
-                                <td>{student.id}</td>
+                                <td>{student.student_id}</td>  {/* ✅ Use student.id */}
                                 <td>{student.full_name}</td>
                                 <td>
                                     <select
-                                        value={attendanceRecords[index]?.status || "absent"}
+                                        value={attendanceRecords[index]?.status || ""}
                                         onChange={(e) => handleStatusChange(index, e.target.value)}
                                     >
                                         <option value="present">Present</option>
@@ -196,7 +198,7 @@ console.log(attendanceData);
 
             {/* View Faculty Attendance Record */}
             <div className="mt-5">
-                <button className="btn p-2" onClick={() => navigate("/student-attendance-reports")}>
+                <button className="btn p-2" onClick={() => navigate("/student-attendance")}>
                     View Faculty Attendance Record
                 </button>
             </div>

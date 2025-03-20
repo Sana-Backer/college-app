@@ -12,10 +12,12 @@ function AddFaculty() {
     email: "",
     phone: "",
     password: "",
-    department: "",
+    department_id: "",
     photo: null,
     role: "faculty",
   });
+  console.log(userData);
+  
   const [departments, setDepartments] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null)
@@ -55,9 +57,9 @@ function AddFaculty() {
     e.preventDefault();
     setIsLoading(true);
 
-    const { full_name, dob, gender, email, phone, password, department, photo } = userData;
+    const { full_name, dob, gender, email, phone, password, department_id, photo } = userData;
 
-    if (!full_name || !dob || !gender || !email || !phone || !password || !department || !photo) {
+    if (!full_name || !dob || !gender || !email || !phone || !password || !department_id || !photo) {
       toast.warning("Please fill out all fields");
       setIsLoading(false);
       return;
@@ -71,7 +73,7 @@ function AddFaculty() {
       formData.append("email", email);
       formData.append("phone", phone);
       formData.append("password", password);
-      formData.append("department", department);
+      formData.append("department_id", department_id);
       formData.append("role", userData.role);
       formData.append("photo", photo);
 
@@ -85,7 +87,7 @@ function AddFaculty() {
           email: "",
           phone: "",
           password: "",
-          department: "",
+          department_id: "",
           photo: null,
           role: "faculty",
         });
@@ -162,8 +164,8 @@ function AddFaculty() {
               </div>
 
               <div className="input-group">
-                <label htmlFor="department">Department</label>
-                <select id="department" name="department" value={userData.department} onChange={handleChange} className="select-field">
+                <label htmlFor="department_id">Department</label>
+                <select id="department_id" name="department_id" value={userData.department_id} onChange={handleChange} className="select-field">
                   <option value="">Select Department</option>
                   {departments.map((D)=>(
                     <option key={D.id} value={D.id}>{D.department_name}</option>

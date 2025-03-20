@@ -79,7 +79,7 @@ const ViewSubject = () => {
                             <th>Name</th>
                             <th>Department</th>
                             <th>Course</th>
-                            <th>Actions</th>
+                            {/* <th>Actions</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -89,14 +89,14 @@ const ViewSubject = () => {
                                     <td>{subject.name}</td>
                                     <td>{getDeptName(subject.department)}</td>
                                     <td>{getCourseName(subject.course)}</td>
-                                    <td className='course-actions'>
+                                    {/* <td className='course-actions'>
                                         <button className='editbtn' onClick={() => handleEdit()}>
                                             <FaEdit />
                                         </button>
                                         <button className="deletebtn" onClick={() => handleDelete()}>
                                             <FaTrashAlt />
                                         </button>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             ))
                         ) : (

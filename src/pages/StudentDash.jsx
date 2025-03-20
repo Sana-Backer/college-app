@@ -128,26 +128,14 @@ const StudentDash = () => {
                             <Link onClick={() => handleActiveFeature("notes")}>Notes</Link>
                             <Link onClick={() => handleActiveFeature("attendence")}>Attendance</Link>
                             <Link onClick={() => handleActiveFeature("result")}>Result</Link>
-                            <MdNotifications
+                            {/* <MdNotifications
                                 className="notification"
                                 onClick={handleShowNotifications}
-                            />
+                            /> */}
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
-                {sidebarVisible && (
-                    <aside className="profile-sidebar">
-                        <div className="profile-image">
-                            <img src={profile.photo} alt="Profile" />
-                        </div>
-                        <div className="stdprofile-info">
-                            <h4>{profile.full_name}</h4>
-                            <hr />
-                            <p>{profile.email}</p>
-                            <p>{profile.phone}</p>
-                        </div>
-                    </aside>
-                )}
+              
 
                 <div className='d-flex row'>
                     <div className="sidebar  col-lg-2 col-md-4 col-sm-12 container mb-2" id='hidesidebar'>

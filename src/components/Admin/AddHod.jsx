@@ -100,28 +100,6 @@ function AddHod() {
         }
       };
     
-  //   try {
-  //     const response = await registerApi({ ...userData, department: Number(department) });
-  //     if (response.status === 200) {
-  //       toast.success("OTP sent successfully");
-  //       setUserData({ full_name: "", dob: "", gender: "", email: "", phone: "", password: "", department: "", role: "hod" });
-  //       navigate("/Otp", { state: { email: userData.email } });
-  //     } else {
-  //       toast.error("Registration failed! Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during registration:", error.response?.data || error.message);
-  //     if (error.response?.data) {
-  //       Object.keys(error.response.data).forEach((field) => {
-  //         toast.error(`${field}: ${error.response.data[field].join(", ")}`);
-  //       });
-  //     } else {
-  //       toast.error("An unexpected error occurred. Please try again.");
-  //     }
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <div className="registration-page">

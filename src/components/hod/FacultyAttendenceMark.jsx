@@ -37,15 +37,19 @@ const FacAttendence = () => {
 
                 // Fetch faculty list
                 const facultyResponse = await facultyApi(token);
+                console.log(facultyResponse);
+
                 setFaculties(facultyResponse?.data || []);
 
                 // Initialize attendance state with faculty details
                 const initialAttendance = facultyResponse?.data.map((faculty, index) => ({
                     SI_No: index + 1,
-                    facultyId: faculty.id,
+                    facultyId: faculty.user,  // <-- This is where we store user ID
                     status: "present",
-                    recordedBy: hodId  // Use HOD name instead of username state
+                    recordedBy: hodId
                 }));
+
+
                 setAttendance(initialAttendance);
 
             } catch (err) {
@@ -67,43 +71,38 @@ const FacAttendence = () => {
     useEffect(() => {
         const userData = (localStorage.getItem("username"));
 
+
+
         if (userData) {
             setRecordedBy(userData.name);
         }
     }, []);
 
     // Submit Attendance
-    const handleSubmitAttendance = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        setSuccess(null);
+    const handleSubmitAttendance = async () => {
+        const token = localStorage.getItem('access');
 
-        const attendanceData = attendance.map(item => ({
-            faculty_id: item.facultyId,  // Match API field
-            attendance_date: selectedDate,
-            status: item.status,
-            recorded_by: username
+        if (!token || attendance.length === 0) {
+            console.error("Token not found or no attendance data.");
+            return;
+        }
+
+        const attendanceData = attendance.map(faculty => ({
+            faculty_id: faculty.facultyId,  // ✅ Use actual faculty IDs
+            attendance_date: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+            status: faculty.status, // ✅ Use selected status
         }));
 
-        console.log("Submitting Attendance Data:", attendanceData);
+        console.log("📌 Sending Attendance Data:", attendanceData); // Debugging Log
 
         try {
-            const response = await createFacultyAttendanceApi(token, JSON.stringify({ attendance: attendanceData }));
-
-            if (response.status === 201) {
-                setSuccess("Attendance submitted successfully!");
-                setAttendance(attendance.map(item => ({ ...item, status: "present" })));
-            } else {
-                setError("Failed to submit attendance.");
-            }
+            const response = await createFacultyAttendanceApi(attendanceData, token);
+            console.log("✅ Attendance submitted successfully:", response.data);
         } catch (error) {
-            console.error("Error submitting attendance:", error);
-            setError("An error occurred.");
-        } finally {
-            setLoading(false);
+            console.error("❌ Error submitting attendance:", error.response?.data || error);
         }
     };
+
 
 
 
@@ -130,15 +129,14 @@ const FacAttendence = () => {
                         <tr>
                             <th>SI No.</th>
                             <th>Faculty ID</th>
-                            {/* <th>Faculty Name</th> */}
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {attendance.map((faculty, index) => (
-                            <tr key={faculty.facultyId}>
-                                <td>{faculty.SI_No}</td>
-                                <td>{faculty.facultyId}</td>
+                            <tr key={index}> {/* Avoid using faculty.user if it's undefined */}
+                                <td>{index + 1}</td> {/* Dynamic Serial Number */}
+                                <td>{faculty.facultyId}</td> {/* Corrected to use faculty.facultyId */}
                                 <td>
                                     <select
                                         value={faculty.status}
@@ -152,6 +150,8 @@ const FacAttendence = () => {
                         ))}
                     </tbody>
                 </table>
+
+
 
                 <button className="submit-btn" onClick={handleSubmitAttendance} disabled={loading}>
                     {loading ? "Submitting..." : "Submit Attendance"}

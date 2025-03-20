@@ -125,6 +125,10 @@
   width: 50% !important;
   display: flex !important;
 }
+.modal-body input,
+.modal-body textarea {
+  text-align: center;
+}
 
 @media (min-width: 1001px) {
   .full-description {
@@ -175,5 +179,24 @@
     /* Optional: Prevent too much stretching */
     /* white-space: normal; */
   }
+
+  .modal-dialog {
+    max-width: 90% !important;
+    width: 100% !important;
+    margin: auto !important;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    padding: 15px;
+  }
+
+  .modal-body input,
+  .modal-body textarea {
+    font-size: 14px;
+    padding: 8px;
+    width: 100%;
+  }
+
 
 }

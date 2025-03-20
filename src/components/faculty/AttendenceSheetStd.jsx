@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./attendenceView.css";
+import { getBatchApi } from "../../Services/allAPI";
 
 const MonthlyAttendance = () => {
     const [students, setStudents] = useState([]);
@@ -13,9 +14,7 @@ const MonthlyAttendance = () => {
     useEffect(() => {
         const fetchBatches = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/batches/", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const response = await getBatchApi()
                 setBatches(response.data);
             } catch (error) {
                 console.error("Error fetching batches:", error);
@@ -24,24 +23,6 @@ const MonthlyAttendance = () => {
         fetchBatches();
     }, [token]);
 
-    // useEffect(() => {
-    //     if (batch && month) {
-    //         fetchAttendance();
-    //     }
-    // }, [batch, month]);
-
-    // const fetchAttendance = async () => {
-    //     try {
-    //         const response = await axios.get("http://127.0.0.1:8000/api/monthly-attendance/", {
-    //             params: { batch, month },
-    //             headers: { Authorization: `Bearer ${token}` },
-    //         });
-    //         setStudents(response.data.students);
-    //         setAttendanceData(response.data.attendance);
-    //     } catch (error) {
-    //         console.error("Error fetching attendance:", error);
-    //     }
-    // };
 
     const daysInMonth = new Date(month.split("-")[0], month.split("-")[1], 0).getDate();
     const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -79,23 +60,7 @@ const MonthlyAttendance = () => {
                                 </td>
                             ))}
                         </tr>
-                        <tr >
-                            <td>12</td>
-                            <td>Sana Thasneem K A</td>
-                            {daysArray.map((day) => (
-                                <td key={day} className="attendance-status">
-                                    {/* {attendanceData[student.id]?.[day] || "-"} */}
-                                </td>
-                            ))}
-                        </tr>  <tr >
-                            <td>12</td>
-                            <td>Muhammed ansil rahman</td>
-                            {daysArray.map((day) => (
-                                <td key={day} className="attendance-status">
-                                    {/* {attendanceData[student.id]?.[day] || "-"} */}
-                                </td>
-                            ))}
-                        </tr>
+                        
                 </tbody>
             </table>
         </div>

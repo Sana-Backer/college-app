@@ -52,7 +52,6 @@ const HodProfile = () => {
     return (
         <div className="profile mt-2 border py-3 px-3">
             <h2>HOD Profile</h2>
-            <div className="d-flex justify-content-end"><RiEdit2Fill /></div> {/* Edit icon */}
             <hr />
             <div className="profile-details d-flex flex-row">
                 <div className="col-lg-3">Name</div>:
@@ -78,11 +77,11 @@ const HodProfile = () => {
                 <div className="col-lg-3">Phone</div>:
                 <div className="col-lg-5 ms-2">{userDetails.phone}</div>
             </div>
-            <hr />
+            {/* <hr />
             <div className="profile-details d-flex flex-row">
                 <div className="col-lg-3">Department</div>:
                 <div className="col-lg-5 ms-2">{userDetails.department}</div>
-            </div>
+            </div> */}
         </div>
     );
 };

@@ -12,6 +12,7 @@ import AddStudent from '../components/Admin/AddStudent';
 import AddFaculty from '../components/Admin/AddFaculty';
 import AddDepartment from '../components/Admin/AddDepartment';
 import AddNote from '../components/hod/AddNote';
+import AddNotification from '../components/hod/NotificationtoFac'
 import Notification from '../components/Admin/Notification';
 import FacultyAttendenceMark from '../components/hod/FacultyAttendenceMark';
 import { getUserProfileApi, departmentApi } from '.././Services/allAPI';
@@ -19,7 +20,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import AssignmentStd from '../components/AssignmentStd';
 
-// import './hoddash.css'
+import './hoddash.css'
 import AddAssignment from '../components/AddAssignment';
 
 const HodDash = () => {
@@ -36,22 +37,22 @@ const HodDash = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [showDetails, setShowDetails] = useState(false);
-    const [sidebarVisible, setSidebarVisible] = useState(false); 
+    const [sidebarVisible, setSidebarVisible] = useState(false);
 
     useEffect(() => {
         const fetchProfileDetails = async () => {
             const token = localStorage.getItem('access');
             const userId = localStorage.getItem('userId');
-    
+
             if (!token || !userId) {
                 toast.error('Authentication error: Missing token or user ID.');
                 return;
             }
-    
+
             try {
                 const response = await getUserProfileApi(userId, token);
                 const profileData = response.data;
-    
+
                 setProfile({
                     full_name: profileData.full_name || "N/A",
                     email: profileData.email || "N/A",
@@ -60,16 +61,16 @@ const HodDash = () => {
                     department: profileData.department?.id || "N/A"  // Ensure department name is fetched
                 });
                 console.log(profileData);
-                
+
             } catch (error) {
                 console.error('Error fetching profile data:', error);
                 toast.error('Failed to fetch profile data.');
             }
         };
-    
+
         fetchProfileDetails();
     }, []);
-    
+
 
     const handleActiveFeature = (feature) => {
         setShowNotifications(false);
@@ -88,8 +89,7 @@ const HodDash = () => {
                 return <ViewFaculty />;
             case "attendenceMark":
                 return <FacultyAttendenceMark />;
-            case "notes":
-                return <Notes />;
+           
             case "assignments":
                 return <AssignmentStd />;
 
@@ -121,17 +121,17 @@ const HodDash = () => {
 
     return (
         <div className=''>
-             <div className='backtohome  d-flex justify-content-end mt-2 '>
-                            <Link to={'/home'} className='tohome'>
-                                Back to Home</Link>
-                        </div>
+            <div className='backtohome  d-flex justify-content-end mt-2 '>
+                <Link to={'/home'} className='tohome'>
+                    Back to Home</Link>
+            </div>
             <Navbar expand="lg" className="navigation-menu">
                 <div className='icon-photo ms-2 d-lg-none' onClick={handlePhotoClick}>
                     <img src={profile.photo} className='img-fluid' alt="profile" />
                 </div>
-                
+
                 <Navbar.Toggle aria-controls="basic-navbar-nav" className='ms-auto' />
-                
+
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="nav-links ms-auto me-auto mt-2">
                         <a
@@ -155,13 +155,7 @@ const HodDash = () => {
                         >
                             All Students
                         </a>
-                        <a
-                            href="#notes"
-                            onClick={() => handleActiveFeature("notes")}
-                            className={activeFeature === "notes" ? "active" : ""}
-                        >
-                            Notes
-                        </a>
+                       
                         <a
                             href="#assignments"
                             onClick={() => handleActiveFeature("assignments")}
@@ -174,37 +168,22 @@ const HodDash = () => {
                             onClick={() => handleActiveFeature("attendenceMark")}
                             className={activeFeature === "attendenceMark" ? "active" : ""}
                         >
-                           Faculty Attendance
+                            Faculty Attendance
                         </a>
-                        <MdNotifications className="notification-btn" />
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
 
-            {/* Profile Sidebar - positioned below the navbar */}
-            {/* {sidebarVisible && (
-                <aside className="hprofile-sidebar">
-                    <div className="hprofile-image">
-                        <img src={profile.photo} alt="Profile" />
-                    </div>
-                    <div className="hprofile-info">
-                        <h4>{profile.full_name}</h4>
-                        <p>{profile.department_name}</p>
-                        <hr />
-                        <p>{profile.email}</p>
-                        <p>{profile.phone}</p>
-                    </div>
-                </aside>
-            )} */}
+    
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image img-fluid">
-                        <img src={profile.profile} alt="Profile" />
+                        <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">
                         <h3>{profile.full_name}</h3>
-                        <p>{profile.department}</p>
+                        {/* <p>{profile.department}</p> */}
                         <hr />
                         <p>{profile.email}</p>
                         <p>{profile.phone}</p>
@@ -222,41 +201,39 @@ const HodDash = () => {
             </button>
 
             <Modal show={showModal} onHide={handleModalClose} centered className="custom-modal">
-                <Modal.Header closeButton className="custom-modal-header">
-                    <Modal.Title>{showForm ? `Add ${showForm}` : "Select User Type"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="custom-modal-body">
-                    {!showForm ? (
-                        <div className="d-flex justify-content-around">
-                            <Button variant="primary" onClick={() => setShowForm("Student")} className="custom-button m-2">
-                                Add Student
-                            </Button>
-                            <Button variant="success" onClick={() => setShowForm("Faculty")} className="custom-button m-2">
-                                Add Faculty
-                            </Button>
-                            <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
-                                Add Department
-                            </Button>
-                            <Button variant="info" onClick={() => setShowForm("Notes")} className="custom-button m-2">
-                                Add Notes
-                            </Button>
-                            <Button variant="info" onClick={() => setShowForm("Assignment")} className="custom-button m-2">
-                                Add Assignment
-                            </Button>
-                        </div>
-                    ) : showForm === "Student" ? (
-                        <AddStudent onClose={handleModalClose} />
-                    ) : showForm === "Faculty" ? (
-                        <AddFaculty onClose={handleModalClose} />
-                    ) : showForm === "Department" ? (
-                        <AddDepartment onClose={handleModalClose} />
-                    ) : showForm === "Notes" ? (
-                        <AddNote onClose={handleModalClose} />
-                    ) : showForm === "Assignment" ? (
-                        <AddAssignment onClose={handleModalClose} />
-                    ) : null}
-                </Modal.Body>
-            </Modal>
+    <Modal.Header closeButton className="custom-modal-header">
+        <Modal.Title>{showForm ? `Add ${showForm}` : "Select User Type"}</Modal.Title>
+    </Modal.Header>
+    <Modal.Body className="custom-modal-body">
+        {!showForm ? (
+            <div className="d-flex justify-content-around">
+                <Button variant="primary" onClick={() => setShowForm("Student")} className="custom-button m-2">
+                    Add Student
+                </Button>
+                <Button variant="success" onClick={() => setShowForm("Faculty")} className="custom-button m-2">
+                    Add Faculty
+                </Button>
+                <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
+                    Add Department
+                </Button>
+                <Button variant="danger" onClick={() => setShowForm("Notification")} className="custom-button m-2">
+                    Add Notification
+                </Button>
+            </div>
+        ) : showForm === "Student" ? (
+            <AddStudent onClose={handleModalClose} />
+        ) : showForm === "Faculty" ? (
+            <AddFaculty onClose={handleModalClose} />
+        ) : showForm === "Department" ? (
+            <AddDepartment onClose={handleModalClose} />
+        ) : showForm === "Notes" ? (
+            <AddNote onClose={handleModalClose} />
+        ) : showForm === "Notification" ? (
+            <AddNotification onClose={handleModalClose} />
+        ) : null}
+    </Modal.Body>
+</Modal>
+
         </div>
     );
 };

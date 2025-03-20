@@ -95,7 +95,7 @@ function Login() {
               <input type="checkbox" />
               <p>Remember me</p>
             </div>
-            <p>Forgot Password</p>
+            {/* <p>Forgot Password</p> */}
           </div>
 
           <button type="submit" className="signBtn">
@@ -103,13 +103,13 @@ function Login() {
           </button>
         </form>
 
-        <button className="google">
+        {/* <button className="google">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
             alt="Google logo"
           />
           Sign in with Google
-        </button>
+        </button> */}
         <p className="spf">
           Don't have an account? <Link to="/signup">Click here to signup</Link>
         </p>
