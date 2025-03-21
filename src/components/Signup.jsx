@@ -1,43 +1,54 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { loginApi } from "../Services/allAPI";
+import { toast, ToastContainer } from "react-toastify";
 
 function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+    const [userData, setUserData] = useState({
+      email: "",
+      password: "",
+    });
+  
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Fields",
-        text: "Please enter both email and password!",
-      });
+
+    if (!userData.email || !userData.password) {
+      toast.error("Please enter all fields");
       return;
     }
 
-    // Validate credentials
-    if (email === "bvcollege2024@gmail.com" && password === "admin2024") {
-      Swal.fire({
-        icon: "success",
-        title: "Login Successful",
-        text: "Welcome back!",
-        confirmButtonText: "Proceed",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/admin-home");
-        }
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Login Failed",
-        text: "Invalid email or password.",
-      });
+    try {
+      const result = await loginApi(userData);
+      if (result.status === 200) {
+        // Storing the token and user data in localStorage
+        localStorage.setItem("loggedUser", JSON.stringify(result.data));
+        localStorage.setItem("access", result.data.access);
+        localStorage.setItem("role", result.data.role);
+
+        setUserData({ email: "", password: "" });
+        toast.success("Login successful");
+        navigate("/admin-home");
+      } else if (result.status === 401) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred");
     }
   };
+
 
   return (
     <div
@@ -64,20 +75,22 @@ function SignUp() {
           >
             <div className="mb-4 mt-3">
               <input
+              name="email"
                 type="text"
                 placeholder="Enter email"
                 className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={userData.email}
+                onChange={handleChange}
               />
             </div>
             <div className="mb-4">
               <input
+              name="password"
                 type="password"
                 placeholder="Enter password"
                 className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={userData.password}
+                onChange={handleChange}
               />
             </div>
             <div className="mb-3">

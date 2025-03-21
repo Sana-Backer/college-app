@@ -24,6 +24,7 @@ import AttendanceView from "./components/faculty/AttendenceSheetStd";
 import ChatInterface from "./components/chatbot";
 import AttendanceRecord from "./components/faculty/AttendanceRecord";
 import StudentAttendance from './components/faculty/StudentAttendence'
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
@@ -53,7 +54,8 @@ function App() {
         <Route path="/AllDept" element={<AllDept />} ></Route>
 
         <Route path="/Courses" element={<Courses/>}/>
-        {/* <Route path="/notification" element={<ViewNotifications/>}/> */}
+        <Route path="/contactus" element={<Footer/>}/>
+
         <Route path="/ResultStd" element={<ResultStd/>}/>
         <Route path="/chat" element={<ChatInterface/>}></Route>
       </Routes>

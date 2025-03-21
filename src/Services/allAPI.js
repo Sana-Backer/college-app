@@ -105,8 +105,8 @@ export const getStudentApi = async (id, token, isStudent) => {
 
 
 //delete student api
-export const deleteStudentApi = async (id, token) => {
-  return await commonAPI("DELETE", `${serverUrl}/stlist/${id}/`, "", {
+export const deleteStudentApi = async (student_id, token) => {
+  return await commonAPI("DELETE", `${serverUrl}/stlist/${student_id}/`, "", {
     Authorization: `Bearer ${token}`,
   });
 };

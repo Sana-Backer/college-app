@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import './Home.css';
 import About from '../components/About';
 import logo from '../assets/logo.png';
+import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -27,6 +28,7 @@ const Home = () => {
         </div>
       </div>
       <About/>
+      <Footer/>
 
     </>
   )

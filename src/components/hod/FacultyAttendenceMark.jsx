@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./FacAttendence.css";
 import { createFacultyAttendanceApi, facultyApi, HodApi } from "../../Services/allAPI";
 import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const FacAttendence = () => {
     const [selectedDate, setSelectedDate] = useState("");
@@ -41,7 +42,6 @@ const FacAttendence = () => {
 
                 setFaculties(facultyResponse?.data || []);
 
-                // Initialize attendance state with faculty details
                 const initialAttendance = facultyResponse?.data.map((faculty, index) => ({
                     SI_No: index + 1,
                     facultyId: faculty.user,  // <-- This is where we store user ID
@@ -98,8 +98,10 @@ const FacAttendence = () => {
         try {
             const response = await createFacultyAttendanceApi(attendanceData, token);
             console.log("✅ Attendance submitted successfully:", response.data);
+            toast.success('Attendance added successfullty')
         } catch (error) {
             console.error("❌ Error submitting attendance:", error.response?.data || error);
+            toast.error('error submitting attendance')
         }
     };
 
@@ -142,8 +144,9 @@ const FacAttendence = () => {
                                         value={faculty.status}
                                         onChange={(e) => handleStatusChange(index, e.target.value)}
                                     >
-                                        <option value="present">Present</option>
-                                        <option value="absent">Absent</option>
+                                        <option classNam='present' value="present">Present</option>
+                                        <option className="absent" value="absent">Absent</option>
+                                        <option className="duty-leave" value="duty_leave">Duty Leave</option>
                                     </select>
                                 </td>
                             </tr>

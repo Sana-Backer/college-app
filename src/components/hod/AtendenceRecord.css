@@ -58,6 +58,12 @@ th, td {
     font-weight: bold;
 }
 
+.duty-leave {
+    color: orange;
+    font-weight: bold;
+}
+
+
 .error-message {
     color: red;
     text-align: center;

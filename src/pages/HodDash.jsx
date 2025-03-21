@@ -18,8 +18,7 @@ import FacultyAttendenceMark from '../components/hod/FacultyAttendenceMark';
 import { getUserProfileApi, departmentApi } from '.././Services/allAPI';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import AssignmentStd from '../components/AssignmentStd';
-
+import AssignmentView from '../components/AssignmentView'
 import './hoddash.css'
 import AddAssignment from '../components/AddAssignment';
 
@@ -89,9 +88,10 @@ const HodDash = () => {
                 return <ViewFaculty />;
             case "attendenceMark":
                 return <FacultyAttendenceMark />;
-           
-            case "assignments":
-                return <AssignmentStd />;
+            // case "assignments":
+            //     return <AssignmentView />;
+            // case "notes":
+            //     return < Notes />;
 
             default:
                 return <HodProfile />;
@@ -155,14 +155,21 @@ const HodDash = () => {
                         >
                             All Students
                         </a>
-                       
-                        <a
+
+                        {/* <a
                             href="#assignments"
                             onClick={() => handleActiveFeature("assignments")}
                             className={activeFeature === "assignments" ? "active" : ""}
                         >
                             Assignments
                         </a>
+                        <a
+                            href="#notes"
+                            onClick={() => handleActiveFeature("notes")}
+                            className={activeFeature === "notes" ? "active" : ""}
+                        >
+                            Notes
+                        </a> */}
                         <a
                             href="#attendenceMark"
                             onClick={() => handleActiveFeature("attendenceMark")}
@@ -174,7 +181,7 @@ const HodDash = () => {
                 </Navbar.Collapse>
             </Navbar>
 
-    
+
 
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
@@ -201,38 +208,38 @@ const HodDash = () => {
             </button>
 
             <Modal show={showModal} onHide={handleModalClose} centered className="custom-modal">
-    <Modal.Header closeButton className="custom-modal-header">
-        <Modal.Title>{showForm ? `Add ${showForm}` : "Select User Type"}</Modal.Title>
-    </Modal.Header>
-    <Modal.Body className="custom-modal-body">
-        {!showForm ? (
-            <div className="d-flex justify-content-around">
-                <Button variant="primary" onClick={() => setShowForm("Student")} className="custom-button m-2">
-                    Add Student
-                </Button>
-                <Button variant="success" onClick={() => setShowForm("Faculty")} className="custom-button m-2">
-                    Add Faculty
-                </Button>
-                <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
-                    Add Department
-                </Button>
-                <Button variant="danger" onClick={() => setShowForm("Notification")} className="custom-button m-2">
-                    Add Notification
-                </Button>
-            </div>
-        ) : showForm === "Student" ? (
-            <AddStudent onClose={handleModalClose} />
-        ) : showForm === "Faculty" ? (
-            <AddFaculty onClose={handleModalClose} />
-        ) : showForm === "Department" ? (
-            <AddDepartment onClose={handleModalClose} />
-        ) : showForm === "Notes" ? (
-            <AddNote onClose={handleModalClose} />
-        ) : showForm === "Notification" ? (
-            <AddNotification onClose={handleModalClose} />
-        ) : null}
-    </Modal.Body>
-</Modal>
+                <Modal.Header closeButton className="custom-modal-header">
+                    <Modal.Title>{showForm ? `Add ${showForm}` : "Select User Type"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="custom-modal-body">
+                    {!showForm ? (
+                        <div className="d-flex justify-content-around">
+                            <Button variant="primary" onClick={() => setShowForm("Student")} className="custom-button m-2">
+                                Add Student
+                            </Button>
+                            <Button variant="success" onClick={() => setShowForm("Faculty")} className="custom-button m-2">
+                                Add Faculty
+                            </Button>
+                            <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
+                                Add Department
+                            </Button>
+                            <Button variant="danger" onClick={() => setShowForm("Notification")} className="custom-button m-2">
+                                Add Notification
+                            </Button>
+                        </div>
+                    ) : showForm === "Student" ? (
+                        <AddStudent onClose={handleModalClose} />
+                    ) : showForm === "Faculty" ? (
+                        <AddFaculty onClose={handleModalClose} />
+                    ) : showForm === "Department" ? (
+                        <AddDepartment onClose={handleModalClose} />
+                    ) : showForm === "Notes" ? (
+                        <AddNote onClose={handleModalClose} />
+                    ) : showForm === "Notification" ? (
+                        <AddNotification onClose={handleModalClose} />
+                    ) : null}
+                </Modal.Body>
+            </Modal>
 
         </div>
     );

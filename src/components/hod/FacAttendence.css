@@ -65,7 +65,32 @@ th, td {
     padding: 8px 16px;
     cursor: pointer;
 }
+/* Default styling */
+select {
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white; /* Default white before selection */
+    color: black;
+}
 
+/* Apply colors only after selection */
+/* select.present {
+    background-color: lightgreen;
+    color: green;
+}
+
+select.absent {
+    background-color: lightcoral;
+    color: red;
+}
+
+select.duty-leave {
+    background-color: lightsalmon;
+    color: orange;
+} */
 @media (max-width: 600px) {
     table {
         display: block;

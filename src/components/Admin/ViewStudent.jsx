@@ -33,7 +33,8 @@ const ViewStudent = () => {
     course: '',
     batch: '',
     gender: '',
-    photo: null
+    photo: null,
+    student_id:''
   });
 
   useEffect(() => {
@@ -101,16 +102,22 @@ const ViewStudent = () => {
 
 
   const handleEdit = (student) => {
-    setSelectedStudent(student);
+    setSelectedStudent({
+      ...student,
+      user: student.user || student.id // Ensure the ID is set
+    });
     setShowModal(true);
   };
-
-  const handleDelete = async (studentId) => {
+  
+  const handleDelete = async (student_id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
     try {
-      const response = await deleteStudentApi(studentId, localStorage.getItem('access'));
+      const response = await deleteStudentApi(student_id, localStorage.getItem('access'));
+              console.log("studentid",student_id);
+
       if (response.status === 204) {
-        setStudents(students.filter(student => student.id !== studentId));
+        setStudents(students.filter(student => student.id !== student_id));
+        
         toast.success("Student deleted successfully!");
       }
     } catch (error) {
@@ -122,28 +129,30 @@ const ViewStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     const formData = new FormData();
     Object.keys(selectedStudent).forEach((key) => {
       if (selectedStudent[key] && key !== 'photo') {
         formData.append(key, selectedStudent[key]);
       }
     });
-
+  
     if (selectedStudent.photo instanceof File) {
       formData.append("photo", selectedStudent.photo);
     }
-
+  
     try {
-      const response = await editStdApi(selectedStudent.id, formData, localStorage.getItem('access'));
+      console.log("Submitting Student ID:", selectedStudent.student_id); // Debugging output
+      const response = await editStdApi(selectedStudent.user, formData, localStorage.getItem('access'));
+      
       if (response.status === 200) {
         setStudents(students.map(student =>
-          student.id === selectedStudent.id ? { ...response.data } : student
+          student.user === selectedStudent.user ? { ...response.data } : student
         ));
         setShowModal(false);
         toast.success("Student details updated!");
       } else {
-        toast.error("Failed to update Student details.");
+        toast.error("Failed to update student details.");
       }
     } catch (error) {
       console.error("Error updating student:", error);
@@ -152,6 +161,7 @@ const ViewStudent = () => {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <Container>
@@ -230,7 +240,7 @@ const ViewStudent = () => {
                   <button className='editbtn' onClick={() => handleEdit(student)}>
                     <FaEdit />
                   </button>
-                  <button onClick={() => handleDelete(student.id)} className="deletebtn">
+                  <button onClick={() => handleDelete(student.student_id)} className="deletebtn">
                     <FaTrashAlt />
                   </button>
                 </td>
@@ -269,14 +279,7 @@ const ViewStudent = () => {
                   onChange={(e) => setSelectedStudent({ ...selectedStudent, email: e.target.value })}
                 />
               </Form.Group>
-              <Form.Group controlId="password" className="mt-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={selectedStudent.phone}
-                  onChange={(e) => setSelectedStudent({ ...selectedStudent, phone: e.target.value })}
-                />
-              </Form.Group>
+           
 
               {/* Phone */}
               <Form.Group controlId="phone" className="mt-3">
