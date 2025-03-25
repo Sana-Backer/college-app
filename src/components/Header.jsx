@@ -37,7 +37,7 @@ const Header = () => {
                 {/* User Info */}
                 <div className='d-flex mt-1'>
                         <FaUser className='text-light' />
-                        <p className='ms-1 text-light'>{role}</p>
+                        <p className='ms-1 text-light'>{username}</p>
                     </div>
 
                 {/* Logout */}

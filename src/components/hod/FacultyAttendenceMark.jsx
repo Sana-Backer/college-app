@@ -23,19 +23,7 @@ const FacAttendence = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch HOD details
-                // const hodResponse = await HodApi(token);
-                // let hodId = null;
-
-                // if (hodResponse.data) {
-                //     hodId = hodResponse.data.id; 
-
-                //     // localStorage.setItem('hodId', hodId); 
-                //     setHodId(hodId); // Set HOD name in state
-                // }
-
-                // setHod(hodResponse?.data || []);
-
+               
                 // Fetch faculty list
                 const facultyResponse = await facultyApi(token);
                 console.log(facultyResponse);
@@ -46,6 +34,7 @@ const FacAttendence = () => {
                     SI_No: index + 1,
                     facultyId: faculty.user,  // <-- This is where we store user ID
                     status: "present",
+                    name : faculty.full_name,
                     recordedBy: hodId
                 }));
 
@@ -89,11 +78,12 @@ const FacAttendence = () => {
 
         const attendanceData = attendance.map(faculty => ({
             faculty_id: faculty.facultyId,  // ✅ Use actual faculty IDs
-            attendance_date: new Date().toISOString().split("T")[0], // YYYY-MM-DD
-            status: faculty.status, // ✅ Use selected status
+            name : faculty.full_name,
+            attendance_date: new Date().toISOString().split("T")[0],
+            status: faculty.status, 
         }));
 
-        console.log("📌 Sending Attendance Data:", attendanceData); // Debugging Log
+        console.log("📌 Sending Attendance Data:", attendanceData);
 
         try {
             const response = await createFacultyAttendanceApi(attendanceData, token);
@@ -127,27 +117,31 @@ const FacAttendence = () => {
                 </div>
 
                 <table>
-                    <thead>
+                    <thead className="fac-detail">
                         <tr>
                             <th>SI No.</th>
                             <th>Faculty ID</th>
+                            <th>Name</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {attendance.map((faculty, index) => (
-                            <tr key={index}> {/* Avoid using faculty.user if it's undefined */}
-                                <td>{index + 1}</td> {/* Dynamic Serial Number */}
-                                <td>{faculty.facultyId}</td> {/* Corrected to use faculty.facultyId */}
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{faculty.facultyId}</td>
+                                <td>{faculty.name}</td>
                                 <td>
                                     <select
                                         value={faculty.status}
                                         onChange={(e) => handleStatusChange(index, e.target.value)}
+                                        style={{ color: faculty.status === "present" ? "darkGreen" : faculty.status === "absent" ? "red" : "orange" }}
                                     >
-                                        <option classNam='present' value="present">Present</option>
-                                        <option className="absent" value="absent">Absent</option>
-                                        <option className="duty-leave" value="duty_leave">Duty Leave</option>
+                                        <option value="present" style={{ color: "green" }}>Present</option>
+                                        <option value="absent" style={{ color: "red" }}>Absent</option>
+                                        <option value="duty_leave" style={{ color: "orange" }}>Duty Leave</option>
                                     </select>
+
                                 </td>
                             </tr>
                         ))}

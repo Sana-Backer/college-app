@@ -224,7 +224,10 @@ export const deleteFacultyApi = async (id, token) => {
 //edit faculty
 export const editFacultyApi = async (id, facultydetails, token) => {
   return await commonAPI("PUT", `${serverUrl}/falist/${id}/`, facultydetails, {
-    Authorization: `Bearer ${token}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -669,6 +672,22 @@ export const createFacultyAttendanceApi = async (data, token) => {
       throw error;
   }
 };
+export const deleteFacultyAttendenceApi = async (token, id) => {
+
+  try {
+    const response = await axios.delete(`${serverUrl}/faculty-attendance/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": 'application/json'
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error deleting attendance  report:", error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
 // ------------result
 // post
 export const uploadExamResultApi = async (token, title, file) => {
@@ -700,7 +719,7 @@ export const ExamResultApi = async (token) => {
 export const deleteExamResultApi = async (token, id) => {
 
   try {
-    const response = await axios.delete(`http://localhost:8000/api/exam_result/${id}/`, {
+    const response = await axios.delete(`${serverUrl}/exam_result/${id}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -159,28 +159,30 @@ const Notification = () => {
                 <FaEye /> {showNotifications ? 'Hide Notifications' : 'View Notifications'}
             </button>
             <ToastContainer />
-            {/* ✅ Fix: Check if notifications is defined before accessing .length */}
-            {showNotifications && Array.isArray(notifications) && notifications.length > 0 ? (
-                notifications.map(notification => (
-                    <div key={notification.id} className="notifications">
-                        <div>
-                            <h3>{notification.title}</h3>
-                            <p>{notification.message}</p>
+           <div className='notifications-list'>
+            <h2 className='mt-5'>All Notifications </h2>
+                {showNotifications && Array.isArray(notifications) && notifications.length > 0 ? (
+                    notifications.map(notification => (
+                        <div key={notification.id} className="notifications">
+                            <div>
+                                <h3>{notification.title}</h3>
+                                <p>{notification.message}</p>
+                            </div>
+                            <div className="notification-actions">
+                                <button className="n-edit" onClick={() => handleEditNotification(notification)}>
+                                    <FaEdit />
+                                </button>
+                                <button className="n-delete" onClick={() => handleDeleteNotification(notification.id)}>
+                                    <FaTrash />
+                                </button>
+                            </div>
                         </div>
-                        <div className="notification-actions">
-                            <button className="n-edit" onClick={() => handleEditNotification(notification)}>
-                                <FaEdit />
-                            </button>
-                            <button className="n-delete" onClick={() => handleDeleteNotification(notification.id)}>
-                                <FaTrash />
-                            </button>
-                        </div>
-                    </div>
-                ))
-            ) : (
-               <></>
-            )}
-
+                    ))
+                ) : (
+                   <></>
+                )}
+    
+           </div>
 
         </div>
     );

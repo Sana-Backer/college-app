@@ -62,12 +62,12 @@ const ViewStudent = () => {
         setCourses(Array.isArray(courseResponse.data) ? courseResponse.data : []);
 
         const batchResponse = await getBatchApi(token);
-        console.log("Batch Response:", batchResponse.data); // Debugging API response
+        console.log("Batch Response:", batchResponse.data); 
 
         if (Array.isArray(batchResponse.data)) {
           setBatches(batchResponse.data);
         } else {
-          setBatches([]); // Ensure batches is always an array
+          setBatches([]); 
         }
 
       } catch (error) {
@@ -104,7 +104,7 @@ const ViewStudent = () => {
   const handleEdit = (student) => {
     setSelectedStudent({
       ...student,
-      user: student.user || student.id // Ensure the ID is set
+      user: student.user || student.id
     });
     setShowModal(true);
   };
@@ -142,7 +142,7 @@ const ViewStudent = () => {
     }
   
     try {
-      console.log("Submitting Student ID:", selectedStudent.student_id); // Debugging output
+      console.log("Submitting Student ID:", selectedStudent.student_id); 
       const response = await editStdApi(selectedStudent.user, formData, localStorage.getItem('access'));
       
       if (response.status === 200) {

@@ -13,26 +13,12 @@
   padding: 0.5rem 1rem;
 }
 
-/* .tohome {
-  background-color:rgb(73, 73, 197) ;
-  border: none;
-  border-radius: 50px;
- padding: 10px 20px;
-  font-size: 17px;
-  color: white;
-  text-decoration: none;
-}
-.tohome:hover{
-  background-color: rgb(50, 50, 164);
-  color: white;
-  text-decoration: none;
-}
- */
+
 
 .notification-btn {
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6c757d;
+  color: white;
   transition: color 0.3s ease;
 }
 

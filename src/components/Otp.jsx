@@ -26,7 +26,9 @@ function Otp() {
       const response = await verifyOtpApi({ otp, email }); 
       if (response.status === 200) {
         toast.success('OTP verified successfully!');
-        navigate('/');
+        setTimeout(() => {
+          navigate(-1); 
+        }, 1000);
       } else {
         toast.error('Invalid OTP. Please try again.');
       }

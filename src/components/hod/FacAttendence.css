@@ -1,6 +1,4 @@
 .attendance-container {
-    width: 90%;
-    max-width: 800px;
     margin: auto;
     padding: 20px;
     background: #f9f9f9;
@@ -28,6 +26,10 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+}
+.fac-detail th{
+    background-color: #dbdada;
+    text-align: center;
 }
 
 th, td {
@@ -65,32 +67,15 @@ th, td {
     padding: 8px 16px;
     cursor: pointer;
 }
-/* Default styling */
 select {
     border: none;
     font-weight: bold;
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
-    background-color: white; /* Default white before selection */
-    color: black;
 }
 
-/* Apply colors only after selection */
-/* select.present {
-    background-color: lightgreen;
-    color: green;
-}
 
-select.absent {
-    background-color: lightcoral;
-    color: red;
-}
-
-select.duty-leave {
-    background-color: lightsalmon;
-    color: orange;
-} */
 @media (max-width: 600px) {
     table {
         display: block;

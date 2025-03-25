@@ -101,24 +101,41 @@ function ViewFaculty() {
     setShowModal(true);
 
   };
-
-  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedFaculty((prevFaculty) => ({
-      ...prevFaculty,
-      [name]: value,
-    }));
+    if (name === 'photo') {
+      setSelectedFaculty((prevFaculty) => ({
+        ...prevFaculty,
+        [name]: e.target.files[0],
+      }));
+    } else {
+      setSelectedFaculty((prevFaculty) => ({
+        ...prevFaculty,
+        [name]: value,
+      }));
+    }
   };
 
-  // Handle photo input change
-  const handlePhotoChange = (e) => {
-    setSelectedFaculty((prevFaculty) => ({
-      ...prevFaculty,
-      photo: e.target.files[0],
-    }));
-  };
 
+  // Handle form input change
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setSelectedFaculty((prevFaculty) => ({
+  //     ...prevFaculty,
+  //     [name]: value,
+  //   }));
+  // };
+
+  // const handlePhotoChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setSelectedFaculty((prevFaculty) => ({
+  //       ...prevFaculty,
+  //       photo: file,
+  //     }));
+  //   }
+  // };
+  
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -288,10 +305,19 @@ function ViewFaculty() {
               <Form.Label>Role</Form.Label>
               <Form.Control type="text" name="role" value={selectedFaculty?.role || ""} onChange={handleChange} />
             </Form.Group>
-            <Form.Group className="mt-3">
-              <Form.Label>Photo</Form.Label>
-              <Form.Control type="file" name="photo" onChange={handlePhotoChange} />
-            </Form.Group>
+        <Form.Group className="mt-3">
+                     <Form.Label>Current Photo</Form.Label>
+                     <div>
+                       {selectedFaculty?.photo && (
+                         <img
+                           src={selectedFaculty.photo instanceof File ? URL.createObjectURL(selectedFaculty.photo) : `${serverUrl}${selectedFaculty.photo}`}
+                           alt="HOD"
+                           style={{ width: "80px", height: "80px", borderRadius: "50%", marginBottom: "10px" }}
+                         />
+                       )}
+                     </div>
+                     <Form.Control type="file" name="photo" onChange={handleChange} />
+                   </Form.Group>
 
             <Button variant="primary" type="submit" className="mt-4 w-100" disabled={isSubmitting}>
               {isSubmitting ? <Spinner animation="border" size="sm" /> : "Update"}

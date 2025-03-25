@@ -84,7 +84,7 @@
     font-size: 14px;
   }
   .notifications-list {
-    max-height: 300px; /* Adjust as needed */
+    max-height: 350px; /* Adjust as needed */
     overflow-y: auto;
     overflow-x: hidden;
 }

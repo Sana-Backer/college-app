@@ -6,11 +6,66 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
 
-h2 {
-    text-align: center;
+.back-button {
+    background-color: #1d41c1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+.date-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* .back-button {
+    background-color: #1d41c1;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 15px;
+} */
+
+.back-button:hover {
+    background-color: #142c8f;
+}
+
+.Attendance-Rec-container {
+    text-align: center; /* Ensures the title is centered */
+}
+
+.Attendance-Rec-title {
+    display: inline-block; /* Allows the underline to work properly */
+    position: relative;
     margin-bottom: 20px;
 }
+
+.Attendance-Rec-title::after {
+    content: '';  
+    display: block;
+    width: 50px;  
+    height: 4px;
+    background-color: #1d41c1;
+    border-radius: 2px;
+    margin: 5px auto; /* Centers the underline */
+}
+
 
 .filters {
     display: flex;
@@ -41,26 +96,15 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+.fac-attendence-view th{
+    background-color:#ddd;
+    text-align: center;
+}
 
 th, td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: center;
-}
-
-.present {
-    color: green;
-    font-weight: bold;
-}
-
-.absent {
-    color: red;
-    font-weight: bold;
-}
-
-.duty-leave {
-    color: orange;
-    font-weight: bold;
 }
 
 

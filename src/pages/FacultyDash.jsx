@@ -16,7 +16,7 @@ import AddNote from '../components/hod/AddNote';
 import StudentAttendence from '../components/faculty/StudentAttendence'
 import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
-import { getNotificationsApi, getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
+import { departmentApi, getNotificationsApi, getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
 import AssignmentView from '../components/AssignmentView';
 
 const FacultyDash = () => {
@@ -28,20 +28,25 @@ const FacultyDash = () => {
     const [showActionMenu, setShowActionMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
-    const [profile, setProfile] = useState({
-        full_name: '',
-        department: '',
-        email: '',
-        phone: '',
-        photo: null
-    });
+    const [profile, setProfile] = useState({});
     const navigate = useNavigate()
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [departments, setDepartments] = useState([]);
+    const [departmentName, setDepartmentName] = useState("N/A"); // New state for department name
+
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            try {
+                const response = await departmentApi();
+                setDepartments(response.data);
+            } catch (error) {
+                console.log("Error fetching departments:", error);
+            }
+        };
+        fetchDepartments();
+    }, []);
 
 
-    const backhome = () => {
-        navigate('/home')
-    }
 
     useEffect(() => {
         const ProfileDetails = async () => {
@@ -56,12 +61,18 @@ const FacultyDash = () => {
                 const response = await getUserProfileApi(userId, token);
                 const profileData = response.data;
                 setProfile({
-                    full_name: profileData.full_name,
+                    full_name: profileData.user.full_name,
                     department: profileData.department,
-                    email: profileData.email,
-                    phone: profileData.phone,
+                    email: profileData.user.email,
+                    phone: profileData.user.phone,
                     photo: profileData.photo ? `${serverUrl}${profileData.photo}` : ''
                 });
+                 // Find the department name if departments data is available
+                 if (profileData.department) {
+                    const foundDepartment = departments.find(dept => dept.id === profileData.department);
+                    setDepartmentName(foundDepartment ? foundDepartment.department_name : "N/A");
+                }
+
                 console.log('profile data', profileData);
 
             } catch (error) {
@@ -206,7 +217,7 @@ const FacultyDash = () => {
                         >
                             Result
                         </a>
-                        <MdNotifications className="notification-btn" onClick={handleShowNotifications} />
+                        <MdNotifications className="notification-btn mt-2" onClick={handleShowNotifications} />
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -220,11 +231,11 @@ const FacultyDash = () => {
                         <img src={profile.photo} alt="Profile" />
                     </div>
                     <div className="profile-info">
-                        {/* <h4>{profile.full_name}</h4>
-                        <p>{profile.department}</p>
+                        <h4>{profile.full_name}</h4>
+                        <p>{departmentName}</p>
                         <hr />
                         <p>{profile.email}</p>
-                        <p>{profile.phone}</p> */}
+                        <p>{profile.phone}</p>
                     </div>
                 </aside>
 

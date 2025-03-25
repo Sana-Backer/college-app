@@ -22,7 +22,6 @@ const FacultyProfile = () => {
     }, []);
 
     useEffect(() => {
-        // Fetch faculty profile
         const fetchFacultyProfile = async () => {
             const token = localStorage.getItem('access');
             const userId = localStorage.getItem('userId');
