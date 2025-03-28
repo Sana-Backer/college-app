@@ -112,9 +112,7 @@ function AdminHome() {
                 <ListItemText primary="Add Faculty" />
               </ListItem>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddStudent />)}>
-                <ListItemText primary="Add Student"
-                // onClick={toggleDrawerClose}
-                />
+                <ListItemText primary="Add Student"/>
               </ListItem>
               <ListItem button className="nested-item" onClick={() => renderComponent(<AddCourse />)}>
                 <ListItemText primary="Add Course" />
@@ -195,11 +193,7 @@ function AdminHome() {
           >
             <Menu />
           </IconButton>
-          {/* <div className='m-auto d-flex flex-column align-items-center mb-2 '>
-            <img src={logo} className='' style={{ width: '150px', borderRadius: '90px' }} alt="" />
-
-            <h1 className='my-2'>Welcome  <span className='text-primary'>Admin</span></h1>
-          </div> */}
+      
 
           {selectedComponent}
         </Container>

@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { loginApi } from "../Services/allAPI";
 import { toast, ToastContainer } from "react-toastify";
+import { IoLockClosedOutline } from "react-icons/io5";
+import './signup.css'
 
 function SignUp() {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-    const [userData, setUserData] = useState({
-      email: "",
-      password: "",
-    });
-  
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,15 +30,21 @@ function SignUp() {
     try {
       const result = await loginApi(userData);
       if (result.status === 200) {
-        // Storing the token and user data in localStorage
         localStorage.setItem("loggedUser", JSON.stringify(result.data));
         localStorage.setItem("access", result.data.access);
         localStorage.setItem("role", result.data.role);
-
-        setUserData({ email: "", password: "" });
-        toast.success("Login successful");
-        navigate("/admin-home");
+        if (result.data.role === "admin") {
+          setUserData({ email: "", password: "" });
+          toast.success("Login successful");
+          navigate("/admin-home");
+        } else {
+          alert("Access denied! You are not an admin.");
+          // navigate("/"); 
+        }
+  
       } else if (result.status === 401) {
+        console.log("not admin");
+        
         toast.error("Invalid email or password");
       } else {
         toast.error("Something went wrong");
@@ -51,31 +57,30 @@ function SignUp() {
 
 
   return (
-    <div
-      className="row w-100 d-flex justify-content-center align-items-center"
-      style={{ height: "80vh" }}
-    >
-      <div className="row w-75 mt-5" style={{ height: "470px" }}>
-        <div className="col-md-6 shadow d-flex justify-content-center align-items-center flex-column p-5">
+    <div className="login-page w-100 d-flex justify-content-center align-items-center">
+      <div className="login-container row  w-75 mt-5" >
+        <div className="col-md-6 admin-login shadow d-flex justify-content-center align-items-center flex-column p-5">
           <div
-            className="p-3 d-flex justify-content-center align-items-center"
+            className=" p-3 d-flex justify-content-center align-items-center"
             style={{
               height: "70px",
               width: "70px",
-              border: "3px solid red",
+              background: '#f9f9f93e3',
               borderRadius: "50px",
             }}
           >
-            <i className="fa-solid fa-lock fa-2x text-primary"></i>
+            <IoLockClosedOutline className="login-icon" />
           </div>
-          <h2 className="text-center text-primary d-flex">Welcome Admin</h2>
+
+          <h2 className="text-center d-flex">Admin Portal</h2>
+          <p className="">Enter your credentials to access the admin dashboard</p>
           <form
-            className="border rounded p-3 w-100 shadow mt-3"
+            className=" rounded w-100  mt-3"
             onSubmit={handleLogin}
           >
             <div className="mb-4 mt-3">
               <input
-              name="email"
+                name="email"
                 type="text"
                 placeholder="Enter email"
                 className="form-control"
@@ -85,7 +90,7 @@ function SignUp() {
             </div>
             <div className="mb-4">
               <input
-              name="password"
+                name="password"
                 type="password"
                 placeholder="Enter password"
                 className="form-control"
@@ -94,21 +99,15 @@ function SignUp() {
               />
             </div>
             <div className="mb-3">
-              <button className="btn btn-primary" type="submit">
+              <button className="login-button w-25" type="submit">
                 Login
               </button>
             </div>
           </form>
         </div>
-        <div
-          className="col-md-6 shadow p-0 d-flex justify-content-center align-items-center flex-column text-light"
-          style={{
-            backgroundImage:
-              "url('https://us.123rf.com/450wm/mashmuh/mashmuh2012/mashmuh201200408/160498085-online-registration-or-sing-up-concept-young-woman-logs-into-the-site-young-woman-posting-resume.jpg?ver=6')",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="d-flex justify-content-center align-items-center flex-column"></div>
+        <div className="col-md-6 shadow p-0 d-flex justify-content-center align-items-center flex-column " style={{ marginLeft: '-15px' }}>
+          <h1 style={{ fontWeight: '600', fontSize: '40px' }}> Welcome to College <br />Admin Portal</h1>
+          <p className="text-dark w-75 " style={{ fontSize: '19px', textAlign: "center" }}>Manage student inquiries, update college information, and monitor chat support all in one place.</p>
         </div>
       </div>
     </div>

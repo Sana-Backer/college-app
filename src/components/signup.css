@@ -1,81 +1,84 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Poppins", sans-serif;
-  }
-  
-  .signupbox{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  
-  
-  .container {
-    background: #fff;
-    padding: 40px 40px;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    max-height: 800px;
-    width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Lock Icon */
+.login-icon {
+  font-size: 40px;
+  color: #fff;
+}
+
+/* Admin Login Box */
+.admin-login {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  z-index: 1;
+}
+
+/* Headings */
+h2 {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.form-control{
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  border-bottom:3px solid #182848;
+  box-shadow:  0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.login-button{
+  padding: 12px 16px ;
+  font-size: 18px;
+background: #d6cadb;
+border: none;
+border-radius: 6px;
+color: #dbdada;
+
+
+}
+/* Login Button */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #4b6cb7, #182848);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.register-btn:hover {
+  background: linear-gradient(to right, #3a4d7c, #121a2b);
+  transform: scale(1.03);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-login {
+      padding: 30px;
   }
   
   h2 {
-    text-align: center;
-    margin-top: 5px;
+      font-size: 24px;
   }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5px;
-  }
-  
-  .form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-group input[type="text"],
-  .form-group input[type="email"],
-  .form-group input[type="tel"],
-  .form-group input[type="password"] {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .gender-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .gender-group label {
-    margin-right: 15px;
-    font-weight: normal;
-  }
-  
-  .gender-group input[type="radio"] {
-    margin-right: 5px;
-  }
-  
+
   .register-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(to right, #4b6cb7, #182848);
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-  
+      font-size: 16px;
   }
-  
-  .register-btn:hover {
-    background: linear-gradient(to right, #3a4d7c, #121a2b);
-  }
+}

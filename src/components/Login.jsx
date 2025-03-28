@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "./login.css"; // Import the CSS file
 import { loginApi } from "../Services/allAPI";
+import { IoIosLogOut } from "react-icons/io";
+import { FaUser } from "react-icons/fa";
 
 function Login() {
   const [userData, setUserData] = useState({
@@ -110,8 +112,8 @@ function Login() {
           />
           Sign in with Google
         </button> */}
-        <p className="spf">
-          Don't have an account? <Link to="/signup">Click here to signup</Link>
+        <p className="spf ">
+        Login as admin? <Link to="/signup">Sign in</Link>
         </p>
       </div>
       <ToastContainer />

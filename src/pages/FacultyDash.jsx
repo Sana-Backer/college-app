@@ -67,13 +67,7 @@ const FacultyDash = () => {
                     phone: profileData.user.phone,
                     photo: profileData.photo ? `${serverUrl}${profileData.photo}` : ''
                 });
-                 // Find the department name if departments data is available
-                 if (profileData.department) {
-                    const foundDepartment = departments.find(dept => dept.id === profileData.department);
-                    setDepartmentName(foundDepartment ? foundDepartment.department_name : "N/A");
-                }
-
-                console.log('profile data', profileData);
+                 console.log('profile data', profileData);
 
             } catch (error) {
                 console.error('Error fetching profile data:', error);
@@ -83,6 +77,13 @@ const FacultyDash = () => {
 
         ProfileDetails();
     }, []);
+    
+    useEffect(() => {
+        if (profile.department && departments.length > 0) {
+            const foundDepartment = departments.find(dept => dept.id === profile.department);
+            setDepartmentName(foundDepartment ? foundDepartment.department_name : "N/A");
+        }
+    }, [profile.department, departments]); 
 
     const handleActiveFeature = (feature) => {
         setActiveFeature(feature);
@@ -222,9 +223,6 @@ const FacultyDash = () => {
                 </Navbar.Collapse>
             </Navbar>
           
-        
-
-
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image">
