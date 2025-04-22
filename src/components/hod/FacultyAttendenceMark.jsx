@@ -88,7 +88,7 @@ const FacAttendence = () => {
         try {
             const response = await createFacultyAttendanceApi(attendanceData, token);
             console.log("✅ Attendance submitted successfully:", response.data);
-            toast.success('Attendance added successfullty')
+            alert('Attendance added successfullty')
         } catch (error) {
             console.error("❌ Error submitting attendance:", error.response?.data || error);
             toast.error('error submitting attendance')

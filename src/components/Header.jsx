@@ -45,6 +45,7 @@ const Header = () => {
                 {role === "student" && <Link to="/studentDash">Student Dashboard</Link>}
                 {role === "hod" && <Link to="/hodDash">HOD Dashboard</Link>}
                 {role === "faculty" && <Link to="/facultydash">Faculty Dashboard</Link>}
+                {role === "admin" && <Link to="/admin-home">Admin Dashboard</Link>}
                 <Link to="/AllDept">Departments</Link>
                 <Link to="/contactus">Contact Us</Link>
 

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './addbatch.css'
 import { addbatchApi, getCoursesApi } from "../../Services/allAPI";
+import './addbatch.css'
 const AddBatch = () => {
   const [formData, setFormData] = useState({
     batch_name: "",
@@ -11,32 +11,29 @@ const AddBatch = () => {
     start_year: "",
     end_year: "",
   });
-  const [courses, setCourses] = useState([]); // Ensuring courses is always an array
+  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const allCourses = async () => {
       try {
-        const response = await getCoursesApi()
+        const response = await getCoursesApi();
         if (response.status === 200) {
-          setCourses(response.data)
-
+          setCourses(response.data);
         } else {
-          toast.error('Failed to get courses');
-
+          toast.error("Failed to get courses");
         }
       } catch (error) {
-        console.error('Error fetching courses:', error);
-        toast.error('An unexpected error occurred. Please try again.');
-
+        console.error("Error fetching courses:", error);
+        toast.error("An unexpected error occurred. Please try again.");
       }
-    }
-    allCourses()
-  }, [])
+    };
+    allCourses();
+  }, []);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -51,63 +48,118 @@ const AddBatch = () => {
 
     try {
       const response = await addbatchApi(formData);
-      console.log(response.data);
-      toast.success("Batch added successfully!");
-      setFormData({ batch_name: "", course: "", start_year: "", end_year: "" });
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Batch added successfully!");
+        setFormData({
+          batch_name: "",
+          course: "",
+          start_year: "",
+          end_year: "",
+        });
+      } else {
+        toast.error("Failed to add batch. Please check the inputs.");
+      }
     } catch (error) {
-      toast.error("Failed to add batch. Please check the inputs.");
+      toast.error("Error adding batch. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="add-batch-container">
-      <div className="add-batch-form">
-        <h2>Add New Batch</h2>
-        <ToastContainer />
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Batch Name:</label>
-            <input
-              type="text"
-              name="batch_name"
-              value={formData.batch_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Course:</label>
-            <select 
-            name="course" 
-            value={formData.course}
-             onChange={handleChange} required>
-              <option value="">Select Course</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.course_name}
-                </option>
-              ))}
-            </select>
-          </div> 
+    <div className="registration-page">
+      <div className="registration-container">
+        <div className="registration-card">
+          <header className="registration-header">
+            <h1>Add Batch</h1>
+            <p>Fill in the batch details below</p>
+          </header>
 
-          <div className="form-group">
-            <label>Start Year:</label>
-            <input type="number" name="start_year" value={formData.start_year} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>End Year:</label>
-            <input type="number" name="end_year" value={formData.end_year} onChange={handleChange} required />
-          </div>
-          <button type="submit" className="submit-button" disabled={isLoading}>
-            {isLoading ? "Processing..." : "Add Batch"}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="registration-form">
+            <div className="form-grid">
+              <div className="input-group">
+                <label htmlFor="batch_name">Batch Name</label>
+                <input
+                  type="text"
+                  id="batch_name"
+                  name="batch_name"
+                  value={formData.batch_name}
+                  onChange={handleChange}
+                  className="input-field"
+                  placeholder="Eg: BCA 2021-2024"
+                  required
+                />
+              </div>
+
+         
+
+              <div className="input-group">
+                <label htmlFor="start_year">Start Year</label>
+                <input
+                  type="number"
+                  id="start_year"
+                  name="start_year"
+                  value={formData.start_year}
+                  onChange={handleChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="end_year">End Year</label>
+                <input
+                  type="number"
+                  id="end_year"
+                  name="end_year"
+                  value={formData.end_year}
+                  onChange={handleChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="course">Course</label>
+                <select
+                  id="course"
+                  name="course"
+                  value={formData.course}
+                  onChange={handleChange}
+                  className="select-field"
+                  required
+                >
+                  <option value="">Select Course</option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.course_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processing..." : "Add Batch"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
-
 };
 
 export default AddBatch;

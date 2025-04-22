@@ -22,36 +22,37 @@ function Login() {
     e.preventDefault();
 
     if (!userData.email || !userData.password) {
-      toast.error("Please enter all fields");
-      return;
+        toast.error("Please enter all fields");
+        return;
     }
 
     try {
-      const result = await loginApi(userData);
-      if (result.status === 200) {
-        // Storing the token and user data in localStorage
-        localStorage.setItem("loggedUser", JSON.stringify(result.data));
-        localStorage.setItem("access", result.data.access);
-        localStorage.setItem("username", result.data.full_name);
-        localStorage.setItem("userId", result.data.id);
-        localStorage.setItem("role", result.data.role);
-        localStorage.setItem("department", result.data.department);
-        localStorage.setItem("course", result.data.course);
-        localStorage.setItem("subject", result.data.subject);
+        const result = await loginApi(userData);
+        console.log("API Response:", result); // 🔍 Debugging log
 
-        setUserData({ email: "", password: "" });
-        toast.success("Login successful");
-        navigate("/home");
-      } else if (result.status === 401) {
-        toast.error("Invalid email or password");
-      } else {
-        toast.error("Something went wrong");
-      }
+        if (result.status === 200) {
+            localStorage.setItem("loggedUser", JSON.stringify(result.data));
+            localStorage.setItem("access", result.data.access);
+            localStorage.setItem("username", result.data.full_name);
+            localStorage.setItem("userId", result.data.id);
+            localStorage.setItem("role", result.data.role);
+            localStorage.setItem("department", result.data.department);
+            localStorage.setItem("course", result.data.course);
+            localStorage.setItem("subject", result.data.subject);
+
+            setUserData({ email: "", password: "" });
+            toast.success("Login successful");
+            navigate("/home");
+        } else {
+            console.error("Login Error:", result);
+            toast.error(result.data?.error || "Invalid email or password");
+        }
     } catch (error) {
-      console.error("Login error:", error);
-      toast.error("An unexpected error occurred");
+        console.error("Login error:", error);
+        toast.error("An unexpected error occurred");
     }
-  };
+};
+
 
   return (
     <div className="lg-Box">

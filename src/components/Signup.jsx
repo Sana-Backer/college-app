@@ -99,7 +99,7 @@ function SignUp() {
               />
             </div>
             <div className="mb-3">
-              <button className="login-button w-25" type="submit">
+              <button className="login-button w-25 bg-primary" type="submit">
                 Login
               </button>
             </div>

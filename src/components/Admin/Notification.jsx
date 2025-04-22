@@ -12,8 +12,6 @@ const Notification = () => {
     const [message, setMessage] = useState('');
     const [recipientType, setRecipientType] = useState('');
     const [recipientIds, setRecipientIds] = useState([]);
-    const [students, setStudents] = useState([]);
-    const [studentOptions, setStudentOptions] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [selectedNotification, setSelectedNotification] = useState(null);
     const [showNotifications, setShowNotifications] = useState(false);
@@ -28,10 +26,8 @@ const Notification = () => {
         const token = localStorage.getItem('access');
         try {
             const response = await getNotificationsApi(token);
-            console.log("API Response:", response); // ✅ Debugging
-    
-            // If response itself is an array, directly set notifications
-            if (Array.isArray(response)) {
+            console.log("API Response:", response); 
+                if (Array.isArray(response)) {
                 setNotifications(response); // ✅ Corrected
             } else if (response?.data && Array.isArray(response.data)) {
                 setNotifications(response.data); // ✅ Handles both cases
@@ -53,7 +49,6 @@ const Notification = () => {
             title,
             message,
             recipientType,
-            // recipientIds: recipientType === 'particularStudent' ? recipientIds : []
         };
 
         try {
@@ -167,6 +162,7 @@ const Notification = () => {
                             <div>
                                 <h3>{notification.title}</h3>
                                 <p>{notification.message}</p>
+                                {/* <p><strong>Send To:</strong> {notification.recipientType}</p> */}
                             </div>
                             <div className="notification-actions">
                                 <button className="n-edit" onClick={() => handleEditNotification(notification)}>

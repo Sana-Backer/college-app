@@ -156,7 +156,7 @@ const HodDash = () => {
                             All Students
                         </a>
 
-                        {/* <a
+                        <a
                             href="#assignments"
                             onClick={() => handleActiveFeature("assignments")}
                             className={activeFeature === "assignments" ? "active" : ""}
@@ -169,7 +169,7 @@ const HodDash = () => {
                             className={activeFeature === "notes" ? "active" : ""}
                         >
                             Notes
-                        </a> */}
+                        </a>
                         <a
                             href="#attendenceMark"
                             onClick={() => handleActiveFeature("attendenceMark")}

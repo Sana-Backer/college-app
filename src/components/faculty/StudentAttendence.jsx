@@ -29,7 +29,6 @@ const StdAttendance = () => {
     const token = localStorage.getItem("access");
     const navigate = useNavigate();
 
-    // Fetch data: Departments, Batches, Subjects, and Students
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,7 +52,6 @@ const StdAttendance = () => {
         fetchData();
     }, [token]);
 
-    // Filter students based on selected batch
     useEffect(() => {
         if (selectedBatch) {
             const filtered = students.filter(student => student.batch && String(student.batch) === String(selectedBatch));
@@ -69,7 +67,6 @@ const StdAttendance = () => {
         }
     }, [selectedBatch, students]);
 
-    // Handle attendance status change
     const handleStatusChange = (index, status) => {
         setAttendanceRecords(prevRecords => {
             const updatedRecords = [...prevRecords];
@@ -199,7 +196,7 @@ const StdAttendance = () => {
             {/* View Faculty Attendance Record */}
             <div className="mt-5">
                 <button className="btn p-2" onClick={() => navigate("/student-attendance")}>
-                    View Faculty Attendance Record
+                    View Student Attendance Record
                 </button>
             </div>
         </div>

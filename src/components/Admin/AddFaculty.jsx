@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import "./.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { departmentApi, registerApi } from "../../Services/allAPI";

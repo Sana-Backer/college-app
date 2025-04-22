@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./addDepartment.css"; // Reuse same styling
 import { addCourseApi } from "../../Services/allAPI";
 
 const AddCourse = () => {
@@ -49,47 +51,62 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="add-course-container">
-      <div className="main">
-        <div className="form-container">
-          <h1>Add Course</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="course_name">Course Name</label>
-              <input
-                type="text"
-                id="course_name"
-                name="course_name"
-                placeholder="Enter course name"
-                value={courseData.course_name}
-                onChange={handleChange}
-                required
-              />
+    <div className="registration-page">
+      <div className="registration-container">
+        <div className="registration-card">
+          <header className="registration-header">
+            <h1>Add Course</h1>
+            <p>Enter course details to create a new entry</p>
+          </header>
+
+          <form onSubmit={handleSubmit} className="registration-form">
+            <div className="form-grid">
+              <div className="input-group">
+                <label htmlFor="course_name">Course Name</label>
+                <input
+                  type="text"
+                  id="course_name"
+                  name="course_name"
+                  placeholder="Enter course name"
+                  value={courseData.course_name}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+
+              <div className="input-group full-width">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  placeholder="Enter course description"
+                  value={courseData.description}
+                  onChange={handleChange}
+                  className="input-field"
+                ></textarea>
+              </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter course description"
-                value={courseData.description}
-                onChange={handleChange}
-                required
-              ></textarea>
-            </div>
-
-            <div className="form-buttons">
-              <button type="button" className="cancel" onClick={() => navigate("/view-courses")}>
+            <div className="form-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => navigate("/view-courses")}
+              >
                 Cancel
               </button>
-              <button type="submit" className="create" disabled={loading}>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={loading}
+              >
                 {loading ? "Adding..." : "Add Course"}
               </button>
             </div>
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

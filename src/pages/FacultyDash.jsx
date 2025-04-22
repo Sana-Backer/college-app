@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './fadash.css';
 import { Link, useNavigate } from 'react-router-dom';
-import prof3 from '../assets/proff3.jpg';
-import { RiArrowGoForwardLine } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
 import { MdNotifications } from 'react-icons/md';
 import { Button, Modal, Nav, Navbar } from 'react-bootstrap';
@@ -14,9 +12,8 @@ import AddStudent from '../components/Admin/AddStudent';
 import AddAssignment from '../components/AddAssignment';
 import AddNote from '../components/hod/AddNote';
 import StudentAttendence from '../components/faculty/StudentAttendence'
-import AttendenceViewStd from '../components/faculty/AttendenceSheetStd'
 import { toast } from 'react-toastify';
-import { departmentApi, getNotificationsApi, getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
+import { departmentApi, getNotificationsbyHodApi, getUserProfileApi } from '../Services/allAPI';
 import AssignmentView from '../components/AssignmentView';
 
 const FacultyDash = () => {

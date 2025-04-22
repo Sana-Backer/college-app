@@ -22,11 +22,14 @@ const refreshToken = async () => {
     throw error;
   }
 };
-
-// Login API
 export const loginApi = async (userDetails) => {
-  return await commonAPI("POST", `${serverUrl}/login/`, userDetails, "");
+  console.log("Sending API request:", userDetails); // Debugging log
+
+  return await commonAPI("POST", `${serverUrl}/login/`, userDetails, {
+    "Content-Type": "application/json",  // Ensure JSON request
+  });
 };
+
 
 // Register API
 export const registerApi = async (userDetails) => {
@@ -443,11 +446,30 @@ export const addbatchApi = async (formData, token) => {
   });
 };
 // 
+// Get all batches
 export const getBatchApi = async (token) => {
   return await commonAPI("GET", `${serverUrl}/batches/`, null, {
     Authorization: `Bearer ${token}`
   });
 };
+
+// Edit batch
+export const editBatchApi = async (batchId, token, batchData) => {
+  return await commonAPI("PUT", `${serverUrl}/batches/${batchId}/`, batchData, {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  });
+};
+
+// Delete batch
+export const deleteBatchApi = async (batchId, token) => {
+  return await commonAPI("DELETE", `${serverUrl}/batches/${batchId}/`, {}, {
+    Authorization: `Bearer ${token}`
+  });
+};
+
+
+
 // ---------------------COURSE
 // -----------------------------------------------------------------
 export const addCourseApi = async (data, token) => {
@@ -512,6 +534,13 @@ export const editSubjectApi = async (subjectid, token, subjectData) => {
   return await commonAPI("PUT", `${serverUrl}/subjects/${subjectid}/`, subjectData, {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json"
+  });
+};
+
+
+export const deleteSubjectApi = async (subjectId, token) => {
+  return await commonAPI("DELETE", `${serverUrl}/subjects/${subjectId}/`, null, {
+    Authorization: `Bearer ${token}`
   });
 };
 

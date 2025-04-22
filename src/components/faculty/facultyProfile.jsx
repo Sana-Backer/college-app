@@ -6,7 +6,7 @@ const FacultyProfile = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [departments, setDepartments] = useState([]);
-    const [departmentName, setDepartmentName] = useState("N/A"); // New state for department name
+    const [departmentName, setDepartmentName] = useState("N/A"); 
 
     useEffect(() => {
         // Fetch departments
@@ -42,13 +42,12 @@ const FacultyProfile = () => {
                     full_name: userData.user?.full_name || "N/A",
                     dob: userData.user?.dob || "N/A",
                     gender: userData.user?.gender || "N/A",
-                    departmentId: userData.department || null, // Store department ID
+                    departmentId: userData.department || null, 
                     email: userData.user?.email || "N/A",
                     phone: userData.user?.phone || "N/A",
                     photo: userData.user?.photo || null,
                 });
 
-                // Find the department name if departments data is available
                 if (userData.department) {
                     const foundDepartment = departments.find(dept => dept.id === userData.department);
                     setDepartmentName(foundDepartment ? foundDepartment.department_name : "N/A");
@@ -63,7 +62,7 @@ const FacultyProfile = () => {
         };
 
         fetchFacultyProfile();
-    }, [departments]); // Depend on departments to ensure department data is available
+    }, [departments]); 
 
     if (loading) {
         return <div>Loading...</div>;
