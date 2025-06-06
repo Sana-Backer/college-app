@@ -28,9 +28,9 @@ const Notification = () => {
             const response = await getNotificationsApi(token);
             console.log("API Response:", response); 
                 if (Array.isArray(response)) {
-                setNotifications(response); // ✅ Corrected
+                setNotifications(response); 
             } else if (response?.data && Array.isArray(response.data)) {
-                setNotifications(response.data); // ✅ Handles both cases
+                setNotifications(response.data); 
             } else {
                 console.error("Invalid response format:", response);
                 setNotifications([]); // ✅ Avoids errors
@@ -38,7 +38,7 @@ const Notification = () => {
         } catch (error) {
             console.error('Error fetching notifications:', error);
             toast.error('Failed to fetch notifications.');
-            setNotifications([]); // ✅ Ensures no undefined errors
+            setNotifications([]); 
         }
     };
         const handleSendNotification = async (e) => {
@@ -162,7 +162,6 @@ const Notification = () => {
                             <div>
                                 <h3>{notification.title}</h3>
                                 <p>{notification.message}</p>
-                                {/* <p><strong>Send To:</strong> {notification.recipientType}</p> */}
                             </div>
                             <div className="notification-actions">
                                 <button className="n-edit" onClick={() => handleEditNotification(notification)}>

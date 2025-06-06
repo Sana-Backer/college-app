@@ -99,6 +99,15 @@ const AddAssignment = () => {
 
       if (response.status === 201) {
         toast.success('Assignment uploaded successfully!');
+        setTitle('');
+        setDescription('');
+        setSub('');
+        setFaculty('');
+        setHod('');
+        setBatch('');
+        setDeadline('');
+      
+        // onAssignmentAdded && onAssignmentAdded(); 
       } else {
         toast.error('Failed to upload assignment');
       }

@@ -32,9 +32,8 @@ const Header = () => {
     return (
         <div className='navbar-custom d-flex align-items-center pt-3'>
             {/* Logo */}
-            <h2 className='text-light ms-3'>BVCollege</h2>
+            <h2 className='text-light ms-3'>BV College</h2>
 
-            {/* Hamburger Icon */}
             <div className="menu-icon d-md-none ms-auto me-3" onClick={() => setMenuOpen(!menuOpen)}>
                 {menuOpen ? <FaTimes /> : <FaBars />}
             </div>

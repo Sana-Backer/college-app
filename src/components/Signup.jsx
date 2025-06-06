@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { loginApi } from "../Services/allAPI";
 import { toast, ToastContainer } from "react-toastify";
 import { IoLockClosedOutline } from "react-icons/io5";
@@ -99,7 +98,7 @@ function SignUp() {
               />
             </div>
             <div className="mb-3">
-              <button className="login-button w-25 bg-primary" type="submit">
+              <button className="login-button w-25 " type="submit">
                 Login
               </button>
             </div>

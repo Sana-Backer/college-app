@@ -15,7 +15,7 @@ function ViewFaculty() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [filteredFaculty, setFilteredFaculty] = useState([]); // Store filtered HODs
+  const [filteredFaculty, setFilteredFaculty] = useState([]); 
   const [departments, setDepartments] = useState([])
   const [filterDepartment, setFilterDepartment] = useState('');
 
@@ -24,7 +24,7 @@ function ViewFaculty() {
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("access"); // Fetch the token from localStorage
+  const token = localStorage.getItem("access"); 
 
   useEffect(() => {
     const AllFacultyData = async () => {
@@ -159,7 +159,7 @@ function ViewFaculty() {
       if (response.status === 200) {
         toast.success("Faculty details updated!");
         setShowModal(false);
-        setFacultyList(facultyList.map((faculty) => (faculty.id === selectedFaculty.id ? response.data : faculty)));
+        // setFacultyList(facultyList.map((faculty) => (faculty.id === selectedFaculty.id ? response.data : faculty)));
       } else {
         toast.error("Failed to update faculty details.");
       }

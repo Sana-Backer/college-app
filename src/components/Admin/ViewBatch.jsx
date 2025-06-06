@@ -47,27 +47,27 @@ const ViewBatch = () => {
             alert("Please fill all fields.");
             return;
         }
-    
+
         try {
             const updatedData = {
                 batch_name: batchName,
-                start_year: Number(startYear),  
-                end_year: Number(endYear),      
+                start_year: Number(startYear),
+                end_year: Number(endYear),
                 course: selectedBatch.course // ✅ Include course ID to prevent the 400 error
             };
-    
+
             await editBatchApi(selectedBatch.id, token, updatedData);
-    
-            setBatches(batches.map(batch => 
+
+            setBatches(batches.map(batch =>
                 batch.id === selectedBatch.id ? { ...batch, ...updatedData } : batch
             ));
-    
+
             setShowModal(false);
         } catch (error) {
             console.error("Error updating batch:", error);
         }
     };
-    
+
 
     // Handle Delete
     const handleDelete = async (batchId) => {
@@ -85,7 +85,7 @@ const ViewBatch = () => {
 
     return (
         <Container className="mt-4">
-            <h2>Batch List</h2>
+            <h2 className='title'>Batch List</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <div className="tablecontainer">
                 <Table striped bordered hover>
@@ -109,13 +109,14 @@ const ViewBatch = () => {
                                     <td>{batch.start_year}</td>
                                     <td>{batch.end_year}</td>
                                     <td>
-                                        <Button variant="warning" size="sm" onClick={() => handleEdit(batch)}>
-                                            <FaEdit />
+                                        <Button variant="" size="md" onClick={() => handleEdit(batch)}>
+                                            <FaEdit className="text-primary" size={20} />
                                         </Button>{' '}
-                                        <Button variant="danger" size="sm" onClick={() => handleDelete(batch.id)}>
-                                            <FaTrashAlt />
+                                        <Button variant="" size="md" onClick={() => handleDelete(batch.id)}>
+                                            <FaTrashAlt className="text-danger" size={20} />
                                         </Button>
                                     </td>
+
                                 </tr>
                             ))
                         ) : (
@@ -136,26 +137,26 @@ const ViewBatch = () => {
                     <Form>
                         <Form.Group>
                             <Form.Label>Batch Name</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                value={batchName} 
-                                onChange={(e) => setBatchName(e.target.value)} 
+                            <Form.Control
+                                type="text"
+                                value={batchName}
+                                onChange={(e) => setBatchName(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Start Year</Form.Label>
-                            <Form.Control 
-                                type="number" 
-                                value={startYear} 
-                                onChange={(e) => setStartYear(e.target.value)} 
+                            <Form.Control
+                                type="number"
+                                value={startYear}
+                                onChange={(e) => setStartYear(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>End Year</Form.Label>
-                            <Form.Control 
-                                type="number" 
-                                value={endYear} 
-                                onChange={(e) => setEndYear(e.target.value)} 
+                            <Form.Control
+                                type="number"
+                                value={endYear}
+                                onChange={(e) => setEndYear(e.target.value)}
                             />
                         </Form.Group>
                     </Form>

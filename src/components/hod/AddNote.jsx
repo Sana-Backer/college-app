@@ -9,7 +9,7 @@ const AddNote = ({ onNoteAdded }) => {
   const [file, setFile] = useState(null);
   const [course, setCourse] = useState('');
   const [subject, setSubject] = useState('');
-  const [semester, setSemester] = useState(''); // ✅ New state for semester
+  const [semester, setSemester] = useState('');
   const [role, setRole] = useState('');
   const [username, setUsername] = useState('');
   const [facultyList, setFacultyList] = useState([]);
@@ -120,6 +120,7 @@ const AddNote = ({ onNoteAdded }) => {
       const response = await upload_Studentnote(formData, reqHeader);
       if (response.status === 201) {
         toast.success("Note uploaded successfully!");
+        
         onNoteAdded && onNoteAdded();
         setTitle('');
         setFile(null);

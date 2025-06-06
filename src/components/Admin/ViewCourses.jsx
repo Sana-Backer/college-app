@@ -81,7 +81,7 @@ const ViewCourse = () => {
 
     return (
         <Container className="mt-4">
-            <h2>Courses List</h2>
+            <h2 className='title'>Courses List</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <div className='tablecontainer'>
                 <Table striped bordered hover className='course-table'>
@@ -98,7 +98,8 @@ const ViewCourse = () => {
                             <tr key={course.id}>
                                 <td>{course.id}</td>
                                 <td>{course.course_name}</td>
-                                <td>{course.description}</td>
+                               <td style={{ wordWrap: "break-word", whiteSpace: "normal", maxHeight:'200px' }}>
+                                    {course.description}</td>
                                 <td className='course-actions'>
                                     <button className='editbtn' onClick={() => handleEdit(course)}>
                                         <FaEdit />

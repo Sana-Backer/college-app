@@ -20,7 +20,6 @@ import CourseDescription from "./components/CourseDescription";
 import AllDept from "./components/AllDept";
 import Courses from "./components/Courses";
 import ViewNotifications from "./components/ViewNotifications";
-import AttendanceView from "./components/faculty/AttendenceSheetStd";
 import ChatInterface from "./components/chatbot";
 import AttendanceRecord from "./components/faculty/AttendanceRecord";
 import StudentAttendance from './components/faculty/StudentAttendence'
@@ -72,7 +71,7 @@ function App() {
         <Route path="/ResultStd" element={<ResultStd />} />
         <Route path="/chat" element={<ChatInterface />}></Route>
       </Routes>
-      \      <ToastContainer />
+     <ToastContainer />
     </>
   );
 }

@@ -86,7 +86,7 @@ export const StudentApi = async (token) => {
 //addStudentApi
 export const addStudentApi = async (formData, reqHeader) => {
   try {
-    const response = await axios.post(`${serverUrl}/stlist/`, formData, {
+    const response = await axios.post(`${serverUrl}/stlists/`, formData, {
       headers: {
         ...reqHeader,
         "Content-Type": "multipart/form-data",
@@ -226,9 +226,9 @@ export const deleteFacultyApi = async (id, token) => {
 
 //edit faculty
 export const editFacultyApi = async (id, facultydetails, token) => {
-  return await commonAPI("PUT", `${serverUrl}/falist/${id}/`, facultydetails, {
+  return await commonAPI("PUT", `${serverUrl}/falistupdate/${id}/`, facultydetails, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   });
@@ -480,11 +480,9 @@ export const addCourseApi = async (data, token) => {
 };
 
 // all courses
-export const getCoursesApi = async (token) => {
+export const getCoursesApi = async () => {
   return await commonAPI("GET", `${serverUrl}/courses-list/`, "",
-    {
-      Authorization: `Bearer ${token}`
-    }
+   
   )
 }
 // Edit Course API
@@ -500,7 +498,7 @@ export const deleteCourseApi = async (courseId, token) => {
   try {
     const response = await commonAPI(
       "DELETE",
-      `${serverUrl}/courses/${courseId}/`,  // ✅ Ensure trailing slash
+      `${serverUrl}/courses/${courseId}/`,  
       null,
       {
         Authorization: `Bearer ${token}`,

@@ -1,21 +1,80 @@
-.college-container {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 350px;
-    border: 1px solid #d1cfcf;
-    background-color: rgb(52, 63, 53);
-    color: #d1cfcf;
+.footer {
+background-color: #262d42; /* Dark Blue */
+  color: #ffffff;
+  padding: 40px 20px 20px;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
 }
 
-.college-container .college-info {
-    width: 500px;
-    text-align: center;
-    font-size: 18px;
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1300px;
+  margin: 0 auto;
+  gap: 30px;
 }
-.college-info h3{
-    font-weight: 600;
+
+.footer-logo {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.college-contact-d{
-    font-style: italic;
+
+.logo-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  object-fit: cover;
+  border: 3px solid #ffffff30;
+}
+
+.footer-logo h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+}
+
+.footer-section {
+  flex: 1 1 220px;
+}
+
+.footer-section h4 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 15px;
+  border-top: 1px solid #333;
+  font-size: 14px;
+  color: #888;
 }

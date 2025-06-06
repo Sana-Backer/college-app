@@ -59,7 +59,7 @@ function Login() {
       <div className="log-content">
         <div className="lg-head">
           <p>WELCOME BACK</p>
-          <p>Welcome back! Please enter your details.</p>
+          <p>Welcome back, Please login!</p>
         </div>
 
         <form onSubmit={handleLogin}>

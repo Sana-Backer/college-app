@@ -48,18 +48,18 @@ const FacAttendanceView = () => {
     };
 
     // Handle Delete
-    // const handleDelete = async (id) => {
-    //     if (!window.confirm("Are you sure you want to delete this record?")) return;
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this record?")) return;
 
-    //     try {
-    //         await deleteFacultyAttendenceApi(id, token);
-    //         setAttendanceRecords(attendanceRecords.filter(record => record.id !== id));
-    //         setFilteredRecords(filteredRecords.filter(record => record.id !== id));
-    //     } catch (error) {
-    //         console.error("Error deleting record:", error);
-    //         alert("Failed to delete record. Please try again.");
-    //     }
-    // };
+        try {
+            await deleteFacultyAttendenceApi(id, token);
+            setAttendanceRecords(attendanceRecords.filter(record => record.id !== id));
+            setFilteredRecords(filteredRecords.filter(record => record.id !== id));
+        } catch (error) {
+            console.error("Error deleting record:", error);
+            alert("Failed to delete record. Please try again.");
+        }
+    };
 
     return (
         <div className="attendance-view-container">

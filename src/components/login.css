@@ -1,21 +1,35 @@
+/* Add this to the CSS to set the background GIF */
 .lg-Box {
+  background-image: url("../assets/giff.gif"); /* Path to your GIF */
+  background-size: cover; /* Make sure the image covers the whole area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent image repetition */
+  height: 100vh; /* Make sure it takes up the full viewport height */
   display: flex;
-  justify-content: center; /* Center the form horizontally */
-  align-items: center; /* Center the form vertically */
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Optionally, add a dark overlay to make text more readable */
+.lg-Box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Black with some transparency */
+  z-index: -1; /* Keep the overlay behind the content */
+}
+
+/* Style for the login form container */
 .log-content {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3rem 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for the form */
+  padding: 20px;
+  border-radius: 10px;
   width: 100%;
-  max-width: 400px;
-  position: relative;
-  backdrop-filter: blur(10px);
+  max-width: 400px; /* You can adjust the width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow for better visibility */
 }
 
 .lg-head {

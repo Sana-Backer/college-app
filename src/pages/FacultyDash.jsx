@@ -64,7 +64,7 @@ const FacultyDash = () => {
                     phone: profileData.user.phone,
                     photo: profileData.photo ? `${serverUrl}${profileData.photo}` : ''
                 });
-                 console.log('profile data', profileData);
+                console.log('profile data', profileData);
 
             } catch (error) {
                 console.error('Error fetching profile data:', error);
@@ -74,13 +74,13 @@ const FacultyDash = () => {
 
         ProfileDetails();
     }, []);
-    
+
     useEffect(() => {
         if (profile.department && departments.length > 0) {
             const foundDepartment = departments.find(dept => dept.id === profile.department);
             setDepartmentName(foundDepartment ? foundDepartment.department_name : "N/A");
         }
-    }, [profile.department, departments]); 
+    }, [profile.department, departments]);
 
     const handleActiveFeature = (feature) => {
         setActiveFeature(feature);
@@ -132,21 +132,21 @@ const FacultyDash = () => {
         setShowActionMenu(!showActionMenu);
     };
 
-       const fetchNotifications = async () => {
-           const token = localStorage.getItem("access");
-           try {
-               const response = await getNotificationsbyHodApi(token);
-               setNotifications(response);
-           } catch (error) {
-               console.error("Error fetching notifications:", error);
-               toast.error("Failed to fetch notifications.");
-           }
-       };
-   
-       const handleShowNotifications = () => {
-           fetchNotifications();
-           setShowNotifications(true);
-       };
+    const fetchNotifications = async () => {
+        const token = localStorage.getItem("access");
+        try {
+            const response = await getNotificationsbyHodApi(token);
+            setNotifications(response);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+            toast.error("Failed to fetch notifications.");
+        }
+    };
+
+    const handleShowNotifications = () => {
+        fetchNotifications();
+        setShowNotifications(true);
+    };
 
     const handleCloseNotifications = () => {
         setShowNotifications(false);
@@ -219,7 +219,7 @@ const FacultyDash = () => {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-          
+
             <div className="dashboard-content">
                 <aside className="profile-sidebar" id='hidesidebar'>
                     <div className="profile-image">
@@ -288,16 +288,38 @@ const FacultyDash = () => {
             </Modal>
 
             {/* Notifications Modal */}
-            <Modal show={showNotifications} onHide={() => setShowNotifications(false)} centered>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Notifications</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                {notifications.length ? notifications.map((n, i) => (
-                                    <div key={i}><h5>{n.title}</h5><p>{n.message}</p></div>
-                                )) : <p>No notifications available.</p>}
-                            </Modal.Body>
-                        </Modal>
+            <Modal
+  show={showNotifications}
+  onHide={() => setShowNotifications(false)}
+  centered
+  size="md"
+>
+  <Modal.Header closeButton className="justify-content-center ">
+    <Modal.Title className="w-100 text-center  fw-bold">
+      🔔 Notifications from HOD 🔔
+    </Modal.Title>
+  </Modal.Header>
+
+  <Modal.Body className="bg-light" style={{ maxHeight: "400px", overflowY: "auto" }}>
+    {notifications.length > 0 ? (
+      notifications.map((n, i) => (
+        <div
+          key={i}
+          className="p-3 mb-3 bg-white rounded shadow-sm border-start border-primary"
+        >
+          <h5 className="text-primary mb-1 fw-bold">{n.title}</h5>
+          <p className="text-muted mb-0">{n.message}</p>
+        </div>
+      ))
+    ) : (
+      <div className="text-center py-4">
+        <h6 className="text-muted">No notifications available.</h6>
+      </div>
+    )}
+  </Modal.Body>
+</Modal>
+
+
         </div>
     );
 };

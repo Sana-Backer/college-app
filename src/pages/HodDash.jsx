@@ -88,10 +88,8 @@ const HodDash = () => {
                 return <ViewFaculty />;
             case "attendenceMark":
                 return <FacultyAttendenceMark />;
-            // case "assignments":
-            //     return <AssignmentView />;
-            // case "notes":
-            //     return < Notes />;
+            case "assignments":
+                return <AssignmentView />;
 
             default:
                 return <HodProfile />;
@@ -116,7 +114,7 @@ const HodDash = () => {
     };
 
     const handlePhotoClick = () => {
-        setSidebarVisible(!sidebarVisible); // Toggle sidebar visibility
+        setSidebarVisible(!sidebarVisible); 
     };
 
     return (
@@ -190,7 +188,6 @@ const HodDash = () => {
                     </div>
                     <div className="profile-info">
                         <h3>{profile.full_name}</h3>
-                        {/* <p>{profile.department}</p> */}
                         <hr />
                         <p>{profile.email}</p>
                         <p>{profile.phone}</p>
@@ -222,6 +219,9 @@ const HodDash = () => {
                             </Button>
                             <Button variant="warning" onClick={() => setShowForm("Department")} className="custom-button m-2">
                                 Add Department
+                            </Button>
+                            <Button variant="success" onClick={() => setShowForm("Note")} className="custom-button m-2">
+                                Add Note
                             </Button>
                             <Button variant="danger" onClick={() => setShowForm("Notification")} className="custom-button m-2">
                                 Add Notification

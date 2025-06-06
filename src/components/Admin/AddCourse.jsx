@@ -38,7 +38,7 @@ const AddCourse = () => {
       const response = await addCourseApi(courseData, token);
       if (response.status === 201) {
         toast.success("Course added successfully.");
-        navigate("/view-courses");
+        setCourseData({ course_name: "", description: "" });
       } else {
         toast.error(response.data?.message || "Error adding course. Try again.");
       }

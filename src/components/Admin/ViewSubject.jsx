@@ -122,7 +122,7 @@ const ViewSubject = () => {
 
     return (
         <Container className="mt-4">
-            <h2>Subjects List</h2>
+            <h2 className='title'>Subjects List</h2>
             <div className="tablecontainer">
                 <Table striped bordered hover className="table">
                     <thead>

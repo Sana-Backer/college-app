@@ -133,6 +133,7 @@ const ViewHod = () => {
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -147,6 +148,7 @@ const ViewHod = () => {
     if (selectedHod.photo) {
       formData.append("photo", selectedHod.photo);
     }
+    console.log(formData);
 
     try {
       const response = await editHodApi(selectedHod.id, formData, token, true);

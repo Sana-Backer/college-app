@@ -29,8 +29,7 @@ const Home = () => {
       </div>
       <About/>
       <Footer/>
-
-    </>
+       </>
   )
 }
 

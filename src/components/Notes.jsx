@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { deleteNoteApi, FacultyApi, getCoursesApi, getNotes } from '../Services/allAPI';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './note.css'; 
+import './note.css';
 import { FaTrash } from 'react-icons/fa';
 
 const Notes = () => {
@@ -11,7 +11,7 @@ const Notes = () => {
   const [facultyList, setFacultyList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [course, setCourse] = useState('');
-  const [semester, setSemester] = useState(''); // ✅ Semester filter state
+  const [semester, setSemester] = useState('');
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const Notes = () => {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
-  // ✅ Filter notes by search query and selected semester
+  // Filter notes by search query and selected semester
   const filteredNotes = notes.filter(note =>
     note.title.toLowerCase().includes(searchQuery) &&
     (semester === '' || note.semester === parseInt(semester))
@@ -126,34 +126,36 @@ const Notes = () => {
     <div className="notes-page">
       <h1 className="notes-title"> Notes </h1>
 
-      {/* ✅ Search Input */}
-      <div className="search-note me-auto">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="🔍 Search by title..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-      </div>
+      {/*  Search Input */}
+      <div className="d-flex items-center justify-content-around mb-4">
+        {/* Search Input */}
+        <div className="d-flex w-75">
+          <input
+            type="text"
+            className="search-input w-full px-4 py-2 border rounded"
+            placeholder="🔍 Search by title..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </div>
 
-      {/* ✅ Semester Filter Dropdown */}
-      <div className="filter-container">
-        <label htmlFor="semester">Filter by Semester:</label>
-        <select
-          id="semester"
-          value={semester}
-          onChange={(e) => setSemester(e.target.value)}
-        >
-          <option value="">All Semesters</option>
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-            <option key={sem} value={sem}>{`Semester ${sem}`}</option>
-          ))}
-        </select>
+        {/* Semester Filter Dropdown */}
+        <div className="d-flex items-center gap-2">
+          <select
+            id="semester"
+            value={semester}
+            onChange={(e) => setSemester(e.target.value)}
+            className="px-3 py-2 border rounded"
+          >
+            <option value="">semester</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+              <option key={sem} value={sem}>{`Semester ${sem}`}</option>
+            ))}
+          </select>
+        </div>
       </div>
-
-      {/* ✅ Notes List */}
-      <div className="notes-grid-container">  
+      {/* Notes List */}
+      <div className="notes-grid-container">
         {filteredNotes.map(note => (
           <div className="note-card" key={note.id}>
             <h3 className="note-title">{note.title}</h3>

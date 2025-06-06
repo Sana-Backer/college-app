@@ -1,31 +1,65 @@
-
-
-.tablecontainer {
-    width: 100%;
-    overflow-x: auto;  
+/* Header Styling */
+.course-table thead {
+    background-color: #f4f6fc;
+    color: #333;
+    font-weight: 600;
 }
 
-.course-table {
-    min-width: 600px; 
+/* Row Hover */
+.course-table tbody tr:hover {
+    background-color: #f1f1f1;
 }
 
-.course-actions{
+/* ID, Course Name, and Description Cells */
+.course-table td {
+    vertical-align: middle;
+    font-size: 15px;
+    color: #444;
+    background-color: #ffffff;
+    padding: 16px 12px; /* Increased padding for height */
+}
+
+/* Action Buttons */
+.course-actions {
     display: flex;
     gap: 1rem;
 }
-.course-actions .editbtn{
-    color: #007bff;
-    cursor: pointer;
-    border: none;
+.course-actions .editbtn {
+    color: #0d6efd;
+    transition: transform 0.2s;
+    font-size: 22px;
     background: none;
-    font-size: 25px;
-
+    border: none;
+    cursor: pointer;
 }
-.course-actions .deletebtn{
-    color: #dc3545;
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 25px;
+.course-actions .editbtn:hover {
+    transform: scale(1.1);
+    color: #084298;
+}
 
+.course-actions .deletebtn {
+    color: #dc3545;
+    transition: transform 0.2s;
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.course-actions .deletebtn:hover {
+    transform: scale(1.1);
+    color: #a71d2a;
+}
+
+/* Subtle Borders */
+.course-table th,
+.course-table td {
+    border: 1px solid #e0e0e0;
+    padding: 16px 12px; /* Also apply to th */
+}
+
+/* Optional: Rounded table with shadow */
+.course-table {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
